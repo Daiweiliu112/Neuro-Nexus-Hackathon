@@ -30,3 +30,5 @@ rjsmin==1.1.0
 s3transfer==0.3.3
 six==1.14.0
 urllib3==1.25.9
+channels==2.4.0
+channels-redis==3.0.1

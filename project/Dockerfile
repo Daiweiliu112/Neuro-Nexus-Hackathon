@@ -28,7 +28,7 @@ RUN apk add --no-cache --virtual gdal-bin
 RUN apk add postgresql-dev gcc python3-dev musl-dev
 #gdal-bin python-gdal python3-gdal
 # python3-gdal
-
+RUN apk add gcc musl-dev python3-dev libffi-dev openssl-dev
 # RUN gdal --version 
  # to see what version of GDAL you have
 # RUN export CPLUS_INCLUDE_PATH=/usr/include/gdal
