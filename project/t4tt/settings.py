@@ -34,6 +34,7 @@ ALLOWED_HOSTS = ['localhost','0.0.0.0']
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'accounts.apps.AccountsConfig',
     'taggit.apps.TaggitAppConfig',
     'django.contrib.admin',
@@ -76,8 +77,16 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 't4tt.wsgi.application'
+ASGI_APPLICATION = 't4tt.routing.application'
 
-
+CHANNEL_LAYERs ={
+    'default':{
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG':{
+            "hosts":[("redis",6379)]
+        }
+    }
+}
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
