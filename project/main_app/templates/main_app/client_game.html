@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Chat Room Example</title>
+    </head>
+    <body>
+        {{ room_name | json_script:"room-name"}}
+        <script src="{% static 'js/get_socket.js' %}"></script>
+        <script>
+          const roomName = JSON.parse(document.getElementById('room-name').textContent);
+          const chatSocket = get_socket(window.location.host, roomName)
+        </script>
+    </body>
+</html>
