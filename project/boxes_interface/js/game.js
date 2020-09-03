@@ -75,6 +75,10 @@ function initDraw(canvas) {
         }
         return inside
     }
+
+    function not1D(element) {
+        return element.style.width != '' && element.style.height != ''
+    }
     
     canvas.addEventListener('mousedown', e => {
         if (drawSwitch) {
@@ -93,10 +97,11 @@ function initDraw(canvas) {
     
     canvas.addEventListener('mouseup', e => {
         if (drawSwitch) {
-            if (element && !newRectIntersect(element)) {
+            n1D = not1D(element)
+            if (element && !newRectIntersect(element) && n1D) {
                 var title = document.createElement('div')
                 var inp = document.createElement('input')
-                
+
                 title.classList.add('rectangle-header')
                 title.classList.add('center-horizontal')
                 title.classList.add('center-vertical')
@@ -107,8 +112,14 @@ function initDraw(canvas) {
                 inp.type = 'text'
                                 
                 title.appendChild(inp)
-            } else if (element !== null) {
-                console.log('Please construct the rectangles such that they do not intersect')
+            } else {
+                if (!n1D) {
+                    console.log("Please ensure a rectangle has non-zero width and height")
+                } else if (element !== null) {
+                    console.log('Please construct the rectangles such that they do not intersect')
+                } else {
+                    console.log("Unknown error");
+                }
                 element.remove()
             }
             element = null
