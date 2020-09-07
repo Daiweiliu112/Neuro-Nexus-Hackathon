@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'channels',
     'accounts.apps.AccountsConfig',
     'taggit.apps.TaggitAppConfig',
+    'main_app.apps.MainAppConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -130,6 +131,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR,'assets'),
+    os.path.join(BASE_DIR,'staticfiles'),
 )
 
 MEDIA_URL = '/media/'
