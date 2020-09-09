@@ -16,11 +16,11 @@ def signup(request):
         print(request.POST['email'])
         print(request.POST['password1'])
         if form.is_valid():
+            new_user = form.save()
             print("valid form")
+            return redirect('/accounts/signin/')
         else:
             print("form invalid")
-        return redirect('accounts/signin/')
-        
     else:
         form = RegisterForm()
     return render(request,'accounts/create_account/create_account.html',{'form':form})
