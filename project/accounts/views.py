@@ -1,14 +1,31 @@
 from django.shortcuts import render,redirect
 from .forms import RegisterForm
 from django.contrib.auth.models import User
-
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import authenticate, login
 
 def home(request):
     return render(request, "accounts/home.html")
 
 
 def signin(request):
-    return render(request, 'accounts/sign-in/sign_in.html')
+    if request.method == "POST":
+        form = AuthenticationForm(request.POST)
+        print(request.POST)
+        user = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request,username=user,password=password)
+        print(user,password)
+        if user is not None:
+            login(request,user)
+            print("login successful")
+        else:
+            print("login failed")
+
+
+    else:
+        form = AuthenticationForm()
+    return render(request, 'accounts/sign-in/sign_in.html',{'form':form})
 
 def signup(request):
     if request.method == "POST":
