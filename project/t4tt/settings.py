@@ -80,7 +80,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 't4tt.wsgi.application'
 ASGI_APPLICATION = 't4tt.routing.application'
 
-CHANNEL_LAYERs ={
+CHANNEL_LAYERS ={
     'default':{
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG':{
