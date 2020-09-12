@@ -10,3 +10,9 @@ def client_game(request):
 
 def clinician_game(request):
     return render(request,'main_app/clinician_game.html')
+
+def clinician_test(request,room_name):
+    print(room_name)
+    return render(request, 'main_app/clinician_game.html',{
+        'room_name':room_name
+        })
