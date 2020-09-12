@@ -24,12 +24,25 @@
   <script src="{% static 'js/get_socket.js' %}"></script>
   <script>
     const roomName = JSON.parse(document.getElementById('room-name').textContent);
-    const chatSocket = get_socket(window.location.host, roomName)
-    console.log(chatSocket)
-    initDraw(document.getElementById('canvas'), chatSocket);
+    //const chatSocket = get_socket(window.location.host, roomName);
+    const chatSocket = new WebSocket(
+      'ws://'
+      + window.location.host
+      + '/ws/socket/'
+      + roomName
+      +'/'
+    );
+    console.log(chatSocket);
+    //initDraw(document.getElementById('canvas'), chatSocket);
     chatSocket.onopen = function (e) {
       console.log('opened!')
-      chatSocket.send({msg: "Here"})
+      chatSocket.send(JSON.stringify(
+        {'message': "Here"}
+        ));
+    }
+    chatSocket.onmessage = function(e){
+      const data = JSON.parse(e.data);
+      console.log(data.message);
     }
   </script>
 </body>

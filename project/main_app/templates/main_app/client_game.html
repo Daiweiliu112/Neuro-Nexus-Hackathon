@@ -17,7 +17,12 @@
         <script src="{% static 'js/get_socket.js' %}"></script>
         <script>
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
+        //const roomName = 'test'
         const chatSocket = get_socket(window.location.host, roomName)
+        chatSocket.onmessage = function(e){
+            const data = JSON.parse(e.data);
+            console.log(data.message);
+        }
         console.log(chatSocket)
         initDraw(document.getElementById('canvas'), chatSocket);
         </script>
