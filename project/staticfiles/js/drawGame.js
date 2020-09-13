@@ -15,7 +15,6 @@ function initDraw(canvas, ws) {
     var socket = ws
     socket.onopen = function (e) {
         console.log("[open] Connection established");
-        // socket.send('here')
     };
 
     socket.onclose = function (e) {
@@ -119,11 +118,12 @@ function initDraw(canvas, ws) {
 
                 title.appendChild(inp)
 
-                elObj = JSON.stringify({
-                    width: element.style.width,
-                    height: element.style.height,
-                    top: element.style.top,
-                    left: element.style.left,
+                elObj = JSON.stringify({message: {
+                        width: element.style.width,
+                        height: element.style.height,
+                        top: element.style.top,
+                        left: element.style.left,
+                    }                    
                 })
                 console.log(elObj)
                 socket.send(elObj)

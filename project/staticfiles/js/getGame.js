@@ -11,7 +11,6 @@ function initDraw(canvas, ws) {
     };
 
     var socket = ws
-    socket.binaryType = "arraybuffer";
     var dp = new DOMParser()
     socket.onopen = function (e) {
         console.log("[open] Connection established");
@@ -20,7 +19,16 @@ function initDraw(canvas, ws) {
         console.log("[close] Connection closed");
     };
     socket.onmessage = function (event) {
-        console.log(event.data)
+        var data = JSON.parse(event.data)['message']
+        var element = document.createElement('div');
+        element.className = 'rectangle'
+
+        element.style.top = data['top']
+        element.style.left = data['left']
+        element.style.width = data['width']
+        element.style.height = data['height']
+
+        canvas.appendChild(element)
     }
 
     function setMousePosition(e) {
