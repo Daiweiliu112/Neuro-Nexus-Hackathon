@@ -28,3 +28,6 @@ def clinician_image(request):
 
 def signup(request):
     return render(request,'main_app/src/create_account/create_account.html')
+
+def download_csv(request):
+    return render(request,'main_app/src/download_data/download_data.html')

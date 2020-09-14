@@ -1,0 +1,35 @@
+{% extends "base_layout.html" %}
+
+{% block content %}
+<header>
+    <div class="navbar navbar-dark bg-dark shadow-sm">
+      <div class="container d-flex justify-content-between">
+        <a href="#" class="navbar-brand d-flex align-items-center">
+          <strong>Tech For Teletherapy</strong>
+        </a>
+        <span class="navbar-brand">Dr. &lt;FirstName LastName&gt;</span>
+        <span class="navbar-brand">Sign out</span>
+        </button>
+      </div>
+    </div>
+  </header>
+  <section class="jumbotron text-center">
+    <div class="container">
+      <h1>Tech For Teletherapy</h1>
+      <h3 class="mt-4">&lt;Motto Here&gt;</h3>
+    </div>
+  </section>
+<div class="container">
+    <div class="row">
+        <div class='col-md-4'>Dropdown for patient</div>
+        <div class='col-md-4'>Start Date</div>
+        <div class='col-md-4'>End Date</div>
+    </div>
+    <div class = "row">
+        <div class="col text-center">
+            <button class="align-center btn btn-primary">Download CSV</button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
