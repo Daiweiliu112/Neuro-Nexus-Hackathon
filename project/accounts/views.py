@@ -19,6 +19,7 @@ def signin(request):
         if user is not None:
             login(request,user)
             print("login successful")
+            return redirect('/main_app/dashboard/')
         else:
             print("login failed")
 
@@ -33,7 +34,10 @@ def signup(request):
         print(request.POST['email'])
         print(request.POST['password1'])
         if form.is_valid():
-            new_user = form.save()
+            new_user = form.save(commit=False)
+            new_user.username = request.POST['email']
+            new_user.save()
+            print(new_user)
             print("valid form")
             return redirect('/accounts/signin/')
         else:
