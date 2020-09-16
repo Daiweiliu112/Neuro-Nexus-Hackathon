@@ -1,5 +1,6 @@
-from django.shortcuts import render
-
+from django.shortcuts import render, redirect
+from .forms import UploadFileForm
+from . import utils
 # Create your views here.
 
 def index(request):
@@ -31,3 +32,19 @@ def signup(request):
 
 def download_csv(request):
     return render(request,'main_app/src/download_data/download_data.html')
+
+def upload_file(request):
+    if request.method == "POST":
+        form = UploadFileForm(request.POST, request.FILES)
+        print(request.POST['title'])
+        if form.is_valid():
+            #utils.save_uploaded_file(request.POST['title'],request.FILES)
+            redirect('main_app/dashboard/')
+    else:
+        form = UploadFileForm()
+    return render(request,'main_app/index.html',{'form':form})
+
+def make_meeting(request):
+    room_name = utils.get_random_string()
+    return render(request,'main_app/room_name.html',{'room_name':room_name})
+            
