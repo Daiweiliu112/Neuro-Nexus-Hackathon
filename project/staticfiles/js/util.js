@@ -7,3 +7,10 @@ function get_socket(host, roomName) {
     + '/'
   );
 }
+
+function send(socket, msg) {
+  socket.send(JSON.stringify({message: msg}))
+}
+
+client = "client"
+clinician = "clinician"

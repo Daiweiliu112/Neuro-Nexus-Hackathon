@@ -1,6 +1,7 @@
+
 /* Drawing rectangles with mouse clicks
- * https://stackoverflow.com/questions/17408010/drawing-a-rectangle-using-click-mouse-move-and-click
- * Accessed August 15, 2020 */
+* https://stackoverflow.com/questions/17408010/drawing-a-rectangle-using-click-mouse-move-and-click
+* Accessed August 15, 2020 */
 
 function initDraw(canvas, ws) {
     var mouse = {
@@ -21,10 +22,12 @@ function initDraw(canvas, ws) {
     };
 
     socket.onmessage = function(e) {
-        console.log(e)
-        var id = JSON.parse(e.data)['message']
-        alert(`The client has clicked on the rectangle for ${id}`)
-        document.querySelector(`#${id}`).style.opacity = 0.5
+        var data = JSON.parse(e.data)['message']
+        if (data.origin === client) {
+            data = data.content
+            alert(`The client has clicked on the rectangle for ${data}`)
+            document.querySelector(`#${data}`).style.opacity = 0.5
+        }
     }
 
 
@@ -72,14 +75,14 @@ function initDraw(canvas, ws) {
             })
             ids.push(id.value)
         }
-        socket.send(JSON.stringify({message: objs}))
+        send(socket, {content: objs, origin: clinician})
     })
 
     document.getElementById('delete-button').addEventListener('click', () => {
         document.querySelectorAll('.rectangle').forEach(rect => {
             rect.remove()
         });
-        socket.send(JSON.stringify({message: 'delete'}))
+        send(socket, {content:'delete', origin: clinician})
     })
 
     function setMousePosition(e) {

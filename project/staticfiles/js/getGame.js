@@ -3,13 +3,6 @@
  * Accessed August 15, 2020 */
 
 function initDraw(canvas, ws) {
-    var mouse = {
-        x: 0,
-        y: 0,
-        startX: 0,
-        startY: 0
-    };
-
     var socket = ws
     socket.onopen = function (e) {
         console.log("[open] Connection established");
@@ -30,7 +23,7 @@ function initDraw(canvas, ws) {
     function sendClick() {
         var id = this.id
         if (clicked.indexOf(id) < 0) {
-            socket.send(JSON.stringify({message: id}))
+            send(socket, {content: id, origin: client})
             clicked.push(id)
         }
     }
@@ -51,34 +44,20 @@ function initDraw(canvas, ws) {
 
         }
         
-        setTimeout(() => {
-            document.querySelectorAll('.rectangle').forEach(rect => {
-                rect.onclick = sendClick
-            })
-        }, 1000)
+        document.querySelectorAll('.rectangle').forEach(rect => {
+            rect.onclick = sendClick
+        })
     }
 
     socket.onmessage = function (event) {
         var data = JSON.parse(event.data)['message']
-        if (data === 'delete') {
-            deleteRects()
-        } else if (typeof data === 'object' && data.length > 0) {
-            makeRects(data)
+        if (data.origin === clinician) {
+            data = data.content
+            if (data === 'delete') {
+                deleteRects()
+            } else if (typeof data === 'object' && data.length > 0) {
+                makeRects(data)
+            }
         }
     }
-
-    // function setMousePosition(e) {
-    //     var ev = e || window.event; //Moz || IE
-    //     if (ev.pageX) { //Moz
-    //         mouse.x = ev.pageX + window.pageXOffset;
-    //         mouse.y = ev.pageY + window.pageYOffset;
-    //     } else if (ev.clientX) { //IE
-    //         mouse.x = ev.clientX + document.body.scrollLeft;
-    //         mouse.y = ev.clientY + document.body.scrollTop;
-    //     }
-    // };
-
-    // canvas.onmousemove = function (e) {
-    //     setMousePosition(e);
-    // }
 }
