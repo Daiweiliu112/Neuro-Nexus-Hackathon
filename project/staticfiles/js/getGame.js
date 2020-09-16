@@ -11,7 +11,6 @@ function initDraw(canvas, ws) {
     };
 
     var socket = ws
-    var dp = new DOMParser()
     socket.onopen = function (e) {
         console.log("[open] Connection established");
     };
@@ -19,10 +18,21 @@ function initDraw(canvas, ws) {
         console.log("[close] Connection closed");
     };
 
+    var clicked = []
+
     function deleteRects() {
         document.querySelectorAll('.rectangle').forEach(rect => {
             rect.remove()
         });
+        clicked = []
+    }
+
+    function sendClick() {
+        var id = this.id
+        if (clicked.indexOf(id) < 0) {
+            socket.send(JSON.stringify({message: id}))
+            clicked.push(id)
+        }
     }
 
     function makeRects(data) {
@@ -38,31 +48,37 @@ function initDraw(canvas, ws) {
             element.id = data[i]['id']
     
             canvas.appendChild(element)
+
         }
+        
+        setTimeout(() => {
+            document.querySelectorAll('.rectangle').forEach(rect => {
+                rect.onclick = sendClick
+            })
+        }, 1000)
     }
 
     socket.onmessage = function (event) {
         var data = JSON.parse(event.data)['message']
         if (data === 'delete') {
             deleteRects()
-        } else {
+        } else if (typeof data === 'object' && data.length > 0) {
             makeRects(data)
         }
-
     }
 
-    function setMousePosition(e) {
-        var ev = e || window.event; //Moz || IE
-        if (ev.pageX) { //Moz
-            mouse.x = ev.pageX + window.pageXOffset;
-            mouse.y = ev.pageY + window.pageYOffset;
-        } else if (ev.clientX) { //IE
-            mouse.x = ev.clientX + document.body.scrollLeft;
-            mouse.y = ev.clientY + document.body.scrollTop;
-        }
-    };
+    // function setMousePosition(e) {
+    //     var ev = e || window.event; //Moz || IE
+    //     if (ev.pageX) { //Moz
+    //         mouse.x = ev.pageX + window.pageXOffset;
+    //         mouse.y = ev.pageY + window.pageYOffset;
+    //     } else if (ev.clientX) { //IE
+    //         mouse.x = ev.clientX + document.body.scrollLeft;
+    //         mouse.y = ev.clientY + document.body.scrollTop;
+    //     }
+    // };
 
-    canvas.onmousemove = function (e) {
-        setMousePosition(e);
-    }
+    // canvas.onmousemove = function (e) {
+    //     setMousePosition(e);
+    // }
 }

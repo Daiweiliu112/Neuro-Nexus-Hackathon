@@ -10,9 +10,8 @@ function initDraw(canvas, ws) {
         startY: 0
     };
     var drawSwitch = false;
-
-
     var socket = ws
+
     socket.onopen = function (e) {
         console.log("[open] Connection established");
     };
@@ -21,6 +20,15 @@ function initDraw(canvas, ws) {
         console.log("[close] Connection closed");
     };
 
+    socket.onmessage = function(e) {
+        console.log(e)
+        var id = JSON.parse(e.data)['message']
+        alert(`The client has clicked on the rectangle for ${id}`)
+        document.querySelector(`#${id}`).style.opacity = 0.5
+    }
+
+
+    
     document.getElementById('draw-switch').addEventListener('click', (e) => {
         if (!element)
             drawSwitch = !drawSwitch;
@@ -31,13 +39,26 @@ function initDraw(canvas, ws) {
         var id = null;
         var element = null;
         var objs = []
+        var ids = []
+
+        if (rects.length === 0) {
+            alert('Please create at least one element');
+            return
+        }
 
         for (let i = 0; i < rects.length; i++) {
             element = rects[i]
             id = element.children[0].children[0] // Get input of the current rectangle
 
+            /* Ensures all rectangles have a name */
             if (id.value === '') {
                 alert('Please enter a value for all rectangles.');
+                return
+            }
+
+            /* Ensures all rectangles are uniquely labelled */
+            if (ids.indexOf(id.value) >= 0) {
+                alert("Your rectangles must have unique lables");
                 return
             }
 
@@ -49,6 +70,7 @@ function initDraw(canvas, ws) {
                 left: element.style.left,
                 id: element.id,
             })
+            ids.push(id.value)
         }
         socket.send(JSON.stringify({message: objs}))
     })
@@ -107,10 +129,12 @@ function initDraw(canvas, ws) {
             }
 
 
-            let arr = [rect.left <= (el.left + el.width),
-            el.left <= (rect.left + rect.width),
-            rect.top <= (el.top + el.height),
-            el.top <= (rect.top + rect.height)]
+            let arr = [
+                rect.left <= (el.left + el.width),
+                rect.top <= (el.top + el.height),
+                el.left <= (rect.left + rect.width),
+                el.top <= (rect.top + rect.height)
+            ]
 
             if (arr.every(i => i)) {
                 inside = true
