@@ -17,6 +17,30 @@
       }
     }
 </style>
+
+<script>
+  
+  $('#create_meeting').click(function(){
+    let url = $(this).val();
+    $.ajax({
+      url:url,
+      success: function(data){
+        $('#room_name').html(data);
+      },
+    })
+  });
+
+  var generate_room_name = function(){
+    let url = $(this).val();
+    $.ajax({
+      url:url,
+      success: function(data){
+        $('#room_name').html(data);
+      },
+    })
+  }
+</script>
+
   <!-- Custom styles for this template -->
 <link href="dashboard.css" rel="stylesheet">
 <div class="navbar navbar-dark bg-dark shadow-sm">
@@ -38,10 +62,13 @@
       <h1>Clinician dashboard</h1>
       <!-- <p class="lead text-muted">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p> -->
       <p>
-        <a href="#" class="btn btn-primary my-2">Create Meeting</a>
+        <a href="#" class="btn btn-primary my-2" id='create_meeting' onclick="generate_room_name">Create Meeting</a>
         <a href="#" class="btn btn-secondary my-2">View Overall Statistics</a>
       </p>
-      <a href="#" class="btn btn-primary my-2">Upload Images</a>
+      <a href="../upload/" class="btn btn-primary my-2">Upload Images</a>
+    </div>
+    <div id='room_name'>
+
     </div>
   </section>
 
@@ -253,5 +280,7 @@
     <p>&copy; 2020 Tech For Teletherapy</p>
   </div>
 </footer>
+
+
 
 {% endblock %}
