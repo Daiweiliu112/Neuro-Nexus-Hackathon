@@ -43,5 +43,8 @@ def upload_file(request):
     else:
         form = UploadFileForm()
     return render(request,'main_app/index.html',{'form':form})
-        
+
+def make_meeting(request):
+    room_name = utils.get_random_string()
+    return render(request,'main_app/room_name.html',{'room_name':room_name})
             
