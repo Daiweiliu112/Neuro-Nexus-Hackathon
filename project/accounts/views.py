@@ -45,3 +45,7 @@ def signup(request):
     else:
         form = RegisterForm()
     return render(request,'accounts/create_account/create_account.html',{'form':form})
+
+def logout(request):
+    logout(request)
+    return redirect('accounts/signin/')

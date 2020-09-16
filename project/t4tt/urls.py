@@ -29,7 +29,8 @@ urlpatterns = [
     path('home/', account_views.home, name='home'),
     path('accounts/', include('accounts.urls')),
     path('admin/', admin.site.urls),
-    path('', include(main_app_urls)),
+    path('main_app/', include(main_app_urls)),
+    path('',account_views.signin)
     #path('main_app/dashboard',main_app_views.dashboard)
     ]
 

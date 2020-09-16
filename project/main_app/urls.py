@@ -14,6 +14,7 @@ urlpatterns = [
     path('child/',views.child_image,name='child'),
     path('child_test/',views.child_image_test,name='child_test'),
     #path('signup/',views.signup,name='signup'),
-    path('csv/',views.download_csv,name='download')
+    path('csv/',views.download_csv,name='download'),
+    path('upload/',views.upload_file,name='upload')
 
 ]
