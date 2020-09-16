@@ -21,12 +21,17 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf.urls.static import static
 from . import settings
 from accounts import views as account_views
+from main_app import urls as main_app_urls
+from main_app import views as main_app_views
 
 
 urlpatterns = [
     path('home/', account_views.home, name='home'),
     path('accounts/', include('accounts.urls')),
-    path('admin/', admin.site.urls)
+    path('admin/', admin.site.urls),
+    path('main_app/', include(main_app_urls)),
+    path('',account_views.signin)
+    #path('main_app/dashboard',main_app_views.dashboard)
     ]
 
 urlpatterns += staticfiles_urlpatterns()
