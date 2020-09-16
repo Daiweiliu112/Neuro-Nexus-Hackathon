@@ -26,6 +26,35 @@ function initDraw(canvas, ws) {
             drawSwitch = !drawSwitch;
     })
 
+    document.getElementById('send-button').addEventListener('click', () => {
+        var rects = document.querySelectorAll('.rectangle')
+        var id = null;
+        var element = null;
+        var objs = []
+
+        for (let i = 0; i < rects.length; i++) {
+            element = rects[i]
+            id = element.children[0].children[0] // Get input of the current rectangle
+
+            if (id.value === '') {
+                alert('Please enter a value for all rectangles.');
+                return
+            }
+
+            element.id = id.value
+            objs.push({                        
+                width: element.style.width,
+                height: element.style.height,
+                top: element.style.top,
+                left: element.style.left,
+                id: element.id,
+            })
+        }
+        console.log(objs)
+        console.log(socket)
+        socket.send(JSON.stringify({message: objs}))
+    })
+
     function setMousePosition(e) {
         var ev = e || window.event; //Moz || IE
         if (ev.pageX) { //Moz
@@ -115,18 +144,8 @@ function initDraw(canvas, ws) {
                 inp.classList.add('rectangle-title')
                 inp.placeholder = 'No value entered'
                 inp.type = 'text'
-
+                
                 title.appendChild(inp)
-
-                elObj = JSON.stringify({message: {
-                        width: element.style.width,
-                        height: element.style.height,
-                        top: element.style.top,
-                        left: element.style.left,
-                    }                    
-                })
-                console.log(elObj)
-                socket.send(elObj)
             } else if (element !== null) {
                 console.log('Please construct the rectangles such that they do not intersect')
                 element.remove()

@@ -20,15 +20,19 @@ function initDraw(canvas, ws) {
     };
     socket.onmessage = function (event) {
         var data = JSON.parse(event.data)['message']
-        var element = document.createElement('div');
-        element.className = 'rectangle'
-
-        element.style.top = data['top']
-        element.style.left = data['left']
-        element.style.width = data['width']
-        element.style.height = data['height']
-
-        canvas.appendChild(element)
+        var element = null;
+        for (let i = 0; i < data.length; i++) {
+            element = document.createElement('div');
+            element.className = 'rectangle'
+    
+            element.style.top = data[i]['top']
+            element.style.left = data[i]['left']
+            element.style.width = data[i]['width']
+            element.style.height = data[i]['height']
+            element.id = data[i]['id']
+    
+            canvas.appendChild(element)
+        }
     }
 
     function setMousePosition(e) {
