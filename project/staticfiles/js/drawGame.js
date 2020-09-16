@@ -50,9 +50,14 @@ function initDraw(canvas, ws) {
                 id: element.id,
             })
         }
-        console.log(objs)
-        console.log(socket)
         socket.send(JSON.stringify({message: objs}))
+    })
+
+    document.getElementById('delete-button').addEventListener('click', () => {
+        document.querySelectorAll('.rectangle').forEach(rect => {
+            rect.remove()
+        });
+        socket.send(JSON.stringify({message: 'delete'}))
     })
 
     function setMousePosition(e) {

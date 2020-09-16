@@ -18,8 +18,14 @@ function initDraw(canvas, ws) {
     socket.onclose = function (e) {
         console.log("[close] Connection closed");
     };
-    socket.onmessage = function (event) {
-        var data = JSON.parse(event.data)['message']
+
+    function deleteRects() {
+        document.querySelectorAll('.rectangle').forEach(rect => {
+            rect.remove()
+        });
+    }
+
+    function makeRects(data) {
         var element = null;
         for (let i = 0; i < data.length; i++) {
             element = document.createElement('div');
@@ -33,6 +39,16 @@ function initDraw(canvas, ws) {
     
             canvas.appendChild(element)
         }
+    }
+
+    socket.onmessage = function (event) {
+        var data = JSON.parse(event.data)['message']
+        if (data === 'delete') {
+            deleteRects()
+        } else {
+            makeRects(data)
+        }
+
     }
 
     function setMousePosition(e) {
