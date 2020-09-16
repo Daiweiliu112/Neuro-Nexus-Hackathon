@@ -31,7 +31,6 @@
   <script>
     const roomName = JSON.parse(document.getElementById('room-name').textContent);
     const chatSocket = get_socket(window.location.host, roomName);
-    console.log(chatSocket);
     initDraw(document.getElementById('canvas'), chatSocket);
   </script>
 </body>
