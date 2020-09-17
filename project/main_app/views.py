@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
 from .forms import UploadFileForm
 from . import utils
+from django.http import JsonResponse
 # Create your views here.
 
 def index(request):

@@ -18,7 +18,28 @@
     }
 </style>
 
+<script>
+  
+  $('#create_meeting').click(function(){
+    let url = $(this).val();
+    $.ajax({
+      url:url,
+      success: function(data){
+        $('#room_name').html(data);
+      },
+    })
+  });
 
+  var generate_room_name = function(){
+    let url = $(this).val();
+    $.ajax({
+      url:url,
+      success: function(data){
+        $('#room_name').html(data);
+      },
+    })
+  }
+</script>
 
   <!-- Custom styles for this template -->
 <link href="dashboard.css" rel="stylesheet">
@@ -41,14 +62,14 @@
       <h1>Clinician dashboard</h1>
       <!-- <p class="lead text-muted">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p> -->
       <p>
-        <a href="#" class="btn btn-primary my-2" id='create_meeting'>Create Meeting</a>
+        <a href="#" class="btn btn-primary my-2" id='create_meeting' onclick="generate_room_name">Create Meeting</a>
         <a href="#" class="btn btn-secondary my-2">View Overall Statistics</a>
       </p>
       <a href="../upload/" class="btn btn-primary my-2">Upload Images</a>
     </div>
-    <p id='room_name'>
+    <div id='room_name'>
 
-    </p>
+    </div>
   </section>
 
   <div class="album py-5 bg-light">
@@ -259,25 +280,7 @@
     <p>&copy; 2020 Tech For Teletherapy</p>
   </div>
 </footer>
-<script
-  src="https://code.jquery.com/jquery-3.4.1.min.js"
-  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-  crossorigin="anonymous"></script>
-<script>
-  $('#create_meeting').click(function(){
-    console.log("clicked");
-    let url = '../ajax/create_meeting/';
-    $.ajax({
-      url:url,
-      success: function(data){
-        console.log("Recieved");
-        console.log(data['room_name']);
-        let client_room_name = data['room_name']
-        $('#room_name').text = client_room_name;
-      },
-    });
-  });
-</script>
+
 
 
 {% endblock %}
