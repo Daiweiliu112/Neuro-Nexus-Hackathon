@@ -48,10 +48,14 @@ def upload_file(request):
 def make_meeting(request):
     room_name = utils.get_room_name()
     print(room_name)
-    client_room_name = "localhost/main_app/"
+    client_room_name = "localhost/main_app/client/" + room_name + "/"
+    clinician_room_name = "localhost/main_app/cli" + room_name + '/'
     #return render(request,'main_app/room_name.html',{'room_name':room_name})
-    data = {'room_name':room_name}
+    data = {'clinician':clinician_room_name,
+            'client':client_room_name
+            }
     return JsonResponse(data)
+
 def client_game(request):
     return render(request,'main_app/client_game.html')
 
