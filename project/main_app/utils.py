@@ -7,4 +7,5 @@ def save_uploaded_file(title, f):
             destination.write(chunk)
 
 def get_room_name():
-    return get_random_string(length=32)
+    name = get_random_string(length=32)
+    return name

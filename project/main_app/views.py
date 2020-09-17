@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 from .forms import UploadFileForm
 from . import utils
 # Create your views here.
@@ -45,6 +46,22 @@ def upload_file(request):
     return render(request,'main_app/index.html',{'form':form})
 
 def make_meeting(request):
-    room_name = utils.get_random_string()
-    return render(request,'main_app/room_name.html',{'room_name':room_name})
+    room_name = utils.get_room_name()
+    print(room_name)
+    client_room_name = "localhost/main_app/"
+    #return render(request,'main_app/room_name.html',{'room_name':room_name})
+    data = {'room_name':room_name}
+    return JsonResponse(data)
+
+def clinician_test(request,room_name):
+    print("clinician:" + room_name)
+    return render(request, 'main_app/clinician_game.html',{
+        'room_name':room_name
+    })
+
+def client_test(request,room_name):
+    print("client" + room_name)
+    return render(request,"main_app/client_game.html",{
+        'room_name':room_name
+    })
             
