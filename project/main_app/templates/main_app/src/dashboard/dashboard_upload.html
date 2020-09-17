@@ -289,5 +289,27 @@
   });
 </script>
 
+<script>
+  $('.card').click(function(){
+    if($(this).hasClass('card-selected')){
+      $(this).removeClass('card-selected');
+    }else{
+      //let classes = $(this).attr('class');
+      //console.log(classes);
+      $(this).addClass('card-selected');
+      classes = $(this).attr('class');
+      console.log(classes);
+    }
+    //console.log('card clicked');
+    //$(this).attr('style','background-color:blue');
+  })
+</script>
+
+  <style>
+    .card-selected{
+      background-color: aqua;
+    }
+  </style>
+
 
 {% endblock %}
