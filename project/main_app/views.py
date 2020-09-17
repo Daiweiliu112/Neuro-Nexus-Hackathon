@@ -14,10 +14,12 @@ def signin_test(request):
     return render(request, 'main_app/src/sign-in/sign_in.html')
 
 def dashboard(request):
-    return render(request,'main_app/src/dashboard/dashboard.html')
+    context = {"testing": '''<image class="image-fluid" height="255" width= "100%" src="/static/I_Spy 1.png" />'''}
+    return render(request,'main_app/src/dashboard/dashboard_upload.html',context)
 
 def dashboard_test(request):
-    return render(request,'main_app/src/dashboard/dashboard_.html')
+    context = {"testing": '''<image class="image-fluid" height="255" width= "100%" src="/static/I_Spy 1.png" />'''}
+    return render(request,'main_app/src/dashboard/dashboard_.html',context)
 
 def child_image(request):
     return render(request, 'main_app/src/child-image/child-image.html')
@@ -39,8 +41,10 @@ def upload_file(request):
         form = UploadFileForm(request.POST, request.FILES)
         print(request.POST['title'])
         if form.is_valid():
+            print("valid form")
             #utils.save_uploaded_file(request.POST['title'],request.FILES)
-            redirect('main_app/dashboard/')
+            return redirect('../dashboard_uploaded/')
+        return redirect('../dashboard_uploaded/')
     else:
         form = UploadFileForm()
     return render(request,'main_app/index.html',{'form':form})
@@ -48,8 +52,8 @@ def upload_file(request):
 def make_meeting(request):
     room_name = utils.get_room_name()
     print(room_name)
-    client_room_name = "localhost/main_app/client/" + room_name + "/"
-    clinician_room_name = "localhost/main_app/cli" + room_name + '/'
+    client_room_name = "/main_app/client/" + room_name + "/"
+    clinician_room_name = "/main_app/cli/" + room_name + '/'
     #return render(request,'main_app/room_name.html',{'room_name':room_name})
     data = {'clinician':clinician_room_name,
             'client':client_room_name

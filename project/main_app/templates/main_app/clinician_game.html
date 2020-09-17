@@ -17,7 +17,10 @@
       Click me to draw a box.
     </button>
   </div>
-  <div id="canvas"></div>
+  <div id="canvas">
+    
+    <img class="image-fluid" src="{% static 'I_Spy 1.png' %}" />
+  </div>
   {{ room_name | json_script:"room-name"}}
   
   <script src="{% static 'js/drawGame.js' %}"></script>

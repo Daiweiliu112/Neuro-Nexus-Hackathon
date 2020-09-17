@@ -7,10 +7,10 @@ urlpatterns = [
     path('',views.index,name='index'),
     #path('sign_in/',views.signin,name='sign_in'),
     #path('sign_in_test/',views.signin_test,name='sign_in_test'),
-    path('dash_board/',views.dashboard,name='dashboard'),
+    path('dashboard_uploaded/',views.dashboard,name='dashboard'),
     path('dashboard/',views.dashboard_test,name='dashboard_test'),
     path('clinician/',views.clinician_image,name='clinician'),
-    path('clinician_test/',views.child_image_test,name='clinician_test'),
+    path('clinician_test/',views.clinician_game,name='clinician_test'),
     path('child/',views.child_image,name='child'),
     path('child_test/',views.child_image_test,name='child_test'),
     #path('signup/',views.signup,name='signup'),
@@ -21,8 +21,8 @@ urlpatterns = [
     #path('client/<str:room_name>/',views.client_test,name='client_test')
 
 
-    path('client',views.client_game,name='client'),
-    path('clinician',views.clinician_game,name='clinician'),
+    path('client/',views.client_game,name='client'),
+    #path('clinician/',views.clinician_game,name='clinician'),
     path('cli/<str:room_name>/',views.clinician_test,name='clinician_test'),
     path('client/<str:room_name>/',views.client_test,name='client_test')
 ]
