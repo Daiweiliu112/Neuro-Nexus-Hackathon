@@ -78,3 +78,5 @@ def client_test(request,room_name):
         'room_name':room_name
     })
             
+def edit_view(request):
+    return render(request,'main_app/src/edit_view/clinician_image.html')
