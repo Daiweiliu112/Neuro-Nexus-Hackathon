@@ -52,6 +52,11 @@ def make_meeting(request):
     #return render(request,'main_app/room_name.html',{'room_name':room_name})
     data = {'room_name':room_name}
     return JsonResponse(data)
+def client_game(request):
+    return render(request,'main_app/client_game.html')
+
+def clinician_game(request):
+    return render(request,'main_app/clinician_game.html')
 
 def clinician_test(request,room_name):
     print("clinician:" + room_name)

@@ -26,7 +26,7 @@ from main_app import views as main_app_views
 
 
 urlpatterns = [
-    path('home/', account_views.home, name='home'),
+    path('home/', include('main_app.urls')),
     path('accounts/', include('accounts.urls')),
     path('admin/', admin.site.urls),
     path('main_app/', include(main_app_urls)),

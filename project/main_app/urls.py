@@ -17,8 +17,12 @@ urlpatterns = [
     path('csv/',views.download_csv,name='download'),
     path('upload/',views.upload_file,name='upload'),
     path(r'ajax/create_meeting/',views.make_meeting,name='create_meeting'),
+    #path('cli/<str:room_name>/',views.clinician_test,name='clinician_test'),
+    #path('client/<str:room_name>/',views.client_test,name='client_test')
+
+
+    path('client',views.client_game,name='client'),
+    path('clinician',views.clinician_game,name='clinician'),
     path('cli/<str:room_name>/',views.clinician_test,name='clinician_test'),
     path('client/<str:room_name>/',views.client_test,name='client_test')
-
-
 ]

@@ -1,0 +1,33 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tech for Teletherapy</title>
+  <link rel="stylesheet" href="{% static 'css/game.css' %}">
+</head>
+
+<body>
+  <div class="center-horizontal">
+    <button id="draw-switch">
+      Click me to draw a box.
+    </button>
+  </div>
+  <div id="canvas"></div>
+  {{ room_name | json_script:"room-name"}}
+  
+  <script src="{% static 'js/drawGame.js' %}"></script>
+  <script src="{% static 'js/get_socket.js' %}"></script>
+  <script>
+    const roomName = JSON.parse(document.getElementById('room-name').textContent);
+    const chatSocket = get_socket(window.location.host, roomName);
+    console.log(chatSocket);
+    initDraw(document.getElementById('canvas'), chatSocket);
+  </script>
+</body>
+
+</html>

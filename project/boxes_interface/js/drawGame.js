@@ -75,43 +75,56 @@ function initDraw(canvas) {
         }
         return inside
     }
+
+    function not1D(element) {
+        return element.style.width != '' && element.style.height != ''
+    }
     
-    canvas.onclick = function (e) {
+    canvas.addEventListener('mousedown', e => {
         if (drawSwitch) {
-            if (element !== null && !newRectIntersect(element)) {
+            mouse.startX = mouse.x;
+            mouse.startY = mouse.y;
+            element = document.createElement('div');
+            element.className = 'rectangle'
+            element.style.left = mouse.x + 'px';
+            element.style.top = mouse.y + 'px';
+            canvas.appendChild(element)
+            
+            
+            canvas.style.cursor = "crosshair";
+        }
+    })
+    
+    canvas.addEventListener('mouseup', e => {
+        if (drawSwitch) {
+            n1D = not1D(element)
+            if (element && !newRectIntersect(element) && n1D) {
                 var title = document.createElement('div')
                 var inp = document.createElement('input')
-                
+
                 title.classList.add('rectangle-header')
                 title.classList.add('center-horizontal')
                 title.classList.add('center-vertical')
                 element.appendChild(title)
-
+        
                 inp.classList.add('rectangle-title')
                 inp.placeholder = 'No value entered'
-                inp.value = null
                 inp.type = 'text'
-                
-                drawSwitch = false;
-                element = null;
-                canvas.style.cursor = "default";
-                
+                                
                 title.appendChild(inp)
-                inp.click()
-            } else if (element !== null) {
-                console.log('Please construct the rectangles such that they do not intersect')
             } else {
-                mouse.startX = mouse.x;
-                mouse.startY = mouse.y;
-                element = document.createElement('div');
-                element.className = 'rectangle'
-                element.style.left = mouse.x + 'px';
-                element.style.top = mouse.y + 'px';
-                canvas.appendChild(element)
-                
-                canvas.style.cursor = "crosshair";
+                if (!n1D) {
+                    console.log("Please ensure a rectangle has non-zero width and height")
+                } else if (element !== null) {
+                    console.log('Please construct the rectangles such that they do not intersect')
+                } else {
+                    console.log("Unknown error");
+                }
+                element.remove()
             }
+            element = null
+            canvas.style.cursor = "default";
         }
-        
-    }
+        drawSwitch = false;
+    })
 }
