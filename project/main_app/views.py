@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
-from .forms import UploadFileForm
+from .forms import UploadImageForm, UploadFileForm
 from . import utils
 from django.http import JsonResponse
+import accounts.models as account_models
+
 # Create your views here.
 
 def index(request):
@@ -14,10 +16,14 @@ def signin_test(request):
     return render(request, 'main_app/src/sign-in/sign_in.html')
 
 def dashboard(request):
+    current_user = request.user
+    print(current_user)
     context = {"testing": '''<image class="image-fluid" height="255" width= "100%" src="/static/I_Spy 1.png" />'''}
     return render(request,'main_app/src/dashboard/dashboard_upload.html',context)
 
 def dashboard_test(request):
+    current_user = request.user
+    print("current user: ", current_user)
     context = {"testing": '''<image class="image-fluid" height="255" width= "100%" src="/static/I_Spy 1.png" />'''}
     return render(request,'main_app/src/dashboard/dashboard_.html',context)
 
@@ -38,15 +44,25 @@ def download_csv(request):
 
 def upload_file(request):
     if request.method == "POST":
-        form = UploadFileForm(request.POST, request.FILES)
+        form = UploadFileForm(request.POST,request.FILES)
         print(request.POST['title'])
         if form.is_valid():
             print("valid form")
+            #image_form = form.save(commit=False)
+            clinician = account_models.Clinician.objects.get(user=request.user)
+            #print("clincian:",clincian.user.email)
+            default_coord = [0,0,0,0]
+            image_model = account_models.Image(image=request.FILES['file'],title=request.POST['title'],clinician=clinician,coords=default_coord)
+            image_model.save()
+            #form.coords = [0,0,0,0]
+            #form.save()
             #utils.save_uploaded_file(request.POST['title'],request.FILES)
+            print("Image Saved")
             return redirect('../dashboard_uploaded/')
-        return redirect('../dashboard_uploaded/')
+        #return redirect('../dashboard_uploaded/')
     else:
         form = UploadFileForm()
+        #form = UploadImageForm()
     return render(request,'main_app/index.html',{'form':form})
 
 def make_meeting(request):

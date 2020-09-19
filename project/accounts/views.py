@@ -3,7 +3,7 @@ from .forms import RegisterForm
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
-
+from . import models
 def home(request):
     return render(request, "accounts/home.html")
 
@@ -35,8 +35,10 @@ def signup(request):
         print(request.POST['password1'])
         if form.is_valid():
             new_user = form.save(commit=False)
+            clinician_model = models.Clinician(title="clincian",user=new_user)
             new_user.username = request.POST['email']
             new_user.save()
+            clinician_model.save()
             print(new_user)
             print("valid form")
             return redirect('/accounts/signin/')
