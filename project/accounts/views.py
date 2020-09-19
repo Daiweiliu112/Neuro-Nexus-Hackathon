@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from .forms import RegisterForm
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from . import models
 def home(request):
     return render(request, "accounts/home.html")
@@ -48,6 +48,6 @@ def signup(request):
         form = RegisterForm()
     return render(request,'accounts/create_account/create_account.html',{'form':form})
 
-def logout(request):
+def logout_view(request):
     logout(request)
-    return redirect('accounts/signin/')
+    return redirect('accounts:signin')

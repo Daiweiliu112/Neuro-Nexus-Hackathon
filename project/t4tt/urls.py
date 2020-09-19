@@ -29,7 +29,7 @@ urlpatterns = [
     path('home/', include('main_app.urls')),
     path('accounts/', include('accounts.urls')),
     path('admin/', admin.site.urls),
-    path('main_app/', include(main_app_urls)),
+    path('main_app/', include('main_app.urls')),
     path('',account_views.signin)
     #path('main_app/dashboard',main_app_views.dashboard)
     ]

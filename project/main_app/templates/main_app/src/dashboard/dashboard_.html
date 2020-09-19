@@ -3,37 +3,37 @@
 {% load static %}
 {% block content %}
 <style>
-    .bd-placeholder-img {
-      font-size: 1.125rem;
-      text-anchor: middle;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-    }
+  .bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
 
-    @media (min-width: 768px) {
-      .bd-placeholder-img-lg {
-        font-size: 3.5rem;
-      }
+  @media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+      font-size: 3.5rem;
     }
+  }
 </style>
 
 
 
-  <!-- Custom styles for this template -->
+<!-- Custom styles for this template -->
 <link href="dashboard.css" rel="stylesheet">
-<div class="navbar navbar-dark bg-dark shadow-sm">
-    <div class="container d-flex justify-content-between">
-      <a href="#" class="navbar-brand d-flex align-items-center">
-        <strong>Tech For Teletherapy</strong>
-      </a>
-      <span class="navbar-brand">Dr. |FirstName| |LastName|</span>
-      <span class="navbar-brand">Sign out</span>
-      </button>
-    </div>
+<!--div class="navbar navbar-dark bg-dark shadow-sm">
+  <div class="container d-flex justify-content-between">
+    <a href="#" class="navbar-brand d-flex align-items-center">
+      <strong>Tech For Teletherapy</strong>
+    </a>
+    <span class="navbar-brand">Dr. |FirstName| |LastName|</span>
+    <a class="navbar-brand button" href="/accounts/signin/">Sign out</a>
+    </button>
   </div>
-</header>
+</div-->
+
 
 <main role="main">
 
@@ -45,10 +45,10 @@
         <a href="#" class="btn btn-primary my-2" id='create_meeting'>Create Meeting</a>
         <!--a href="#" class="btn btn-secondary my-2">View Overall Statistics</a-->
       </p>
-    <div id='room_name'>
+      <div id='room_name'>
         <p>Link for Client: <a id='client_link' href=""></a></p>
         <p>Link for Clincian: <a id='clinician_link' href=""></a></p>
-    </div>
+      </div>
       <a href="../upload/" class="btn btn-primary my-2">Upload Images</a>
     </div>
   </section>
@@ -61,7 +61,7 @@
             <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg"
               preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail">
               <title>Placeholder</title>
-              
+
               <rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%" fill="#eceeef"
                 dy=".3em">Thumbnail</text>
             </svg>
@@ -254,43 +254,41 @@
 
 </main>
 
-<footer class="text-muted">
+<!--footer class="text-muted">
   <div class="container">
     <p class="float-right">
       <a href="#">Back to top</a>
     </p>
     <p>&copy; 2020 Tech For Teletherapy</p>
   </div>
-</footer>
-<script
-  src="https://code.jquery.com/jquery-3.4.1.min.js"
-  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-  crossorigin="anonymous"></script>
+</footer-->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <script>
-  $('#create_meeting').click(function(){
+  $('#create_meeting').click(function () {
     console.log("clicked");
     let url = '../ajax/create_meeting/';
     $.ajax({
-      url:url,
-      success: function(data){
+      url: url,
+      success: function (data) {
         console.log("Recieved");
         console.log(data);
         let client_room_name = data['client']
         let clinician_room_name = data['clinician']
         //$('#room_name').text(client_room_name);
-        $('#client_link').attr('href',"../.." + client_room_name);
+        $('#client_link').attr('href', "../.." + client_room_name);
         $('#client_link').text("localhost" + client_room_name);
-        $('#clinician_link').attr('href',"../.." + clinician_room_name);
+        $('#clinician_link').attr('href', "../.." + clinician_room_name);
         $('#clinician_link').text("localhost" + clinician_room_name)
       },
     });
   });
 </script>
 <script>
-  $('.card').click(function(){
-    if($(this).hasClass('card-selected')){
+  $('.card').click(function () {
+    if ($(this).hasClass('card-selected')) {
       $(this).removeClass('card-selected');
-    }else{
+    } else {
       //let classes = $(this).attr('class');
       //console.log(classes);
       $(this).addClass('card-selected');
@@ -302,9 +300,9 @@
   })
 </script>
 
-  <style>
-    .card-selected{
-      background-color: aqua;
-    }
-  </style>
+<style>
+  .card-selected {
+    background-color: aqua;
+  }
+</style>
 {% endblock %}
