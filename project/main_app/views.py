@@ -16,15 +16,35 @@ def signin_test(request):
     return render(request, 'main_app/src/sign-in/sign_in.html')
 
 def dashboard(request):
-    current_user = request.user
-    print(current_user)
+    #current_user = request.user
     context = {"testing": '''<image class="image-fluid" height="255" width= "100%" src="/static/I_Spy 1.png" />'''}
     return render(request,'main_app/src/dashboard/dashboard_upload.html',context)
 
 def dashboard_test(request):
     current_user = request.user
     print("current user: ", current_user)
-    context = {"testing": '''<image class="image-fluid" height="255" width= "100%" src="/static/I_Spy 1.png" />'''}
+    clinician = account_models.Clinician.objects.get(user=request.user)
+    images = account_models.Image.objects.filter(clinician=clinician)
+    print("Image: ", images)
+    print(len(images))
+    row = len(images) // 3
+    remain = len(images) % 3
+    image_array = []
+    for i in range(row):
+        starting_index = i * 3
+        temp = [images[starting_index], images[starting_index + 1], images[starting_index + 2]]
+        image_array.append(temp)
+    if remain > 0:
+        last_index = 3 * row
+        temp = []
+        for i in range(remain):
+            temp.append(images[last_index + i])
+        image_array.append(temp)
+    print(image_array)
+    context = {
+        "images":image_array,
+    }
+    print(context)
     return render(request,'main_app/src/dashboard/dashboard_.html',context)
 
 def child_image(request):
