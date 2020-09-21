@@ -32,7 +32,7 @@ urlpatterns = [
     path('main_app/', include(main_app_urls)),
     path('',account_views.signin)
     #path('main_app/dashboard',main_app_views.dashboard)
-    ]
+]
 
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # method that allows media url

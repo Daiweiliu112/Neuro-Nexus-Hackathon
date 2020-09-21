@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'dynamic_fields',
     'six',
-    'main_app'
+    # 'main_app'
 ]
 
 MIDDLEWARE = [

@@ -34,10 +34,11 @@ function initDraw(canvas, ws) {
             element = document.createElement('div');
             element.className = 'rectangle'
     
-            element.style.top = data[i]['top']
-            element.style.left = data[i]['left']
-            element.style.width = data[i]['width']
-            element.style.height = data[i]['height']
+            /* Adjust pixel values for different screen sizes */
+            element.style.top = data[i]['top'] * screen.height + 'px'
+            element.style.left = data[i]['left'] * screen.width + 'px'
+            element.style.width = data[i]['width'] * screen.width + 'px'
+            element.style.height = data[i]['height'] * screen.height + 'px'
             element.id = data[i]['id']
     
             canvas.appendChild(element)
@@ -51,6 +52,7 @@ function initDraw(canvas, ws) {
 
     socket.onmessage = function (event) {
         var data = JSON.parse(event.data)['message']
+        console.log(data);
         if (data.origin === clinician) {
             data = data.content
             if (data === 'delete') {

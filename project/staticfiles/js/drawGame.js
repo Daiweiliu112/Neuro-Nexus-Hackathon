@@ -66,12 +66,13 @@ function initDraw(canvas, ws) {
             }
 
             element.id = id.value
-            objs.push({                        
-                width: element.style.width,
-                height: element.style.height,
-                top: element.style.top,
-                left: element.style.left,
-                id: element.id,
+            /* Convert to percentage, convert back after sending */
+            objs.push({
+                width: Number(element.style.width.slice(0, -2)) / screen.width,
+                height: Number(element.style.height.slice(0, -2)) / screen.height,
+                top: Number(element.style.top.slice(0, -2)) / screen.height,
+                left: Number(element.style.left.slice(0, -2)) / screen.width,
+                id: element.id
             })
             ids.push(id.value)
         }
