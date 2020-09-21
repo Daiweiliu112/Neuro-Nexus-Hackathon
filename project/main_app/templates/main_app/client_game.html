@@ -11,7 +11,9 @@
         <title>Chat Room Example</title>
     </head>
     <body>
-        <div id="canvas"></div>
+        <div id="canvas">
+            <img class="image-fluid" src="{% static 'I_Spy 1.png' %}" />
+        </div>
         {{ room_name | json_script:"room-name"}}
         <script src="{% static 'js/getGame.js' %}"></script>
         <script src="{% static 'js/util.js' %}"></script>
