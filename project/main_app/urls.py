@@ -22,5 +22,7 @@ urlpatterns = [
     path(r'editview/(?P<pk>\d+)/$',views.edit_view,name='editview'),
     #path('editview/<int:pk>/',views.edit_view,name='editview'),
     path('save_image/',views.save_image_edit,name="save_image_edit"),
-    path('create_collection/',views.create_collection_view,name="create_collection")
+    path('create_collection/',views.create_collection_view,name="create_collection"),
+    path('ajax/create_collection/',views.create_collection,name="ajax_create_collection"),
+    path(r'edit_collection/(?P<pk>\d+)/$',views.edit_collection_view,name='edit_collection')
 ]

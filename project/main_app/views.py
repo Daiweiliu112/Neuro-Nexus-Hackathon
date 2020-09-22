@@ -36,7 +36,7 @@ def dashboard_test(request):
             starting_index = i * 3
             temp = [collections[starting_index],collections[starting_index + 1],collections[starting_index + 2]]
         if collections_remainder > 0:
-            last_index = collections * collections_row
+            last_index = 3 * collections_row
             temp = []
             for i in range(collections_remainder):
                 temp.append(collections[last_index+i])
@@ -175,7 +175,7 @@ def create_collection_view(request):
         current_user = request.user
         clinician = account_models.Clinician.objects.get(user=current_user)
         collections = account_models.ImageSet.objects.filter(clinician=clinician)
-
+        #collections_pk = collections.pk
         images = account_models.Image.objects.filter(clinician=clinician)
         print("Image: ", images)
         print(len(images))
@@ -201,5 +201,54 @@ def create_collection_view(request):
     return render(request,'main_app/src/dashboard/dashboard_collection.html')
 
 def create_collection(request):
+    images_id = json.loads(request.POST.get("selected_image"))
+    print(images_id)
     
-    pass
+    current_user = request.user
+    clinician = account_models.Clinician.objects.get(user=current_user)
+    print(clinician)
+    image_set = account_models.ImageSet()
+    image_set.clinician = clinician
+    image_set.title = json.loads(request.POST.get("title"))
+    fields = image_set._meta.get_fields()
+    print(type(fields[3]))
+    i = 3
+    #for image_id in images_id:
+    #    temp_model = fields[i]
+    #    temp_model = account_models.Image.objects.get(pk=image_id)
+        
+    #    i+=1
+    image_set.pic1 = account_models.Image.objects.get(pk=images_id[0])
+    image_set.pic2 = account_models.Image.objects.get(pk=images_id[1])
+    image_set.pic3 = account_models.Image.objects.get(pk=images_id[2])
+    image_set.pic4 = account_models.Image.objects.get(pk=images_id[3])
+    image_set.pic5 = account_models.Image.objects.get(pk=images_id[4])
+    image_set.pic6 = account_models.Image.objects.get(pk=images_id[5])
+    image_set.pic7 = account_models.Image.objects.get(pk=images_id[6])
+    image_set.pic8 = account_models.Image.objects.get(pk=images_id[7])
+    image_set.pic9 = account_models.Image.objects.get(pk=images_id[8])
+    image_set.pic10 = account_models.Image.objects.get(pk=images_id[9])
+    image_set.pic11 = account_models.Image.objects.get(pk=images_id[10])
+    for i in range(3,14):
+        print(fields[i])
+    image_set.save()
+    print(image_set.pic1.pk)
+    return JsonResponse({"sucess":True})
+
+def edit_collection_view(request,pk):
+    if request.user.is_authenticated:
+        print(pk)
+        collection_model = account_models.ImageSet.objects.get(pk=pk)
+        collection_image = [[collection_model.pic1,collection_model.pic2,collection_model.pic3],
+                            [collection_model.pic4,collection_model.pic5,collection_model.pic6],
+                            [collection_model.pic7,collection_model.pic8,collection_model.pic9],
+                            [collection_model.pic10,collection_model.pic11]
+        ]
+
+
+        context = {
+            "collection_image":collection_image
+        }
+
+
+    return render(request,'main_app/src/dashboard/dashboard_collection.html')
