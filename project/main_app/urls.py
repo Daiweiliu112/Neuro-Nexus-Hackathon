@@ -1,8 +1,7 @@
 from django.urls import path
 from . import views
 
-
-app_name = 'main_app'
+# app_name = 'main_app'
 urlpatterns = [
     path('',views.index,name='index'),
     #path('sign_in/',views.signin,name='sign_in'),
@@ -25,7 +24,7 @@ urlpatterns = [
     #path('clinician/',views.clinician_game,name='clinician'),
     #path('cli/<str:room_name>/',views.clinician_test,name='clinician_test'),
     #path('client/<str:room_name>/',views.client_test,name='client_test'),
-    path('cli/<str:room_name>/',views.client_test,name='clinician_test'),
-    path('client/<str:room_name>/',views.clinician_test,name='client_test'),
+    path('cli/<str:room_name>/',views.clinician_test,name='clinician_test'),
+    path('client/<str:room_name>/',views.client_test,name='client_test'),
     path('editview/',views.edit_view,name='edit view'),
 ]

@@ -24,16 +24,15 @@
   <!-- Custom styles for this template -->
 <link href="dashboard.css" rel="stylesheet">
 <div class="navbar navbar-dark bg-dark shadow-sm">
-    <div class="container d-flex justify-content-between">
-      <a href="#" class="navbar-brand d-flex align-items-center">
-        <strong>Tech For Teletherapy</strong>
-      </a>
-      <span class="navbar-brand">Dr. |FirstName| |LastName|</span>
-      <span class="navbar-brand">Sign out</span>
-      </button>
-    </div>
+  <div class="container d-flex justify-content-between">
+    <a href="#" class="navbar-brand d-flex align-items-center">
+      <strong>Tech For Teletherapy</strong>
+    </a>
+    <span class="navbar-brand">Dr. |FirstName| |LastName|</span>
+    <span class="navbar-brand">Sign out</span>
+    </button>
   </div>
-</header>
+</div>
 
 <main role="main">
 
@@ -51,6 +50,12 @@
     </div>
       <a href="../upload/" class="btn btn-primary my-2">Upload Images</a>
     </div>
+
+    <form name="cli_id_form" action="#" onsubmit="return send_data()" style="padding: 10px;">
+        <input type="text" placeholder="Client ID" name="cli_id"  class="form-control" id="client-id">
+        <input type="submit" value="Create Client" class="btn btn-primary my-2">
+    </form>
+
   </section>
 
   <div class="album py-5 bg-light">
@@ -300,11 +305,41 @@
     //console.log('card clicked');
     //$(this).attr('style','background-color:blue');
   })
+
+  function send_data() {
+   console.log('Sending data to server...');
+   var cli_id = document.forms["cli_id_form"]["cli_id"].value;
+   // will add in in game currency and tie to user model
+   var data = {
+     cli_id: cli_id
+   };
+   data = JSON.stringify(data);
+   // console.log(data);
+ 
+   $.ajax({
+     type: 'GET',
+     dataType: 'json',
+     url: '/update_sled_score/',
+     data: data,
+     success: function (response) {
+       console.log(response);
+     },
+     error: function (response) {
+       console.log(response);
+     },
+   });
+ }
+
 </script>
 
   <style>
     .card-selected{
       background-color: aqua;
+    }
+
+    #client-id {
+      width: 10%;
+      margin: 0 auto;
     }
   </style>
 {% endblock %}
