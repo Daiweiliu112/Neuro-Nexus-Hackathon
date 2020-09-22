@@ -24,16 +24,16 @@ from accounts import views as account_views
 from main_app import urls as main_app_urls
 from main_app import views as main_app_views
 
-
 urlpatterns = [
     path('home/', include('main_app.urls')),
     path('accounts/', include('accounts.urls')),
     path('admin/', admin.site.urls),
-    path('main_app/', include('main_app.urls')),
+    path('main_app/', include(main_app_urls)),
     path('',account_views.signin),
     path('check_cli_num/', main_app_views.check_cli_num, name='check_cli_num'),
+
     #path('main_app/dashboard',main_app_views.dashboard)
-    ]
+]
 
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # method that allows media url
