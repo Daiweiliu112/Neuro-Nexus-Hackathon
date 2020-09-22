@@ -12,27 +12,31 @@ function initDraw(canvas, ws) {
     };
 
     var clicked = []
+    var items = [];
 
     function deleteRects() {
-        document.querySelectorAll('.rectangle').forEach(rect => {
+        document.querySelectorAll('.target').forEach(rect => {
             rect.remove()
         });
         clicked = []
+        items = []
     }
 
     function sendClick() {
         var id = this.id
         if (clicked.indexOf(id) < 0) {
-            send(socket, {content: id, origin: client})
+            send(socket, {content: id.replace(' ', '@@@'), origin: client})
             clicked.push(id)
         }
     }
 
     function makeRects(data) {
         var element = null;
+        items = [];
         for (let i = 0; i < data.length; i++) {
             element = document.createElement('div');
-            element.className = 'rectangle'
+            element.className = 'target'
+            element.style.position = 'absolute'
     
             /* Adjust pixel values for different screen sizes */
             element.style.top = data[i]['top'] * screen.height + 'px'
@@ -40,14 +44,18 @@ function initDraw(canvas, ws) {
             element.style.width = data[i]['width'] * screen.width + 'px'
             element.style.height = data[i]['height'] * screen.height + 'px'
             element.id = data[i]['id']
-    
-            canvas.appendChild(element)
+            items.push(data[i]['id'].replace('@@@', ' '))
 
+            canvas.appendChild(element)
+            
         }
         
-        document.querySelectorAll('.rectangle').forEach(rect => {
+        document.querySelectorAll('.target').forEach(rect => {
             rect.onclick = sendClick
         })
+
+        document.getElementById('item-list').innerText = "Items: " + items.join(', ');
+        items = [];
     }
 
     socket.onmessage = function (event) {

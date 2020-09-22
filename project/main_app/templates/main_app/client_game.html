@@ -20,6 +20,7 @@
 </div>
 
 <div class="footer">
+    <h3 id="item-list" class="center-horizontal" >Items: No items yet!</h3>
 </div>
 {{ room_name | json_script:"room-name"}}
 
@@ -30,6 +31,15 @@
     const chatSocket = get_socket(window.location.host, roomName)
     initDraw(document.getElementById('canvas'), chatSocket);
 </script>
+
+<style>
+    #item-list {
+        color: #FFCB9A;
+        font-size: 30px;
+        margin: auto 0;
+    }
+
+</style>
 {% endblock %}
 
 </html>

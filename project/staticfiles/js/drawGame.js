@@ -27,6 +27,7 @@ function initDraw(canvas, ws) {
         var data = JSON.parse(e.data)['message']
         if (data.origin === client) {
             data = data.content
+            console.log(data,  document.querySelector(`#${data}`));
             alert(`The client has clicked on the rectangle for ${data}`)
             document.querySelector(`#${data}`).style.opacity = 0.5
         }
@@ -67,7 +68,7 @@ function initDraw(canvas, ws) {
                 return
             }
 
-            element.id = id.value
+            element.id = id.value.replace(' ', '$$$');
             /* Convert to percentage, convert back after sending */
             objs.push({
                 width: Number(element.style.width.slice(0, -2)) / screen.width,
@@ -181,8 +182,11 @@ function initDraw(canvas, ws) {
                 inp.type = 'text'
                 
                 title.appendChild(inp)
-            } else if (element !== null) {
-                console.log('Please construct the rectangles such that they do not intersect')
+            } else {
+                if (element !== null) {
+                    console.log('Please construct the rectangles such that they do not intersect')
+                }
+                console.log(element);
                 element.remove()
             }
             element = null
