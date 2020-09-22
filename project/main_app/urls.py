@@ -27,5 +27,8 @@ urlpatterns = [
     #path('client/<str:room_name>/',views.client_test,name='client_test'),
     path('cli/<str:room_name>/',views.client_test,name='clinician_test'),
     path('client/<str:room_name>/',views.clinician_test,name='client_test'),
-    path('editview/',views.edit_view,name='edit view'),
+    path(r'editview/(?P<pk>\d+)/$',views.edit_view,name='editview'),
+    #path('editview/<int:pk>/',views.edit_view,name='editview'),
+    path('save_image/',views.save_image_edit,name="save_image_edit")
+    
 ]

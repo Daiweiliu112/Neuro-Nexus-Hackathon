@@ -50,6 +50,7 @@
         <p>Link for Clincian: <a id='clinician_link' href=""></a></p>
       </div>
       <a href="../upload/" class="btn btn-primary my-2">Upload Images</a>
+      <a href="" class="btn btn-primary">Make collection</a>
     </div>
   </section>
 
@@ -59,7 +60,7 @@
       <div class="row">
         {% for asset_image in image_row %}
         <div class="col-md-4">
-          <div class="card mb-4 shadow-sm">
+          <div class="card mb-4 shadow-sm" id='{{ asset_image.pk }}'>
             <!--svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg"
               preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail">
               <title>Placeholder</title>
@@ -68,15 +69,15 @@
                 dy=".3em">Thumbnail</text>
             </svg-->
 
-            <image class="image-fluid" height="255" width= "100%" src='{{ asset_image.image.url }}' />
+            <image class="image-fluid" height="255" width="100%" src='{{ asset_image.image.url }}' />
             <div class="card-body">
               <p class="card-text">{{ asset_image.title }} </p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                  <!--button type="button" class="btn btn-sm btn-outline-secondary">View</button-->
+                  <a class="edit btn btn-sm btn-outline-secondary" href='{% url 'main_app:editview' asset_image.pk %}'>Edit</a>
                 </div>
-                <small class="text-muted">9 mins</small>
+
               </div>
             </div>
           </div>
@@ -85,7 +86,7 @@
       </div>
       {% endfor %}
 
-      
+
     </div>
   </div>
 

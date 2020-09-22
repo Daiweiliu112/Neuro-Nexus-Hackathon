@@ -19,7 +19,7 @@
 </style>
   <!-- Custom styles for this template -->
 <link href="child-image.css" rel="stylesheet">
-<header>
+<!--header>
     <div class="navbar navbar-dark bg-dark shadow-sm">
       <div class="container d-flex justify-content-between ml-2">
         <a href="#" class="navbar-brand d-flex align-items-center">
@@ -37,7 +37,7 @@
         </button>
       </div>
     </div>
-  </header>
+  </header-->
 
   <div class="center-horizontal">
     <button id="draw-switch">
@@ -48,8 +48,8 @@
     </button>
   </div>
   <div id="canvas">
-  
-    <img class="image-fluid" src="{% static 'I_Spy 1.png' %}" />
+    
+    <img class="image-fluid" src="{{ image.image.url }}" />
     
   </div>
 
@@ -69,7 +69,8 @@
         </svg>
       </span>
       <span>&nbsp;</span>
-      <a class="btn btn-primary" id="save" href="../dashboard_uploaded">Save</a>
+      
+      <button class="btn btn-primary" id="save">Save</a>
     </div>
   </footer>
 
@@ -79,8 +80,12 @@
   src="https://code.jquery.com/jquery-3.4.1.min.js"
   integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
   crossorigin="anonymous"></script>
-  
+  {% csrf_token %}
   <script>
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    var post_url = '{% url 'main_app:save_image_edit' %}'
+    var points;
+    let image_info = {{ image.pk }}
     initDraw(document.getElementById('canvas'));
     //console.log("drawing box");
     $('#clear').click(function(){
@@ -89,9 +94,27 @@
         return this.innerHTML;
       }).get();
       console.log(rectall.join());
-      $(".rectangle").remove()
+      $(".rectangle").remove();
+      console.log(points)
     });
-
+    $('#save').click(function(){
+      console.log(post_url);
+      console.log(points);
+      console.log(image_info);
+      $.post({
+        headers: {'X-CSRFToken': csrftoken},
+        mode: 'same-origin',
+        type:"POST",
+        url:post_url,
+        data:{
+          "points": JSON.stringify(points),
+          "image_pk": JSON.stringify(image_info)
+        },
+        success: function(){
+          window.location.replace('{% url 'main_app:dashboard' %}' );
+        }
+      });
+    });
   </script>
   <style>
     #canvas{

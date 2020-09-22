@@ -116,13 +116,32 @@ function initDraw(canvas) {
                         left: element.style.left,
                     }                    
                 })
+                //let top_pixel = element.style.top.replace('px','')
+                let top_pixel = parseInt(element.style.top)
+                let left_pixel = parseInt(element.style.left)
+                let width_pixel = parseInt(element.style.width)
+                let height_pixel = parseInt(element.style.height)
+                console.log(top_pixel + left_pixel)
+                points = {
+                "top_left":[left_pixel,top_pixel],
+                "top_right":[left_pixel+width_pixel, top_pixel],
+                "bottom_left":[left_pixel,top_pixel+height_pixel],
+                "bottom_right":[ left_pixel+width_pixel,top_pixel+height_pixel]
+                }
                 console.log(elObj)
+                console.log(points);
+                //console.log(post_url);
+                /*$.ajax(
+                    
+                )*/
+                
             } else if (element !== null) {
                 console.log('Please construct the rectangles such that they do not intersect')
                 element.remove()
             }
             element = null
             canvas.style.cursor = "default";
+            
         }
         drawSwitch = false;
     })

@@ -64,7 +64,7 @@ class Image(models.Model):
     clinician = models.ForeignKey(Clinician, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     coords = ArrayField( # bounding box for target object
-                        models.PositiveSmallIntegerField(null=True,blank=True), 
+                        models.PositiveSmallIntegerField(null=True,blank=True),         # x1,y1,x2,y2
                         size=4,
                     )
 
