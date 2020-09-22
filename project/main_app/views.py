@@ -9,6 +9,15 @@ import json
 
 # Create your views here.
 
+
+def check_cli_num(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        logger.error(data)
+        user = request.user
+        analytics.check_cli_num(user,data)
+        return HttpResponse("It's cool man!")
+
 def index(request):
     return render(request,'main_app/index copy.html')
 

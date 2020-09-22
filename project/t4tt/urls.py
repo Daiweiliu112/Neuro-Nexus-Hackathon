@@ -30,7 +30,8 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('admin/', admin.site.urls),
     path('main_app/', include('main_app.urls')),
-    path('',account_views.signin)
+    path('',account_views.signin),
+    path('check_cli_num/', main_app_views.check_cli_num, name='check_cli_num'),
     #path('main_app/dashboard',main_app_views.dashboard)
     ]
 
