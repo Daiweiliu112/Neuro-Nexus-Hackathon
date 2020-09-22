@@ -28,18 +28,31 @@ def dashboard_test(request):
         current_user = request.user
         print("current user: ", current_user)
         clinician = account_models.Clinician.objects.get(user=request.user)
+        collections = account_models.ImageSet.objects.filter(clinician=clinician)
+        collections_row = len(collections) // 3
+        collections_remainder = len(collections) % 3
+        collections_array = []
+        for i in range(collections_row):
+            starting_index = i * 3
+            temp = [collections[starting_index],collections[starting_index + 1],collections[starting_index + 2]]
+        if collections_remainder > 0:
+            last_index = collections * collections_row
+            temp = []
+            for i in range(collections_remainder):
+                temp.append(collections[last_index+i])
+            collections_array.append(temp)
         images = account_models.Image.objects.filter(clinician=clinician)
         print("Image: ", images)
         print(len(images))
-        row = len(images) // 3
+        image_row = len(images) // 3
         remain = len(images) % 3
         image_array = []
-        for i in range(row):
+        for i in range(image_row):
             starting_index = i * 3
             temp = [images[starting_index], images[starting_index + 1], images[starting_index + 2]]
             image_array.append(temp)
         if remain > 0:
-            last_index = 3 * row
+            last_index = 3 * image_row
             temp = []
             for i in range(remain):
                 temp.append(images[last_index + i])
@@ -47,6 +60,7 @@ def dashboard_test(request):
         print(image_array)
         context = {
             "images":image_array,
+            "collections":collections_array,
         }
         print(context)
         return render(request,'main_app/src/dashboard/dashboard_.html',context)
@@ -156,5 +170,36 @@ def save_image_edit(request):
     print("coord check:",image_model.coords)
     return JsonResponse({"worked":True})
 
-def collection_view(request):
+def create_collection_view(request):
+    if request.user.is_authenticated:
+        current_user = request.user
+        clinician = account_models.Clinician.objects.get(user=current_user)
+        collections = account_models.ImageSet.objects.filter(clinician=clinician)
+
+        images = account_models.Image.objects.filter(clinician=clinician)
+        print("Image: ", images)
+        print(len(images))
+        image_row = len(images) // 3
+        remain = len(images) % 3
+        image_array = []
+        for i in range(image_row):
+            starting_index = i * 3
+            temp = [images[starting_index], images[starting_index + 1], images[starting_index + 2]]
+            image_array.append(temp)
+        if remain > 0:
+            last_index = 3 * image_row
+            temp = []
+            for i in range(remain):
+                temp.append(images[last_index + i])
+            image_array.append(temp)
+        print(image_array)
+        context = {
+            "images":image_array,
+        }
+        print(context)
+        return render(request,'main_app/src/dashboard/dashboard_collection.html',context)
     return render(request,'main_app/src/dashboard/dashboard_collection.html')
+
+def create_collection(request):
+    
+    pass

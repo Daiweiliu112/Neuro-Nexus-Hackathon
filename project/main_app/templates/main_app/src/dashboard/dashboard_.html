@@ -50,17 +50,53 @@
         <p>Link for Clincian: <a id='clinician_link' href=""></a></p>
       </div>
       <a href="../upload/" class="btn btn-primary my-2">Upload Images</a>
-      <a href="" class="btn btn-primary">Make collection</a>
+      <!--a href="{% url 'main_app:create_collection' %}" class="btn btn-primary">Make collection</a-->
+      <button type="button" class="btn btn-primary" id="create_collection">Create Collection</button>
     </div>
   </section>
 
   <div class="album py-5 bg-light">
+
     <div class="container">
+      <span>Collections/Image Sets</span>
+
+      {% for collection_row in collections %}
+      <div class="row">
+        {% for collection_set in collection_row %}
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm" id='{{ collection_set.pk }}'>
+            <!--svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg"
+            preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail">
+            <title>Placeholder</title>
+
+            <rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%" fill="#eceeef"
+              dy=".3em">Thumbnail</text>
+          </svg-->
+            <image class="image-fluid" height="255" width="100%" src='{{ collection_set.pic1.image.url }}' />
+            <div class="card-body">
+              <p class="card-text">{{ collection_set.title }} </p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <!--button type="button" class="btn btn-sm btn-outline-secondary">View</button-->
+                  <!--a class="edit btn btn-sm btn-outline-secondary"
+                  href='{% url 'main_app:editview' asset_image.pk %}'>Edit</a-->
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+
+
+      <span>Uploaded Images</span>
       {% for image_row in images %}
       <div class="row">
         {% for asset_image in image_row %}
         <div class="col-md-4">
-          <div class="card mb-4 shadow-sm" id='{{ asset_image.pk }}'>
+          <div class="card mb-4 shadow-sm up-image" id='{{ asset_image.pk }}'>
             <!--svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg"
               preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail">
               <title>Placeholder</title>
@@ -75,7 +111,8 @@
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
                   <!--button type="button" class="btn btn-sm btn-outline-secondary">View</button-->
-                  <a class="edit btn btn-sm btn-outline-secondary" href='{% url 'main_app:editview' asset_image.pk %}'>Edit</a>
+                  <a class="edit btn btn-sm btn-outline-secondary"
+                    href='{% url 'main_app:editview' asset_image.pk %}'>Edit</a>
                 </div>
 
               </div>
@@ -123,6 +160,7 @@
   });
 </script>
 <script>
+  let selected_card_id = []
   $('.card').click(function () {
     if ($(this).hasClass('card-selected')) {
       $(this).removeClass('card-selected');
@@ -133,9 +171,23 @@
       classes = $(this).attr('class');
       console.log(classes);
     }
+    if ($(this).hasClass('up-image')) {
+      if ($(this).hasClass('selected-image-set')) {
+        $(this).removeClass('selected-image-set')
+      } else {
+
+        $(this).addClass('selected-image-set');
+      }
+    }
     //console.log('card clicked');
     //$(this).attr('style','background-color:blue');
-  })
+  });
+  $('#create_collection').click(function () {
+    let selected_image = $(".selected-image-set").map(function () {
+      return $(this).attr("id");
+    }).get();
+    console.log(selected_image)
+  });
 </script>
 
 <style>
