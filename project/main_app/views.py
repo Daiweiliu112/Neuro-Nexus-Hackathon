@@ -4,7 +4,6 @@ from . import utils
 from django.http import JsonResponse
 from accounts.models import (
     Client,
-    ClientClinicianLink,
     )
 from django.contrib.auth.models import User
 
@@ -14,16 +13,16 @@ def check_cli_num(request):
     # request should be ajax and method should be GET.
     if request.is_ajax and request.method == "GET":
         # get the client number from the client side.
-        cli_num = request.GET.get("cli_num", None)
+        cli_id = request.GET.get("cli_id", None)
         # check for the existing client number in the database.
         user = request.user
-        if Client.objects.filter(cli_num = cli_num).exists():
+        if Client.objects.filter(id_num = cli_id).exists():
             # if cli_num found return not valid .
             return JsonResponse({"valid":False}, status = 200)
         else:
             user = request.user
             # if cli_num not found, then clinician can create a new client.
-            client = Client(clinician=user,id_num=cli_num)
+            client = Client(clinician=user,id_num=cli_id)
             client.save()
             return JsonResponse({"valid":True}, status = 200)
 
