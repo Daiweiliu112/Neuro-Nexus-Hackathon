@@ -7,27 +7,6 @@ from django.http import JsonResponse
 def index(request):
     return render(request,'main_app/index copy.html')
 
-<<<<<<< HEAD
-def client_game(request):
-    return render(request,'main_app/client_game.html')
-
-def clinician_game(request):
-    return render(request,'main_app/clinician_game.html')
-
-def clinician_test(request,room_name):
-    print("clinician:" + room_name)
-    return render(request, 'main_app/clinician_game.html',{
-        'room_name':room_name
-    })
-
-def client_test(request,room_name):
-    print("client" + room_name)
-    return render(request,"main_app/client_game.html",{
-        'room_name':room_name
-    })
-    
-=======
->>>>>>> master
 def signin(request):
     return render(request, 'main_app/src/sign-in/signin.html')
 
@@ -99,8 +78,5 @@ def client_test(request,room_name):
         'room_name':room_name
     })
             
-<<<<<<< HEAD
-=======
 def edit_view(request):
     return render(request,'main_app/src/edit_view/clinician_image.html')
->>>>>>> master

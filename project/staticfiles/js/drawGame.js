@@ -13,6 +13,8 @@ function initDraw(canvas, ws) {
     var drawSwitch = false;
     var socket = ws
 
+    document.querySelector('img').draggable = false;
+
     socket.onopen = function (e) {
         console.log("[open] Connection established");
     };

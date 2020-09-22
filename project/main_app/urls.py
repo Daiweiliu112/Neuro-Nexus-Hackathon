@@ -15,12 +15,6 @@ urlpatterns = [
     #path('signup/',views.signup,name='signup'),
     path('csv/',views.download_csv,name='download'),
     path('upload/',views.upload_file,name='upload'),
-<<<<<<< HEAD
-    path('ajax/create_meeting/',views.make_meeting,name='create_meeting'),
-
-    path('cli/<str:room_name>/',views.clinician_test,name='clinician_test'),
-    path('client/<str:room_name>/',views.client_test,name='client_test'),
-=======
     path(r'ajax/create_meeting/',views.make_meeting,name='create_meeting'),
     #path('cli/<str:room_name>/',views.clinician_test,name='clinician_test'),
     #path('client/<str:room_name>/',views.client_test,name='client_test')
@@ -30,8 +24,7 @@ urlpatterns = [
     #path('clinician/',views.clinician_game,name='clinician'),
     #path('cli/<str:room_name>/',views.clinician_test,name='clinician_test'),
     #path('client/<str:room_name>/',views.client_test,name='client_test'),
-    path('cli/<str:room_name>/',views.client_test,name='clinician_test'),
-    path('client/<str:room_name>/',views.clinician_test,name='client_test'),
+    path('cli/<str:room_name>/',views.clinician_test,name='clinician_test'),
+    path('client/<str:room_name>/',views.client_test,name='client_test'),
     path('editview/',views.edit_view,name='edit view'),
->>>>>>> master
 ]
