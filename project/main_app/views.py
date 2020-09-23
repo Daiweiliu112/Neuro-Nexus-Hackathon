@@ -133,9 +133,10 @@ def upload_file(request):
 
 def make_meeting(request):
     room_name = utils.get_room_name()
-    print(room_name)
-    client_room_name = "/main_app/client/" + room_name + "/"
-    clinician_room_name = "/main_app/cli/" + room_name + '/'
+    print(request.POST.get("pk"))
+    pk = request.POST.get("pk")
+    client_room_name = "/main_app/client/" + room_name + "/" + pk
+    clinician_room_name = "/main_app/cli/" + room_name + '/' + pk
     #return render(request,'main_app/room_name.html',{'room_name':room_name})
     data = {'clinician':clinician_room_name,
             'client':client_room_name
@@ -148,16 +149,49 @@ def client_game(request):
 def clinician_game(request):
     return render(request,'main_app/clinician_game.html')
 
-def clinician_test(request,room_name):
+def clinician_test(request,room_name,pk):
     print("clinician:" + room_name)
+    print("pk:",pk)
+    collection = ImageSet.objects.get(pk=pk)
+    images = [
+        collection.pic1,
+        collection.pic2,
+        collection.pic3,
+        collection.pic4,
+        collection.pic5,
+        collection.pic6,
+        collection.pic7,
+        collection.pic8,
+        collection.pic9,
+        collection.pic10,
+        collection.pic11,
+    ]
+    print(images)
     return render(request, 'main_app/clinician_game.html',{
-        'room_name':room_name
+        'room_name':room_name,
+        "set_images":images
     })
 
-def client_test(request,room_name):
+def client_test(request,room_name,pk):
     print("client" + room_name)
+    collection = ImageSet.objects.get(pk=pk)
+    images = [
+        collection.pic1,
+        collection.pic2,
+        collection.pic3,
+        collection.pic4,
+        collection.pic5,
+        collection.pic6,
+        collection.pic7,
+        collection.pic8,
+        collection.pic9,
+        collection.pic10,
+        collection.pic11,
+    ]
+    print(images)
     return render(request,"main_app/client_game.html",{
-        'room_name':room_name
+        'room_name':room_name,
+        "set_images":images
     })
             
 def edit_view(request,pk):
@@ -166,8 +200,13 @@ def edit_view(request,pk):
         image_model = Image.objects.get(pk=pk)
         print("image url:",image_model.image.url)
         print("image title:", image_model.title)
+        image_points = image_model.coords
+        if(image_points == [0,0,0,0]):
+            image_points = None
+        print(image_points)
         context ={
-            "image":image_model
+            "image":image_model,
+            "points":image_points
         }
         return render(request,'main_app/src/edit_view/edit_view.html',context=context)
     else:
@@ -184,6 +223,7 @@ def save_image_edit(request):
     points_arr = [points["top_left"][0],points["top_left"][1],points["bottom_right"][0],points["bottom_right"][1]]
     print(points_arr)
     image_model.coords = points_arr 
+    image_model.title = json.loads(request.POST.get("title"))
     #image_model.coords = points_arr
     image_model.save()
     print("coord check:",image_model.coords)

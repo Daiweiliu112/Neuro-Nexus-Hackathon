@@ -81,10 +81,47 @@
   integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
   crossorigin="anonymous"></script>
   {% csrf_token %}
+  {% if points %}
+  <script>
+    let points_ = {{ points }}
+    console.log("There are coords:" + points_[2])
+    let width = points_[2] - points_[0];
+    let height = points_[3] - points_[1];
+    data1 = {
+        "top":points_[1],
+        "left":points_[0],
+        "width": width,
+        "height":height
+    }
+    console.log(height)
+    function makeRects(data) {
+        var element = null;
+        element = document.createElement('div');
+        element.className = 'rectangle'
+        element.style.position = 'absolute'
+        
+        element.style.top = data['top'] + 'px'
+        element.style.left = data['left'] + 'px'
+        element.style.width = data['width'] + 'px'
+        element.style.height = data['height'] + 'px'
+        
+        document.getElementById('canvas').appendChild(element)
+        items = []
+        
+    };
+    makeRects(data1);
+  </script>
+  {% else %}
+  <script>
+    console.log("No coords")
+  </script>
+  {% endif %}
+
   <script>
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    document.querySelector('img').draggable = false;
     $('#title').val("{{ image.title }}")
-    var post_url = '{% url 'main_app:save_image_edit' %}'
+    var post_url = "{% url 'main_app:save_image_edit' %}"
     var points;
     let image_info = {{ image.pk }}
     initDraw(document.getElementById('canvas'));
@@ -102,6 +139,7 @@
       console.log(post_url);
       console.log(points);
       console.log(image_info);
+      let title = $("#title").val();
       $.post({
         headers: {'X-CSRFToken': csrftoken},
         mode: 'same-origin',
@@ -109,7 +147,8 @@
         url:post_url,
         data:{
           "points": JSON.stringify(points),
-          "image_pk": JSON.stringify(image_info)
+          "image_pk": JSON.stringify(image_info),
+          "title":JSON.stringify(title)
         },
         success: function(){
           window.location.replace('{% url 'main_app:dashboard' %}' );

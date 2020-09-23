@@ -46,8 +46,8 @@
         <!--a href="#" class="btn btn-secondary my-2">View Overall Statistics</a-->
       </p>
       <div id='room_name'>
-        <p>Link for Client: <a id='client_link' href=""></a></p>
-        <p>Link for Clincian: <a id='clinician_link' href=""></a></p>
+        <p>Link for Client: <a id='client_link' href="" target="_blank"></a></p>
+        <p>Link for Clincian: <a id='clinician_link' href="" target="_blank"></a></p>
       </div>
       <a href="../upload/" class="btn btn-primary my-2">Upload Images</a>
       <!--a href="{% url 'main_app:create_collection' %}" class="btn btn-primary">Make collection</a-->
@@ -70,7 +70,7 @@
       <div class="row">
         {% for collection_set in collection_row %}
         <div class="col-md-4">
-          <div class="card mb-4 shadow-sm" id='{{ collection_set.pk }}'>
+          <div class="card mb-4 shadow-sm collection-images" id='{{ collection_set.pk }}'>
             <!--svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg"
             preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail">
             <title>Placeholder</title>
@@ -145,24 +145,42 @@
 </footer-->
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"
   integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+{% csrf_token %}
 <script>
+  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
   $('#create_meeting').click(function () {
     console.log("clicked");
-    let url = '../ajax/create_meeting/';
-    $.ajax({
-      url: url,
-      success: function (data) {
-        console.log("Recieved");
-        console.log(data);
-        let client_room_name = data['client']
-        let clinician_room_name = data['clinician']
-        //$('#room_name').text(client_room_name);
-        $('#client_link').attr('href', "../.." + client_room_name);
-        $('#client_link').text("localhost" + client_room_name);
-        $('#clinician_link').attr('href', "../.." + clinician_room_name);
-        $('#clinician_link').text("localhost" + clinician_room_name)
-      },
-    });
+    let selected_collection = $(".selected-image-set").map(function () {
+      return $(this).attr("id");
+    }).get();
+    if(selected_collection.length == 1){
+      let url = '../ajax/create_meeting/';
+      $.ajax({
+        url: url,
+        headers: {'X-CSRFToken': csrftoken},
+        mode: 'same-origin',
+        method:"POST",
+        data:{
+          "pk":JSON.stringify(parseInt(selected_collection[0]))
+        },
+        success: function (data) {
+          console.log("Recieved");
+          console.log(data);
+          let client_room_name = data['client']
+          let clinician_room_name = data['clinician']
+          //$('#room_name').text(client_room_name);
+          $('#client_link').attr('href', "../.." + client_room_name);
+          $('#client_link').text("localhost" + client_room_name);
+          $('#clinician_link').attr('href', "../.." + clinician_room_name);
+          $('#clinician_link').text("localhost" + clinician_room_name)
+        },
+      });
+    }else if (selected_collection.length == 0){
+      alert("Select 1 image set from below");
+    }else {
+      alert("Select only 1 image set from below");
+    }
+    
   });
 </script>
 <script>
@@ -183,6 +201,12 @@
       } else {
 
         $(this).addClass('selected-image-set');
+      }
+    }else if($(this).hasClass('collection-images')){
+      if($(this).hasClass('selected-image-set')){
+        $(this).removeClass('selected-image-set')
+      }else{
+        $(this).addClass('selected-image-set')
       }
     }
     //console.log('card clicked');
@@ -225,6 +249,7 @@
   <style>
     .card-selected{
       background-color: aqua;
+
     }
 
     #client-id {
