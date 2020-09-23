@@ -151,6 +151,15 @@
   let collection_pk_ = -1
 </script>
 {% endif %}
+
+{% if collection_title %}
+<script>
+$('#title').val("{{ collection_title }}")
+</script>
+{% else %}
+<script>
+</script>
+{% endif %}
 <script>
   const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
   let url = '{% url 'main_app:ajax_create_collection' %}';

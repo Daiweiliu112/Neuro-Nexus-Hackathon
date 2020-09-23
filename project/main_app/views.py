@@ -82,8 +82,6 @@ def child_image(request):
 def child_image_test(request):
     return render(request, 'main_app/src/child-image/child_image.html')
 
-def clinician_image(request):
-    return render(request, 'main_app/src/clinician-image/clinician-image.html')
 
 def signup(request):
     return render(request,'main_app/src/create_account/create_account.html')
@@ -158,10 +156,9 @@ def edit_view(request,pk):
         context ={
             "image":image_model
         }
-        return render(request,'main_app/src/edit_view/clinician_image.html',context=context)
+        return render(request,'main_app/src/edit_view/edit_view.html',context=context)
     else:
         redirect('accounts:signin')
-    return render(request,'main_app/src/edit_view/clinician_image.html')
 
 def save_image_edit(request):
     print(request.POST.get("points"))
@@ -260,11 +257,12 @@ def edit_collection_view(request,pk):
         current_user = request.user
         clinician = clinician = account_models.Clinician.objects.get(user=current_user)
         image_array = get_images(clinician)
-
+        title = collection_model.title
         context = {
             "collection":collection_image,
             "images": image_array,
             "collection_pk":pk,
+            "collection_title":title
         }
         return render(request,'main_app/src/dashboard/dashboard_collection.html',context)
 
