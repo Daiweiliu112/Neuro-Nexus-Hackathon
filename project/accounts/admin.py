@@ -2,10 +2,8 @@ from django.contrib import admin
 from .models import (
     Game,
     GameTrain,
-    Clinician,
     Client,
     Score,
-    ClientClinicianLink,
     Image,
     ImageSet,
     )
@@ -24,13 +22,6 @@ class GameTrainAdmin(admin.ModelAdmin):
 admin.site.register(GameTrain, GameTrainAdmin)
 
 
-class ClinciainAdmin(admin.ModelAdmin):
-    list_display = ('user','is_active')
-    search_fields = (['is_active'])
-
-admin.site.register(Clinician, ClinciainAdmin)
-
-
 class ClientAdmin(admin.ModelAdmin):
     list_display = ('is_active',)
     search_fields = (['is_active'])
@@ -43,13 +34,6 @@ class ScoreAdmin(admin.ModelAdmin):
     search_fields = ()
 
 admin.site.register(Score, ScoreAdmin)
-
-
-class ClientClinicianLinkAdmin(admin.ModelAdmin):
-    list_display = ('client','clinician','is_active')
-    search_fields = ()
-
-admin.site.register(ClientClinicianLink, ClientClinicianLinkAdmin)
 
 
 class ImageAdmin(admin.ModelAdmin):

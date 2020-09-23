@@ -22,15 +22,10 @@ class GameTrain(models.Model):
     updated = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
 
-############### Extended User Profile for Clinicians
-class Clinician(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=20,null=True, blank=True)
-    is_active = models.BooleanField(default=True)
 
 ########## Client (NOT an extended user model!)
 class Client(models.Model):
-    clinician = models.ForeignKey(Clinician, on_delete=models.CASCADE)
+    clinician = models.ForeignKey(User, on_delete=models.CASCADE)
     email = models.EmailField(max_length=150)
     pronouns = models.CharField(max_length=20)
     id_num = models.IntegerField(null=True,blank=True)
@@ -51,17 +46,12 @@ class Score(models.Model):
     game_train = models.ForeignKey(GameTrain,on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 
-############## ClientClinician
-class ClientClinicianLink(models.Model):
-    client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    clinician = models.ForeignKey(Clinician, on_delete=models.CASCADE)
-    is_active = models.BooleanField(('active'), default=False)
 
 ############ Image
 class Image(models.Model):
     image = models.ImageField(upload_to='main_nav/%Y/%m/%d' ,max_length=IMAGE_MAX_LENGTH,  default="default.png") #
     title = models.CharField(max_length=50)
-    clinician = models.ForeignKey(Clinician, on_delete=models.CASCADE)
+    clinician = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     coords = ArrayField( # bounding box for target object
                         models.PositiveSmallIntegerField(null=True,blank=True),         # x1,y1,x2,y2
@@ -70,7 +60,7 @@ class Image(models.Model):
 
 ############ ImageSet
 class ImageSet(models.Model):
-    clinician = models.ForeignKey(Clinician, on_delete=models.CASCADE)
+    clinician = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=50)
     pic1 = models.ForeignKey(Image, on_delete=models.CASCADE,related_name='pic1')
     pic2 = models.ForeignKey(Image, on_delete=models.CASCADE,related_name='pic2')

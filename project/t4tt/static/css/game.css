@@ -10,9 +10,8 @@ html, body {
   font-family: 'Quicksand';
   font-weight: 400;;
   color: #FFCB9A;
-  width:2000px;
-  height:2000px;
-  border: 10px solid transparent;
+  width:100%;
+  height:100%;
 }
 .rectangle {
   color: inherit;
@@ -46,4 +45,39 @@ html, body {
 
 .center-vertical *{
   margin: auto;
+}
+
+/* Header styles */
+.jumbotron {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  margin-bottom: 0;
+  background-color: #fff;
+}
+@media (min-width: 768px) {
+  .jumbotron {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+}
+
+.jumbotron p:last-child {
+  margin-bottom: 0;
+}
+
+.jumbotron h1 {
+  font-weight: 300;
+}
+
+.jumbotron .container {
+  max-width: 40rem;
+}
+
+footer {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+footer p {
+  margin-bottom: .25rem;
 }
