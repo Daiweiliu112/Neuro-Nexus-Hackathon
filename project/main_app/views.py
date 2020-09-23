@@ -4,8 +4,11 @@ from . import utils
 from django.http import JsonResponse
 from accounts.models import (
     Client,
+    ImageSet,
+    Image
     )
 from django.contrib.auth.models import User
+import json
 
 # Create your views here.
 
@@ -46,8 +49,8 @@ def dashboard_test(request):
     if request.user.is_authenticated:
         current_user = request.user
         print("current user: ", current_user)
-        clinician = account_models.Clinician.objects.get(user=request.user)
-        collections = account_models.ImageSet.objects.filter(clinician=clinician)
+        #clinician = account_models.Clinician.objects.get(user=request.user)
+        collections = ImageSet.objects.filter(clinician=request.user)
         collections_row = len(collections) // 3
         collections_remainder = len(collections) % 3
         collections_array = []
@@ -60,7 +63,7 @@ def dashboard_test(request):
             for i in range(collections_remainder):
                 temp.append(collections[last_index+i])
             collections_array.append(temp)
-        images = account_models.Image.objects.filter(clinician=clinician)
+        images = Image.objects.filter(clinician=request.user)
         print("Image: ", images)
         print(len(images))
         image_row = len(images) // 3
@@ -107,10 +110,10 @@ def upload_file(request):
             if form.is_valid():
                 print("valid form")
                 #image_form = form.save(commit=False)
-                clinician = account_models.Clinician.objects.get(user=request.user)
+                #clinician = account_models.Clinician.objects.get(user=request.user)
                 #print("clincian:",clincian.user.email)
                 default_coord = [0,0,0,0]
-                image_model = account_models.Image(image=request.FILES['file'],title=request.POST['title'],clinician=clinician,coords=default_coord)
+                image_model = Image(image=request.FILES['file'],title=request.POST['title'],clinician=request.user,coords=default_coord)
                 image_model.save()
                 #form.coords = [0,0,0,0]
                 #form.save()
@@ -160,7 +163,7 @@ def client_test(request,room_name):
 def edit_view(request,pk):
     print(pk)
     if request.user.is_authenticated:
-        image_model = account_models.Image.objects.get(pk=pk)
+        image_model = Image.objects.get(pk=pk)
         print("image url:",image_model.image.url)
         print("image title:", image_model.title)
         context ={
@@ -174,7 +177,7 @@ def save_image_edit(request):
     print(request.POST.get("points"))
     print(request.POST)
     image_pk = request.POST.get("image_pk")
-    image_model = account_models.Image.objects.get(pk=image_pk)
+    image_model = Image.objects.get(pk=image_pk)
     print(image_model.coords)
     points = json.loads(request.POST.get("points"))
     print(points["top_left"])
@@ -189,10 +192,10 @@ def save_image_edit(request):
 def create_collection_view(request):
     if request.user.is_authenticated:
         current_user = request.user
-        clinician = account_models.Clinician.objects.get(user=current_user)
-        collections = account_models.ImageSet.objects.filter(clinician=clinician)
+        #clinician = account_models.Clinician.objects.get(user=current_user)
+        collections = ImageSet.objects.filter(clinician=request.user)
         #collections_pk = collections.pk
-        images = account_models.Image.objects.filter(clinician=clinician)
+        images = Image.objects.filter(clinician=request.user)
         print("Image: ", images)
         print(len(images))
         image_row = len(images) // 3
@@ -220,15 +223,15 @@ def create_collection(request):
     images_id = json.loads(request.POST.get("selected_image"))
     print(images_id)
     current_user = request.user
-    clinician = account_models.Clinician.objects.get(user=current_user)
-    print(clinician)
+    #clinician = account_models.Clinician.objects.get(user=current_user)
+    #print(clinician)
     collection_pk = json.loads(request.POST.get("collection_pk"))
     if(collection_pk < 0):
-        image_set = account_models.ImageSet()
+        image_set = ImageSet()
     else:
-        image_set = account_models.ImageSet.objects.get(pk=collection_pk)
+        image_set = ImageSet.objects.get(pk=collection_pk)
     
-    image_set.clinician = clinician
+    image_set.clinician = request.user
     image_set.title = json.loads(request.POST.get("title"))
     fields = image_set._meta.get_fields()
     print(type(fields[3]))
@@ -238,17 +241,17 @@ def create_collection(request):
     #    temp_model = account_models.Image.objects.get(pk=image_id)
         
     #    i+=1
-    image_set.pic1 = account_models.Image.objects.get(pk=images_id[0])
-    image_set.pic2 = account_models.Image.objects.get(pk=images_id[1])
-    image_set.pic3 = account_models.Image.objects.get(pk=images_id[2])
-    image_set.pic4 = account_models.Image.objects.get(pk=images_id[3])
-    image_set.pic5 = account_models.Image.objects.get(pk=images_id[4])
-    image_set.pic6 = account_models.Image.objects.get(pk=images_id[5])
-    image_set.pic7 = account_models.Image.objects.get(pk=images_id[6])
-    image_set.pic8 = account_models.Image.objects.get(pk=images_id[7])
-    image_set.pic9 = account_models.Image.objects.get(pk=images_id[8])
-    image_set.pic10 = account_models.Image.objects.get(pk=images_id[9])
-    image_set.pic11 = account_models.Image.objects.get(pk=images_id[10])
+    image_set.pic1 = Image.objects.get(pk=images_id[0])
+    image_set.pic2 = Image.objects.get(pk=images_id[1])
+    image_set.pic3 = Image.objects.get(pk=images_id[2])
+    image_set.pic4 = Image.objects.get(pk=images_id[3])
+    image_set.pic5 = Image.objects.get(pk=images_id[4])
+    image_set.pic6 = Image.objects.get(pk=images_id[5])
+    image_set.pic7 = Image.objects.get(pk=images_id[6])
+    image_set.pic8 = Image.objects.get(pk=images_id[7])
+    image_set.pic9 = Image.objects.get(pk=images_id[8])
+    image_set.pic10 = Image.objects.get(pk=images_id[9])
+    image_set.pic11 = Image.objects.get(pk=images_id[10])
     for i in range(3,14):
         print(fields[i])
     image_set.save()
@@ -258,15 +261,15 @@ def create_collection(request):
 def edit_collection_view(request,pk):
     if request.user.is_authenticated:
         print(pk)
-        collection_model = account_models.ImageSet.objects.get(pk=pk)
+        collection_model = ImageSet.objects.get(pk=pk)
         collection_image = [[collection_model.pic1,collection_model.pic2,collection_model.pic3],
                             [collection_model.pic4,collection_model.pic5,collection_model.pic6],
                             [collection_model.pic7,collection_model.pic8,collection_model.pic9],
                             [collection_model.pic10,collection_model.pic11]
         ]
         current_user = request.user
-        clinician = clinician = account_models.Clinician.objects.get(user=current_user)
-        image_array = get_images(clinician)
+        #clinician = Clinician.objects.get(user=current_user)
+        image_array = get_images(current_user)
         title = collection_model.title
         context = {
             "collection":collection_image,
@@ -283,7 +286,7 @@ def get_images(clinician):
     #clinician = account_models.Clinician.objects.get(user=current_user)
     #collections = account_models.ImageSet.objects.filter(clinician=clinician)
     #collections_pk = collections.pk
-    images = account_models.Image.objects.filter(clinician=clinician)
+    images = Image.objects.filter(clinician=clinician)
     #print("Image: ", images)
     #print(len(images))
     image_row = len(images) // 3

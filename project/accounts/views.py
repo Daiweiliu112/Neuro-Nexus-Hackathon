@@ -35,10 +35,10 @@ def signup(request):
         print(request.POST['password1'])
         if form.is_valid():
             new_user = form.save(commit=False)
-            clinician_model = models.Clinician(title="clincian",user=new_user)
+            #clinician_model = models.Clinician(title="clincian",user=new_user)
             new_user.username = request.POST['email']
             new_user.save()
-            clinician_model.save()
+            #clinician_model.save()
             print(new_user)
             print("valid form")
             return redirect('/accounts/signin/')
