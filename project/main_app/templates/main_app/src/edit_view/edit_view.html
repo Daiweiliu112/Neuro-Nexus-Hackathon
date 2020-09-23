@@ -81,6 +81,42 @@
   integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
   crossorigin="anonymous"></script>
   {% csrf_token %}
+  {% if points %}
+  <script>
+    let points_ = {{ points }}
+    console.log("There are coords:" + points_[2])
+    let width = points_[2] - points_[0];
+    let height = points_[3] - points_[1];
+    data1 = {
+        "top":points_[1],
+        "left":points_[0],
+        "width": width,
+        "height":height
+    }
+    console.log(height)
+    function makeRects(data) {
+        var element = null;
+        element = document.createElement('div');
+        element.className = 'rectangle'
+        element.style.position = 'absolute'
+        
+        element.style.top = data['top'] + 'px'
+        element.style.left = data['left'] + 'px'
+        element.style.width = data['width'] + 'px'
+        element.style.height = data['height'] + 'px'
+        
+        document.getElementById('canvas').appendChild(element)
+        items = []
+        
+    };
+    makeRects(data1);
+  </script>
+  {% else %}
+  <script>
+    console.log("No coords")
+  </script>
+  {% endif %}
+
   <script>
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     $('#title').val("{{ image.title }}")

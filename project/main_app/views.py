@@ -166,8 +166,13 @@ def edit_view(request,pk):
         image_model = Image.objects.get(pk=pk)
         print("image url:",image_model.image.url)
         print("image title:", image_model.title)
+        image_points = image_model.coords
+        if(image_points == [0,0,0,0]):
+            image_points = None
+        print(image_points)
         context ={
-            "image":image_model
+            "image":image_model,
+            "points":image_points
         }
         return render(request,'main_app/src/edit_view/edit_view.html',context=context)
     else:
