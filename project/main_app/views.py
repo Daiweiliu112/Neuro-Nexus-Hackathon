@@ -212,11 +212,15 @@ def create_collection_view(request):
 def create_collection(request):
     images_id = json.loads(request.POST.get("selected_image"))
     print(images_id)
-    
     current_user = request.user
     clinician = account_models.Clinician.objects.get(user=current_user)
     print(clinician)
-    image_set = account_models.ImageSet()
+    collection_pk = json.loads(request.POST.get("collection_pk"))
+    if(collection_pk < 0):
+        image_set = account_models.ImageSet()
+    else:
+        image_set = account_models.ImageSet.objects.get(pk=collection_pk)
+    
     image_set.clinician = clinician
     image_set.title = json.loads(request.POST.get("title"))
     fields = image_set._meta.get_fields()
@@ -253,11 +257,38 @@ def edit_collection_view(request,pk):
                             [collection_model.pic7,collection_model.pic8,collection_model.pic9],
                             [collection_model.pic10,collection_model.pic11]
         ]
-
+        current_user = request.user
+        clinician = clinician = account_models.Clinician.objects.get(user=current_user)
+        image_array = get_images(clinician)
 
         context = {
-            "collection_image":collection_image
+            "collection":collection_image,
+            "images": image_array,
+            "collection_pk":pk,
         }
+        return render(request,'main_app/src/dashboard/dashboard_collection.html',context)
 
 
     return render(request,'main_app/src/dashboard/dashboard_collection.html')
+
+def get_images(clinician):
+    #clinician = account_models.Clinician.objects.get(user=current_user)
+    #collections = account_models.ImageSet.objects.filter(clinician=clinician)
+    #collections_pk = collections.pk
+    images = account_models.Image.objects.filter(clinician=clinician)
+    #print("Image: ", images)
+    #print(len(images))
+    image_row = len(images) // 3
+    remain = len(images) % 3
+    image_array = []
+    for i in range(image_row):
+        starting_index = i * 3
+        temp = [images[starting_index], images[starting_index + 1], images[starting_index + 2]]
+        image_array.append(temp)
+    if remain > 0:
+        last_index = 3 * image_row
+        temp = []
+        for i in range(remain):
+            temp.append(images[last_index + i])
+        image_array.append(temp)
+    return image_array    
