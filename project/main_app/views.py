@@ -92,8 +92,6 @@ def child_image(request):
 def child_image_test(request):
     return render(request, 'main_app/src/child-image/child_image.html')
 
-def clinician_image(request):
-    return render(request, 'main_app/src/clinician-image/clinician-image.html')
 
 def signup(request):
     return render(request,'main_app/src/create_account/create_account.html')
@@ -168,10 +166,9 @@ def edit_view(request,pk):
         context ={
             "image":image_model
         }
-        return render(request,'main_app/src/edit_view/clinician_image.html',context=context)
+        return render(request,'main_app/src/edit_view/edit_view.html',context=context)
     else:
         redirect('accounts:signin')
-    return render(request,'main_app/src/edit_view/clinician_image.html')
 
 def save_image_edit(request):
     print(request.POST.get("points"))
@@ -222,11 +219,15 @@ def create_collection_view(request):
 def create_collection(request):
     images_id = json.loads(request.POST.get("selected_image"))
     print(images_id)
-    
     current_user = request.user
     clinician = account_models.Clinician.objects.get(user=current_user)
     print(clinician)
-    image_set = account_models.ImageSet()
+    collection_pk = json.loads(request.POST.get("collection_pk"))
+    if(collection_pk < 0):
+        image_set = account_models.ImageSet()
+    else:
+        image_set = account_models.ImageSet.objects.get(pk=collection_pk)
+    
     image_set.clinician = clinician
     image_set.title = json.loads(request.POST.get("title"))
     fields = image_set._meta.get_fields()
@@ -263,11 +264,39 @@ def edit_collection_view(request,pk):
                             [collection_model.pic7,collection_model.pic8,collection_model.pic9],
                             [collection_model.pic10,collection_model.pic11]
         ]
-
-
+        current_user = request.user
+        clinician = clinician = account_models.Clinician.objects.get(user=current_user)
+        image_array = get_images(clinician)
+        title = collection_model.title
         context = {
-            "collection_image":collection_image
+            "collection":collection_image,
+            "images": image_array,
+            "collection_pk":pk,
+            "collection_title":title
         }
+        return render(request,'main_app/src/dashboard/dashboard_collection.html',context)
 
 
     return render(request,'main_app/src/dashboard/dashboard_collection.html')
+
+def get_images(clinician):
+    #clinician = account_models.Clinician.objects.get(user=current_user)
+    #collections = account_models.ImageSet.objects.filter(clinician=clinician)
+    #collections_pk = collections.pk
+    images = account_models.Image.objects.filter(clinician=clinician)
+    #print("Image: ", images)
+    #print(len(images))
+    image_row = len(images) // 3
+    remain = len(images) % 3
+    image_array = []
+    for i in range(image_row):
+        starting_index = i * 3
+        temp = [images[starting_index], images[starting_index + 1], images[starting_index + 2]]
+        image_array.append(temp)
+    if remain > 0:
+        last_index = 3 * image_row
+        temp = []
+        for i in range(remain):
+            temp.append(images[last_index + i])
+        image_array.append(temp)
+    return image_array    

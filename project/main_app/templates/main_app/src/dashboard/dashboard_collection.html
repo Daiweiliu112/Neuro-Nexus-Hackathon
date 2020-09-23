@@ -43,12 +43,44 @@
       <a href="../upload/" class="btn btn-primary my-2">Upload Images</a>
       <button type="button" class="btn btn-primary" id="save">Finish and Save</button><br>
       <span>Title of the Image set: </span><input type="text" id="title">
+      <div id="tooltip" style="display: none;">Invalid number of image selected. Choose only 11 images</div>
     </div>
   </section>
 
   <div class="album py-5 bg-light">
     <div class="container">
       <span>Current Images</span>
+      {% for collection_image_row in collection %}
+      <div class="row">
+        {% for collection_image in collection_image_row %}
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm up-image" id='{{ collection_image.pk }}'>
+            <!--svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg"
+              preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail">
+              <title>Placeholder</title>
+
+              <rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%" fill="#eceeef"
+                dy=".3em">Thumbnail</text>
+            </svg-->
+
+            <image class="image-fluid" height="255" width="100%" src='{{ collection_image.image.url }}' />
+            <div class="card-body">
+              <p class="card-text">{{ collection_image.title }} </p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <!--button type="button" class="btn btn-sm btn-outline-secondary">View</button-->
+                  <a class="edit btn btn-sm btn-outline-secondary"
+                    href='{% url 'main_app:editview' collection_image.pk %}'>Edit</a>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+
       <span>Uploaded Images</span>
       {% for image_row in images %}
       <div class="row">
@@ -110,6 +142,24 @@
   });
 </script>
 {% csrf_token %}
+{% if collection_pk %}
+<script>
+  let collection_pk_ = {{ collection_pk }}
+</script>
+{% else %}
+<script>
+  let collection_pk_ = -1
+</script>
+{% endif %}
+
+{% if collection_title %}
+<script>
+$('#title').val("{{ collection_title }}")
+</script>
+{% else %}
+<script>
+</script>
+{% endif %}
 <script>
   const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
   let url = '{% url 'main_app:ajax_create_collection' %}';
@@ -123,6 +173,7 @@
       classes = $(this).attr('class');
       console.log(classes);
       console.log(url)
+      console.log(collection_pk_)
     }
     if ($(this).hasClass('up-image')) {
       if ($(this).hasClass('selected-image-set')) {
@@ -144,16 +195,32 @@
     console.log("Title:" + $("#title").val())
     let title = $("#title").val()
     console.log(selected_image);
-    $.post({
-      headers: {'X-CSRFToken': csrftoken},
-      mode: 'same-origin',
-      type: "POST",
-      url: url,
-      data: {
-        "selected_image": JSON.stringify(selected_image),
-        "title": JSON.stringify(title)
-      }
-    });
+    console.log(selected_image.length);
+    if (selected_image.length === 11) {
+      console.log("Valid number of images");
+      $('#tooltip').hide();
+
+      $.post({
+        headers: {
+          'X-CSRFToken': csrftoken
+        },
+        mode: 'same-origin',
+        type: "POST",
+        url: url,
+        data: {
+          "selected_image": JSON.stringify(selected_image),
+          "title": JSON.stringify(title),
+          "collection_pk": JSON.stringify(collection_pk_)
+        },
+        success: function(){
+          window.location.replace('{% url 'main_app:dashboard' %}' );
+        }
+      });
+    } else {
+      console.log("Not enough or too many images");
+      $("#tooltip").show();
+    }
+
   });
 </script>
 
