@@ -102,6 +102,7 @@
       console.log(post_url);
       console.log(points);
       console.log(image_info);
+      let title = $("#title").val();
       $.post({
         headers: {'X-CSRFToken': csrftoken},
         mode: 'same-origin',
@@ -109,7 +110,8 @@
         url:post_url,
         data:{
           "points": JSON.stringify(points),
-          "image_pk": JSON.stringify(image_info)
+          "image_pk": JSON.stringify(image_info),
+          "title":JSON.stringify(title)
         },
         success: function(){
           window.location.replace('{% url 'main_app:dashboard' %}' );

@@ -184,6 +184,7 @@ def save_image_edit(request):
     points_arr = [points["top_left"][0],points["top_left"][1],points["bottom_right"][0],points["bottom_right"][1]]
     print(points_arr)
     image_model.coords = points_arr 
+    image_model.title = json.loads(request.POST.get("title"))
     #image_model.coords = points_arr
     image_model.save()
     print("coord check:",image_model.coords)
