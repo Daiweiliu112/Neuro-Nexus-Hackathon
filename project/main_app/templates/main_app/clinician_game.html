@@ -7,7 +7,7 @@
 
 
 <div id="canvas">
-  <img class="image-fluid" src="{% static 'I_Spy 1.png' %}" />
+  <img class="image-fluid" id= "image-shown" src="{% static 'I_Spy 1.png' %}" />
 </div>
 
 <div class="footer">
@@ -21,16 +21,37 @@
     <button id="delete-button">
       Delete all
     </button>
+    <button id="next-button">
+      Next
+    </button>
   </div>
 </div>
 {{ room_name | json_script:"room-name"}}
 
 <script src="{% static 'js/drawGame.js' %}"></script>
 <script src="{% static 'js/util.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <script>
   const roomName = JSON.parse(document.getElementById('room-name').textContent);
   const chatSocket = get_socket(window.location.host, roomName);
   initDraw(document.getElementById('canvas'), chatSocket);
+  let images = []
+</script>
+{% for ind_image in set_images %}
+<script>
+  images.push({{ ind_image.url }})
+</script>
+{% endfor %}
+<script>;
+  let index = 0;
+  //$('#image-shown').attr("src", images[0])
+  $('#next-button').click(function(){
+    console.log(images[index]);
+    console.log("testing");
+    index++;
+  });
+  
 </script>
 {% endblock %}
 

@@ -134,8 +134,8 @@ def upload_file(request):
 def make_meeting(request):
     room_name = utils.get_room_name()
     print(room_name)
-    client_room_name = "/main_app/client/" + room_name + "/"
-    clinician_room_name = "/main_app/cli/" + room_name + '/'
+    client_room_name = "/main_app/client/" + room_name + "/" + "7"
+    clinician_room_name = "/main_app/cli/" + room_name + '/' + "7"
     #return render(request,'main_app/room_name.html',{'room_name':room_name})
     data = {'clinician':clinician_room_name,
             'client':client_room_name
@@ -148,13 +148,30 @@ def client_game(request):
 def clinician_game(request):
     return render(request,'main_app/clinician_game.html')
 
-def clinician_test(request,room_name):
+def clinician_test(request,room_name,pk):
     print("clinician:" + room_name)
+    print("pk:",pk)
+    collection = ImageSet.objects.get(pk=pk)
+    images = [
+        collection.pic1,
+        collection.pic2,
+        collection.pic3,
+        collection.pic4,
+        collection.pic5,
+        collection.pic6,
+        collection.pic7,
+        collection.pic8,
+        collection.pic9,
+        collection.pic10,
+        collection.pic11,
+    ]
+    print(images)
     return render(request, 'main_app/clinician_game.html',{
-        'room_name':room_name
+        'room_name':room_name,
+        "set_images":images
     })
 
-def client_test(request,room_name):
+def client_test(request,room_name,pk):
     print("client" + room_name)
     return render(request,"main_app/client_game.html",{
         'room_name':room_name
