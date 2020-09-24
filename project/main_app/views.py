@@ -155,15 +155,15 @@ def clinician_test(request,room_name,pk):
     images = [
         collection.pic1,
         collection.pic2,
-        collection.pic3,
-        collection.pic4,
-        collection.pic5,
-        collection.pic6,
-        collection.pic7,
-        collection.pic8,
-        collection.pic9,
-        collection.pic10,
-        collection.pic11,
+        #collection.pic3.image.url,
+        #collection.pic4,
+        #collection.pic5,
+        #collection.pic6,
+        #collection.pic7,
+        #collection.pic8,
+        #collection.pic9,
+        #collection.pic10,
+        #collection.pic11,
     ]
     print(images)
     return render(request, 'main_app/clinician_game.html',{
