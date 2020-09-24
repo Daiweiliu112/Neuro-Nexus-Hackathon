@@ -41,15 +41,16 @@
 {% for ind_image in set_images %}
 <script>
   image_url = '{{ ind_image.image.url }}'
-  console.log(image_url);
-  //images.push(image_url);
+  image_coord = {{ ind_image.coords }}
+  console.log(image_coord);
+  images.push(image_url);
 </script>
 {% endfor %}
 <script>;
   let index = 0;
   //$('#image-shown').attr("src", images[0])
   $('#next-button').click(function(){
-    console.log(images);
+    console.log(images[index]);
     console.log("testing");
     index++;
   });
