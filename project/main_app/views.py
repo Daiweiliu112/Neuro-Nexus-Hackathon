@@ -187,6 +187,7 @@ def client_test(request,room_name,pk):
         collection.pic10,
         collection.pic11,
     ]
+    print(images)
     return render(request,"main_app/client_game.html",{
         'room_name':room_name,
         "set_images":images
