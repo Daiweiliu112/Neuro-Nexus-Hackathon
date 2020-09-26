@@ -65,6 +65,8 @@ function initDraw(canvas, ws) {
             data = data.content
             if (data === 'delete') {
                 deleteRects()
+            } else if (data === 'next') {
+                alert("Next image will be loaded");
             } else if (typeof data === 'object' && data.length > 0) {
                 makeRects(data)
             }

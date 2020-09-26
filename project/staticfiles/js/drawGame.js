@@ -80,6 +80,10 @@ function initDraw(canvas, ws) {
             ids.push(id.value)
         }
         send(socket, {content: objs, origin: clinician})
+    });
+
+    document.getElementById('next-button').addEventListener('click', () => {
+        send(socket, {content: 'next', origin: clinician});
     })
 
     document.getElementById('delete-button').addEventListener('click', () => {
