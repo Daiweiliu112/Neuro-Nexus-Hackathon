@@ -25,7 +25,7 @@ function initDraw(canvas, ws) {
     function sendClick() {
         var id = this.id
         if (clicked.indexOf(id) < 0) {
-            send(socket, {content: id.replace(' ', '@@@'), origin: client})
+            send(socket, {content: id, origin: client})
             clicked.push(id)
         }
     }
@@ -44,7 +44,7 @@ function initDraw(canvas, ws) {
             element.style.width = data[i]['width'] * screen.width + 'px'
             element.style.height = data[i]['height'] * screen.height + 'px'
             element.id = data[i]['id']
-            items.push(data[i]['id'].replace('@@@', ' '))
+            items.push(data[i]['id'].replace('$$$', ' '))
 
             canvas.appendChild(element)
             
