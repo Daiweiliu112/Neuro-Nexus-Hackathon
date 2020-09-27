@@ -37,6 +37,11 @@
     console.log(images);
     let index = 0;
     $('#image-shown').attr('src', images[index]);
+
+    function next_image(){
+      index++;
+      $("#image-shown").attr('src',images[index]);
+    }
     
 </script>
 <style>
