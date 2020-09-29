@@ -51,17 +51,17 @@
 <script>;
   let index = 0;
   let boxes = [];
-  for(let i = 0; i < coord_array.length;i++){
+  for (let i = 0; i < coord_array.length;i++){
     let width = coord_array[i][2] - coord_array[i][0];
     let height = coord_array[i][3] - coord_array[i][1];
     let temp = {
-      "top":coord_array[i][1],
-      "left":coord_array[i][0],
-      "width":width,
-      "height":height
+      top: coord_array[i][1],
+      left: coord_array[i][0],
+      width: width,
+      height: height
     }
     boxes.push(temp);
-  }
+  } 
 
   function makeRects(data) {
     var element = null;

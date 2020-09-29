@@ -18,6 +18,15 @@ img {
   font-weight: 400;
   color: #FFCB9A;
 }
+
+.dot {
+  border-radius: 50%;
+  width: "10px";
+  height: "10px";
+  background-color: "red";
+  position: "absolute";
+}
+
 .rectangle {
   color: inherit;
   border: 5px solid #2C3531;
@@ -59,7 +68,7 @@ input[type="text"] {
 
 button {
   display: inline-block;
-  width: 60px;
+  width: 101px;
   height: 60px;
 }
 

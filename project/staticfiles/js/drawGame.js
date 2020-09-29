@@ -26,11 +26,15 @@ function initDraw(canvas, ws) {
     socket.onmessage = function(e) {
         var data = JSON.parse(e.data)['message']
         if (data.origin === client) {
-            data = data.content
-            console.log(data,  document.querySelector(`#${data}`));
-            data = data.replace('$$$', ' ')
-            alert(`The client has clicked on the rectangle for ${data}`)
-            document.querySelector(`#${data}`).style.opacity = 0.5
+            /* Used when multiple items per page allowed */
+            // if (typeof x['content'] !== 'undefined') {
+            //     data = data.content.replace('$$$', ' ')
+            //     alert(`The client has clicked on the rectangle for ${data}`)
+            //     document.querySelector(`#${data}`).style.opacity = 0.5
+            // } else {
+            //     makeCirc(data.x, data.y);
+            // }
+            makeCirc(data.x, data.y)
         }
     }
 
@@ -142,7 +146,6 @@ function initDraw(canvas, ws) {
                 top: Number(rects[i].style.top.slice(0, -2)),
             }
 
-
             let arr = [
                 rect.left <= (el.left + el.width),
                 rect.top <= (el.top + el.height),
@@ -168,7 +171,6 @@ function initDraw(canvas, ws) {
             element.style.left = mouse.x + 'px';
             element.style.top = mouse.y + 'px';
             canvas.appendChild(element)
-
 
             canvas.style.cursor = "crosshair";
         }
@@ -204,4 +206,14 @@ function initDraw(canvas, ws) {
         }
         drawSwitch = false;
     })
+
+    /* Creates a red circle at the location a user clicked */
+    function makeCirc(x, y) {
+        console.log(x, y);
+        var circ = document.createElement('div');
+        circ.classList.add('dot');
+        circ.style.top = String(y)+'px';
+        circ.style.left = String(x)+'px';
+        canvas.appendChild(circ);
+    }
 }

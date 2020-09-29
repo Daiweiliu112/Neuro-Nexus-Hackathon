@@ -22,13 +22,20 @@ function initDraw(canvas, ws) {
         items = []
     }
 
-    function sendClick() {
-        var id = this.id
-        if (clicked.indexOf(id) < 0) {
-            send(socket, {content: id, origin: client})
-            clicked.push(id)
+    canvas.addEventListener('mousedown', e => {
+        let x = 0;
+        let y = 0;
+        var ev = e || window.event; //Moz || IE
+        if (ev.pageX) { //Moz
+            x = ev.pageX + window.pageXOffset;
+            y = ev.pageY + window.pageYOffset;
+        } else if (ev.clientX) { //IE
+            x = ev.clientX + document.body.scrollLeft;
+            y = ev.clientY + document.body.scrollTop;
         }
-    }
+        console.log(x, y);
+        send(socket, {x: x, y: y, origin: client})
+    });
 
     function makeRects(data) {
         var element = null;
@@ -49,10 +56,6 @@ function initDraw(canvas, ws) {
             canvas.appendChild(element)
             
         }
-        
-        document.querySelectorAll('.target').forEach(rect => {
-            rect.onclick = sendClick
-        })
 
         document.getElementById('item-list').innerText = "Items: " + items.join(', ');
         items = [];
@@ -60,7 +63,6 @@ function initDraw(canvas, ws) {
 
     socket.onmessage = function (event) {
         var data = JSON.parse(event.data)['message']
-        console.log(data);
         if (data.origin === clinician) {
             data = data.content
             if (data === 'delete') {
@@ -73,4 +75,25 @@ function initDraw(canvas, ws) {
             }
         }
     }
+
+    var mouse = {
+        x: 0,
+        y: 0,
+    };
+
+    /* Set mouse location */
+    canvas.onmousemove = function (e) {
+        var ev = e || window.event; //Moz || IE
+        if (ev.pageX) { //Moz
+            mouse.x = ev.pageX + window.pageXOffset;
+            mouse.y = ev.pageY + window.pageYOffset;
+        } else if (ev.clientX) { //IE
+            mouse.x = ev.clientX + document.body.scrollLeft;
+            mouse.y = ev.clientY + document.body.scrollTop;
+        }
+    }
+
+    canvas.addEventListener('mousedown', e => {
+        send(socket, {x: mouse['x'], y: mouse['y']})
+    });
 }
