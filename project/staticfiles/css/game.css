@@ -19,14 +19,6 @@ img {
   color: #FFCB9A;
 }
 
-.dot {
-  border-radius: 50%;
-  width: "10px";
-  height: "10px";
-  background-color: "red";
-  position: "absolute";
-}
-
 .rectangle {
   color: inherit;
   border: 5px solid #2C3531;
