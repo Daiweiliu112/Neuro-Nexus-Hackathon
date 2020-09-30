@@ -84,6 +84,9 @@
     document.querySelectorAll('.rectangle').forEach(rect => {
             rect.remove()
     });
+    document.querySelectorAll('.client-click-pos').forEach(dot_pos =>{
+      dot_pos.remove()
+    });
     index++;
     makeRects(boxes[index]);
     $('#image-shown').attr('src',images[index]);
