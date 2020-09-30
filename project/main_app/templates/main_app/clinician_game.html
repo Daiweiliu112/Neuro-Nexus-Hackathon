@@ -88,6 +88,22 @@
       dot_pos.remove()
     });
     index++;
+
+    if (index >= boxes.length) {
+      $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: 'save_cli_data/',
+        // data: {cli_num, 1234567, trial_data:<all the trial info>},
+        success: function (response) {
+          console.log(response);
+        },
+        error: function (response) {
+          console.log(response);
+        },
+      });
+    }
+
     makeRects(boxes[index]);
     $('#image-shown').attr('src',images[index]);
 
