@@ -54,7 +54,7 @@
       <a href="{% url 'main_app:create_collection' %}" class="btn btn-primary" id="create_collection">Create Collection</a>
     </div>
 
-    <form name="cli_id_form" action="#" onsubmit="return send_data()" style="padding: 10px;">
+    <form id="cli_id_form" name="cli_id_form" action="#" onsubmit="return send_data()" style="padding: 10px;">
         <input type="text" placeholder="Client ID" name="cli_id"  class="form-control" id="client-id">
         <input type="submit" value="Create Client" class="btn btn-primary my-2">
     </form>
@@ -242,6 +242,11 @@
      },
    });
  }
+
+  $("#cli_id_form").submit(function(e) {
+    console.log('here');
+      e.preventDefault();
+  });
 
 </script>
 
