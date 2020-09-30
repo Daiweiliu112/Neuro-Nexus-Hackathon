@@ -211,6 +211,7 @@ function initDraw(canvas, ws) {
     function makeCirc(x, y) {
         console.log(x, y);
         var circ = document.createElement('div');
+        circ.className = "client-click-pos";
         circ.style.borderRadius = "50%";
         circ.style.width = "10px";
         circ.style.height = "10px";
