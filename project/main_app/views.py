@@ -13,24 +13,18 @@ import json
 # Create your views here.
 
 def check_cli_num(request):
-    # request should be ajax and method should be GET.
-    if request.is_ajax and request.method == "GET":
-        # get the client number from the client side.
-        cli_id = request.GET.get("cli_id", None)
-        # check for the existing client number in the database.
+        cli_num = json.loads(request.body)
+        logger.error(cli_num)
         user = request.user
-        if Client.objects.filter(id_num = cli_id).exists():
-            # if cli_num found return not valid .
-            return JsonResponse({"valid":False}, status = 200)
-        else:
-            user = request.user
-            # if cli_num not found, then clinician can create a new client.
-            client = Client(clinician=user,id_num=cli_id)
-            client.save()
-            return JsonResponse({"valid":True}, status = 200)
+        analytics.check_cli_num(user,cli_num)
 
-    return JsonResponse({}, status = 400)
-    
+def save_cli_data(request):
+    if request.method == 'POST':
+        cli_data = json.loads(request.body)
+        logger.error(cli_data)
+        user = request.user
+        analytics.save_cli_data(user,cli_data)
+
 def index(request):
     return render(request,'main_app/index copy.html')
 
