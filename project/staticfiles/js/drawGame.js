@@ -4,7 +4,7 @@
 * Accessed August 15, 2020 */
 
 class ClinicianGame {
-    constructor(canvas, ws) {
+    constructor(canvas, ws, numImages) {
         this.mouse = {
             x: 0,
             y: 0,
@@ -15,11 +15,22 @@ class ClinicianGame {
         this.socket = ws;
         this.canvas = canvas;
         this.element = null;
+        this.trial = 0;
         this.initializeSocket();
         this.initializeListeners();
-        var game = this
+        var game = this;
+        this.data = Array.apply(null, Array(numImages)).map(function () {
+            return {
+                totalClicks: 0,
+                timeElapsed: 0,
+                incorrectClicks: [],
+                correctClicks: [],
+                correct: false,
+            }
+        })
     }
 
+    /* Initializes the different socket functions */
     initializeSocket() {
         this.socket.onopen = function(e) {
             console.log("[open] Connection established");
@@ -33,18 +44,11 @@ class ClinicianGame {
             var data = JSON.parse(e.data)['message']
             if (data.origin === client) {
                 game.makeCirc(data.x, data.y)
-                /* Used when multiple items per page allowed */
-                // if (typeof x['content'] !== 'undefined') {
-                //     data = data.content.replace('$$$', ' ')
-                //     alert(`The client has clicked on the rectangle for ${data}`)
-                //     document.querySelector(`#${data}`).style.opacity = 0.5
-                // } else {
-                //     makeCirc(data.x, data.y);
-                // }
             }
         }
     }
 
+    /* Initializes the different DOM listeners */
     initializeListeners() {
         document.querySelector('img').draggable = false;
 
@@ -65,16 +69,16 @@ class ClinicianGame {
                 game.drawSwitch = !game.drawSwitch;
         })
 
-        /* Iterates over all new rectangles, collects them, and send sthem to the user */
+        /* Iterates over all new rectangles, collects them, and sends them to the user */
         document.getElementById('send-button').addEventListener('click', () => {
             var rects = document.querySelectorAll('.rectangle')
             var id = null;
             var el = null;
-            var objs = []
-            var ids = []
+            var objs = [];
+            var ids = [];
 
             if (rects.length === 0) {
-                alert('Please create at least one el');
+                alert('Please create at least one element');
                 return
             }
 
@@ -231,5 +235,9 @@ class ClinicianGame {
         this.canvas.appendChild(circ);
 
         // Set timeout maybe?
+    }
+
+    getData() {
+        return this.data
     }
 }
