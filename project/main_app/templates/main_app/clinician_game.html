@@ -35,7 +35,7 @@
 <script>
   const roomName = JSON.parse(document.getElementById('room-name').textContent);
   const chatSocket = get_socket(window.location.host, roomName);
-  initDraw(document.getElementById('canvas'), chatSocket);
+  var game = new ClinicianGame(document.getElementById('canvas'), chatSocket, 11);
   let images = []
   let coord_array = []
 </script>
@@ -89,12 +89,17 @@
     });
     index++;
 
+    console.log(index, boxes.length - 1);
+    if (index == boxes.length - 1) {
+      $("#next-button").html("Finish");
+    }
+
     if (index >= boxes.length) {
       $.ajax({
         type: 'GET',
         dataType: 'json',
         url: 'save_cli_data/',
-        // data: {cli_num, 1234567, trial_data:<all the trial info>},
+        data: JSON.stringify({cli_num: 1234567, trial_data: game.getData}),
         success: function (response) {
           console.log(response);
         },
@@ -102,10 +107,12 @@
           console.log(response);
         },
       });
+      alert("Session now complete. Closing tab.");
+      window.close();
     }
 
     makeRects(boxes[index]);
-    $('#image-shown').attr('src',images[index]);
+    $('#image-shown').attr('in',images[index]);
 
     console.log(images[index]);
     console.log(coord_array[index]);
