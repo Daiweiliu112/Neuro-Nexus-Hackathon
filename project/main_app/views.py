@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import UploadImageForm, UploadFileForm
 from . import utils
-from django.http import JsonResponse
+from django.http import HttpResponse,JsonResponse
 from accounts.models import (
     Client,
     ImageSet,
@@ -9,14 +9,24 @@ from accounts.models import (
     )
 from django.contrib.auth.models import User
 import json
+import logging
+from . import analytics
+
+# DEBUGGING
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 
 def check_cli_num(request):
-        cli_num = json.loads(request.body)
+    if request.is_ajax and request.method == "GET":
+        # get the nick name from the client side.
+        cli_num = request.GET.get("cli_id", 1)
         logger.error(cli_num)
         user = request.user
         analytics.check_cli_num(user,cli_num)
+        return HttpResponse("Success")
+
+
 
 def save_cli_data(request):
     if request.method == 'POST':
