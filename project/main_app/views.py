@@ -35,6 +35,19 @@ def save_cli_data(request):
         user = request.user
         analytics.save_cli_data(user,cli_data)
 
+def get_client_data(request):
+    if request.method == "GET":
+        clients = Client.objects.filter(clinician = request.user)
+        clients_id = []
+        for client in clients:
+            clients_id.append(client.id_num)
+        print(clients_id)
+        clients_json = {
+            "clients":clients_id
+        }
+        return JsonResponse(clients_json)
+    
+
 def index(request):
     return render(request,'main_app/index copy.html')
 
