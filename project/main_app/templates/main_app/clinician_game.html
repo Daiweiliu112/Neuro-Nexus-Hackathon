@@ -37,6 +37,7 @@
   const chatSocket = get_socket(window.location.host, roomName);
   initDraw(document.getElementById('canvas'), chatSocket);
   let images = []
+  let coord_array = []
 </script>
 {% for ind_image in set_images %}
 <script>
@@ -44,15 +45,51 @@
   image_coord = {{ ind_image.coords }}
   console.log(image_coord);
   images.push(image_url);
+  coord_array.push(image_coord)
 </script>
 {% endfor %}
 <script>;
   let index = 0;
+  let boxes = [];
+  for(let i = 0; i < coord_array.length;i++){
+    let width = coord_array[i][2] - coord_array[i][0];
+    let height = coord_array[i][3] - coord_array[i][1];
+    let temp = {
+      "top":coord_array[i][1],
+      "left":coord_array[i][0],
+      "width":width,
+      "height":height
+    }
+    boxes.push(temp);
+  }
+
+  function makeRects(data) {
+    var element = null;
+    element = document.createElement('div');
+    element.className = 'rectangle'
+    element.id = "test"
+    element.style.position = 'absolute'
+    
+    element.style.top = data['top'] + 'px'
+    element.style.left = data['left'] + 'px'
+    element.style.width = data['width'] + 'px'
+    element.style.height = data['height'] + 'px'
+    
+    document.getElementById('canvas').appendChild(element)
+  };
+  $('#image-shown').attr('src',images[index]);
+  makeRects(boxes[index]);
   //$('#image-shown').attr("src", images[0])
   $('#next-button').click(function(){
-    console.log(images[index]);
-    console.log("testing");
+    document.querySelectorAll('.rectangle').forEach(rect => {
+            rect.remove()
+    });
     index++;
+    makeRects(boxes[index]);
+    $('#image-shown').attr('src',images[index]);
+
+    console.log(images[index]);
+    console.log(coord_array[index]);
   });
   
 </script>

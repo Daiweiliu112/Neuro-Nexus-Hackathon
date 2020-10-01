@@ -8,7 +8,7 @@
 
 
 <div id="canvas">
-  <img class="image-fluid" src="{% static 'I_Spy 1.png' %}" />
+  <img class="image-fluid" id="image-shown" src="{% static 'I_Spy 1.png' %}" />
 </div>
 
 <div class="footer">
@@ -18,12 +18,27 @@
 
 <script src="{% static 'js/getGame.js' %}"></script>
 <script src="{% static 'js/util.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <script>
     const roomName = JSON.parse(document.getElementById('room-name').textContent);
     const chatSocket = get_socket(window.location.host, roomName)
     initDraw(document.getElementById('canvas'), chatSocket);
+    let images = [];
 </script>
-
+{% for ind_image in set_images %}
+<script>
+  image_url = '{{ ind_image.image.url }}'
+  console.log(image_url);
+  images.push(image_url);
+</script>
+{% endfor %}
+<script>
+    console.log(images);
+    let index = 0;
+    $('#image-shown').attr('src', images[index]);
+    
+</script>
 <style>
     #item-list {
         color: #FFCB9A;
