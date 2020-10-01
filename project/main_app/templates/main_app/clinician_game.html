@@ -35,7 +35,7 @@
 <script>
   const roomName = JSON.parse(document.getElementById('room-name').textContent);
   const chatSocket = get_socket(window.location.host, roomName);
-  var game = new ClinicianGame(document.getElementById('canvas'), chatSocket);
+  var game = new ClinicianGame(document.getElementById('canvas'), chatSocket, 11);
   let images = []
   let coord_array = []
 </script>
