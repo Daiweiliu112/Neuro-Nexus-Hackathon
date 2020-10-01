@@ -228,19 +228,22 @@
    };
    data = JSON.stringify(data);
    // console.log(data);
- 
-   $.ajax({
-     type: 'GET',
-     dataType: 'json',
-     url: '/check_cli_num/',
-     data: data,
-     success: function (response) {
-       console.log(response);
-     },
-     error: function (response) {
-       console.log(response);
-     },
-   });
+   if (cli_id.length === 6) {
+     $.ajax({
+       type: 'GET',
+       dataType: 'json',
+       url: '/check_cli_num/',
+       data: data,
+       success: function (response) {
+         console.log(response);
+       },
+       error: function (response) {
+         console.log(response);
+       },
+     });
+   } else {
+     alert("Client ID must be 6 digits long.");
+   }
  }
 
   $("#cli_id_form").submit(function(e) {
