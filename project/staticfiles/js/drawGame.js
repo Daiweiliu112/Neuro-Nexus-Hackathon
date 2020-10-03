@@ -11,14 +11,6 @@ class ClinicianGame {
             startX: 0,
             startY: 0
         };
-        this.drawSwitch = false;
-        this.socket = ws;
-        this.canvas = canvas;
-        this.element = null;
-        this.trial = 0;
-        this.initializeSocket();
-        this.initializeListeners();
-        var game = this;
         this.data = Array.apply(null, Array(numImages)).map(function () {
             return {
                 totalClicks: 0,
@@ -28,6 +20,16 @@ class ClinicianGame {
                 correct: false,
             }
         })
+        this.drawSwitch = false;
+        this.socket = ws;
+        this.canvas = canvas;
+        this.element = null;
+        this.trial = 0;
+        this.initializeSocket();
+        this.initializeListeners();
+        this.trialStartTime = this.getTime()
+
+        var game = this;
     }
 
     /* Initializes the different socket functions */
@@ -111,7 +113,10 @@ class ClinicianGame {
         });
 
         /* Sends next image to the user */
-        document.getElementById('next-button').addEventListener('click', () => {
+        document.getElementById('next-button-success').addEventListener('click', () => {
+            send(this.socket, {content: 'next', origin: clinician});
+        })
+        document.getElementById('next-button-failure').addEventListener('click', () => {
             send(this.socket, {content: 'next', origin: clinician});
         })
 
@@ -223,6 +228,8 @@ class ClinicianGame {
 
     /* Creates a red circle at the location a user clicked */
     makeCirc(x, y) {
+        /* Create element, add styles (class doesn't work
+         * for some reason) */
         var circ = document.createElement('div');
         circ.className = "client-click-pos";
         circ.style.borderRadius = "50%";
@@ -230,13 +237,38 @@ class ClinicianGame {
         circ.style.height = "10px";
         circ.style.backgroundColor = "red";
         circ.style.position = "absolute";
-        circ.style.top = String(y)+'px';
+        circ.style.top = String(y)+'px'; // TODO: Adjust for different screen sizes
         circ.style.left = String(x)+'px';
+
+        /* Append the child to the canvas */
         this.canvas.appendChild(circ);
 
-        // Set timeout maybe?
+        /* Log click as failure for now */
+        this.data[this.trial].incorrectClicks.push([x, y])
+        this.data[this.trial].totalClicks += 1
     }
 
+    /* Finish logging this trial's data, start next trial */
+    nextImage(succ) {
+        this.data[this.trial].timeElapsed = this.getTime() - this.trialStartTime
+
+        if (succ) {
+            let numClicks = this.data[this.trial].incorrectClicks.length
+            this.data[this.trial].correctClicks.push(this.data[this.trial].incorrectClicks[numClicks - 1])
+            this.data[this.trial].incorrectClicks.pop()
+        }
+
+        this.data[this.trial].correct = succ
+        this.trial += 1
+        this.trialStartTime = this.getTime()
+    }
+
+    /* Gets current time of game */
+    getTime() {
+        return new Date().getTime();
+    }
+
+    /* Get the current state of the game data */
     getData() {
         return this.data
     }

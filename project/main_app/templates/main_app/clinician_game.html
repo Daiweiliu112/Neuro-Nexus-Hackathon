@@ -21,8 +21,11 @@
     <button id="delete-button">
       Delete all
     </button>
-    <button id="next-button">
-      Next
+    <button id="next-button-success">
+      Success
+    </button>
+    <button id="next-button-failure">
+      Failure
     </button>
   </div>
 </div>
@@ -35,7 +38,7 @@
 <script>
   const roomName = JSON.parse(document.getElementById('room-name').textContent);
   const chatSocket = get_socket(window.location.host, roomName);
-  var game = new ClinicianGame(document.getElementById('canvas'), chatSocket, 11);
+  var game = new ClinicianGame(document.getElementById('canvas'), chatSocket, 11); // number of games is currently hard-coded to 11
   let images = []
   let coord_array = []
 </script>
@@ -49,20 +52,6 @@
 </script>
 {% endfor %}
 <script>;
-  let index = 0;
-  let boxes = [];
-  for (let i = 0; i < coord_array.length;i++){
-    let width = coord_array[i][2] - coord_array[i][0];
-    let height = coord_array[i][3] - coord_array[i][1];
-    let temp = {
-      top: coord_array[i][1],
-      left: coord_array[i][0],
-      width: width,
-      height: height
-    }
-    boxes.push(temp);
-  } 
-
   function makeRects(data) {
     var element = null;
     element = document.createElement('div');
@@ -77,23 +66,32 @@
     
     document.getElementById('canvas').appendChild(element)
   };
-  $('#image-shown').attr('src',images[index]);
-  makeRects(boxes[index]);
-  //$('#image-shown').attr("src", images[0])
-  $('#next-button').click(function(){
+
+  /* Logic that runs every time that the clinician wishes 
+   * to go to the next image */
+  function goToNextImage(clientSuccess) {
+
+    /* Remove rectangles and click circles */
     document.querySelectorAll('.rectangle').forEach(rect => {
-            rect.remove()
+      rect.remove()
     });
     document.querySelectorAll('.client-click-pos').forEach(dot_pos =>{
       dot_pos.remove()
     });
-    index++;
 
-    console.log(index, boxes.length - 1);
+    /* Increment index of image */
+    index++;
+    game.nextImage(clientSuccess)
+
+    /* Let clinician know if they are on the last image */
     if (index == boxes.length - 1) {
-      $("#next-button").html("Finish");
+      let notification = document.createElement('span');
+      notification.style.color = "#fff";
+      notification.innerHTML = "\t(This is the Last trial)";
+      document.querySelector('.footer .center-horizontal').appendChild(notification)
     }
 
+    /* If the game is over, send the game data via ajax request */
     if (index >= boxes.length) {
       $.ajax({
         type: 'GET',
@@ -111,11 +109,34 @@
       window.close();
     }
 
+    /* Make new rects if available */
     makeRects(boxes[index]);
     $('#image-shown').attr('in',images[index]);
+  }
 
-    console.log(images[index]);
-    console.log(coord_array[index]);
+  let index = 0;
+  let boxes = [];
+  for (let i = 0; i < coord_array.length;i++){
+    let width = coord_array[i][2] - coord_array[i][0];
+    let height = coord_array[i][3] - coord_array[i][1];
+    let temp = {
+      top: coord_array[i][1],
+      left: coord_array[i][0],
+      width: width,
+      height: height
+    }
+    boxes.push(temp);
+  } 
+
+
+  $('#image-shown').attr('src',images[index]);
+  makeRects(boxes[index]);
+  //$('#image-shown').attr("src", images[0])
+  $('#next-button-success').click(function(){
+    goToNextImage(true);
+  });
+  $('#next-button-failure').click(function(){
+    goToNextImage(false);
   });
   
 </script>
