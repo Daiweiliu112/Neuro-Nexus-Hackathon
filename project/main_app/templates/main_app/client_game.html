@@ -6,6 +6,23 @@
 <html>
 {% block content %}
 
+<style>
+  .bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  @media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+      font-size: 3.5rem;
+    }
+  }
+</style>
+
 
 <div id="canvas">
   <img class="image-fluid" id="image-shown" src="{% static 'I_Spy 1.png' %}" />
@@ -56,6 +73,7 @@
   };
 
   function calc_data(coord_data){
+    console.log(coord_data);
     let width = coord_data[2]- coord_data[0];
     let height = coord_data[3] - coord_data[1];
     let temp = {
