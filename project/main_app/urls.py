@@ -23,5 +23,6 @@ urlpatterns = [
     path('save_image/',views.save_image_edit,name="save_image_edit"),
     path('create_collection/',views.create_collection_view,name="create_collection"),
     path('ajax/create_collection/',views.create_collection,name="ajax_create_collection"),
-    path(r'edit_collection/(?P<pk>\d+)/$',views.edit_collection_view,name='edit_collection')
+    path(r'edit_collection/(?P<pk>\d+)/$',views.edit_collection_view,name='edit_collection'),
+    path('client_id/',views.get_client_data,name='client_id')
 ]

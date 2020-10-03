@@ -58,6 +58,9 @@
         <input type="text" placeholder="Client ID" name="cli_id"  class="form-control" id="client-id">
         <input type="submit" value="Create Client" class="btn btn-primary my-2">
     </form>
+    <select name="client_list" id="client_list">
+    </select>
+
 
   </section>
 
@@ -172,7 +175,7 @@
           $('#client_link').attr('href', "../.." + client_room_name);
           $('#client_link').text("localhost" + client_room_name);
           $('#clinician_link').attr('href', "../.." + clinician_room_name);
-          $('#clinician_link').text("localhost" + clinician_room_name)
+          $('#clinician_link').text("localhost" + clinician_room_name);
         },
       });
     }else if (selected_collection.length == 0){
@@ -219,6 +222,26 @@
     console.log(selected_image)
   });
 
+  function get_clients(){
+    let client_id_url = "{% url 'main_app:client_id' %}";
+    $.ajax({
+      type: "GET",
+      dataType:'json',
+      url: client_id_url,
+      success: function(data){
+        let dropdown_selection = $("#client_list");
+        let client_ids = data["clients"];
+        //console.log(client_ids);
+        for(let i = 0; i < client_ids.length;i++) {
+          //console.log("Data:" + client_ids[i]);
+          dropdown_selection.append(new Option(client_ids[i],client_ids[i]) );
+        }
+      },
+      error:function(data){
+        console.log(data);
+      }
+    });
+  }
 
   function send_data() {
    console.log('Sending data to server...');
@@ -228,26 +251,35 @@
    };
    data = JSON.stringify(data);
    // console.log(data);
- 
-   $.ajax({
-     type: 'GET',
-     dataType: 'json',
-     url: '/check_cli_num/',
-     data: data,
-     success: function (response) {
-       console.log(response);
-     },
-     error: function (response) {
-       console.log(response);
-     },
-   });
+   if (cli_id.length === 6) {
+     $.ajax({
+       type: 'GET',
+       dataType: 'json',
+       url: '/check_cli_num/',
+       data: data,
+       success: function (response) {
+         console.log(response);
+         
+       },
+       error: function (response) {
+         console.log(response);
+       },
+     });
+   } else {
+     alert("Client ID must be 6 digits long.");
+   }
  }
 
   $("#cli_id_form").submit(function(e) {
     console.log('here');
       e.preventDefault();
   });
+  
 
+  
+  $(document).ready(function(){
+    get_clients();
+  })
 </script>
 
   <style>
