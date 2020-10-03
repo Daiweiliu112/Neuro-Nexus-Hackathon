@@ -32,7 +32,7 @@ class ClientGame {
                     game.deleteRects()
                 } else if (data === 'next') {
                     //alert("Next image will be loaded");
-                    game.next_image();
+                    next_image();
                 } else if (typeof data === 'object' && data.length > 0) {
                     game.makeRects(data)
                 }
