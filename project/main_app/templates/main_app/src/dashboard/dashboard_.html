@@ -223,17 +223,18 @@
   });
 
   function get_clients(){
-    let client_id_url = "{% url 'main_app:client_id' %}";
+    let client_id_url = "{% url 'main_app:client_num' %}";
     $.ajax({
       type: "GET",
-      dataType:'json',
+      //dataType:'json',
       url: client_id_url,
       success: function(data){
         let dropdown_selection = $("#client_list");
         let client_ids = data["clients"];
+        dropdown_selection.empty();
         //console.log(client_ids);
         for(let i = 0; i < client_ids.length;i++) {
-          //console.log("Data:" + client_ids[i]);
+          console.log("Data:" + client_ids[i]);
           dropdown_selection.append(new Option(client_ids[i],client_ids[i]) );
         }
       },
@@ -252,6 +253,7 @@
     };
     data = JSON.stringify(data);
    // console.log(data);
+<<<<<<< HEAD
     if (cli_id.length === 6) {
       $.ajax({
         type: 'GET',
@@ -269,6 +271,26 @@
       alert("Client ID must be 6 digits long.");
     }
   }
+=======
+   if (cli_id.length === 6) {
+     $.ajax({
+       type: 'GET',
+       dataType: 'json',
+       url: check_cli_num_url,
+       data: {"cli_num": cli_id},
+       success: function (response) {
+         console.log(response);
+         get_clients()
+       },
+       error: function (response) {
+         console.log(response);
+       },
+     });
+   } else {
+     alert("Client ID must be 6 digits long.");
+   }
+ }
+>>>>>>> 01faade2e0f3559c22fa176f654fdc89ad613006
 
   $("#cli_id_form").submit(function(e) {
     console.log('here');
