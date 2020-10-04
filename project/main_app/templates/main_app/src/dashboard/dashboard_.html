@@ -247,7 +247,7 @@
 
   function send_data() {
     let check_cli_num_url = "{% url 'main_app:check_cli_num' %}";
-    console.log('Sending data to server...');
+    console.log('Sending prospective client id to server in order to confirm there are no clients with that given id...');
     var cli_id = document.forms["cli_id_form"]["cli_id"].value;
     var data = {
      cli_id: cli_id
@@ -279,12 +279,30 @@
   });
   
   $("#download-csv").click(function(){
-    let download_CSV = "{% url 'main_app:get_csv' %}";
+    let download_CSV_url = "{% url 'main_app:get_csv' %}";
+    console.log('Sending client id to server...');
+    // place holder till I know how to reference the active element in the dropdown list
+    var cli_id = document.forms["cli_id_form"]["cli_id"].value; 
+    var data = {
+     cli_id: cli_id,
+    };
+    data = JSON.stringify(data);
+    console.log(data);
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     $.ajax({
+      type:"POST",
+      dataType: 'json',
       headers: {'X-CSRFToken': csrftoken},
       mode: 'same-origin',
-      type:"POST",
+      url: download_CSV_url,
+      data: data,
+      success: function (response) {
+         console.log(response);
+         get_clients()
+       },
+       error: function (response) {
+         console.log(response);
+       },
     })
   })
 

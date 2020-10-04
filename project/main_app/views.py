@@ -23,31 +23,17 @@ def get_csv(request):
         cli_id = json.loads(request.body)
         logger.error(cli_id)
         user = request.user
-
-        # if the client is associated with the requested clinician then 
-        # we we concatenate all the scores for that client and prompt a csv download
-
-        # if
-            # name = 
-
-        response = HttpResponse(content_type='text/csv')
-        #decide the file name
-        response['Content-Disposition'] = 'attachment; filename={}.csv'.format(name)
-
-        writer = csv.writer(response, csv.excel)
-        response.write(u'\ufeff'.encode('utf8'))
-
-        #write the headers
-        writer.writerow([
-            smart_str(u"User"),
-        ])
-        #get data from database or from text file....
-        events = event_services.get_events_by_year(year) #dummy function to fetch data
-        for score in scores:
-            writer.writerow([
-                smart_str(event.name)
-            ])
-        return response
+        try:
+            client = Client.objects.get(clinician=request.user,id_num=cli_id)
+            utils.export_as_csv(client)
+            is_valid = {
+                "valid":True
+            }
+        except:
+            is_valid = {
+                "valid":False
+            }
+        return JsonResponse(is_valid)
 
 def check_cli_num(request):
     if request.is_ajax and request.method == "GET":

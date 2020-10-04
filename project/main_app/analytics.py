@@ -31,9 +31,14 @@ def check_cli_num(user,data):
 
 def save_cli_data(user,data):
     # print(type(data))
-    for key in data:
-        logger.error(key)
-        logger.error('*************************')
+    # for key in data:
+    #     logger.error(key)
+    #     logger.error('*************************')
+    count = 0
+    for key, value in data.items():
+        print("key {}: {}".format(count,key))
+        print("value {}: {}".format(count,value))
+        count += 1
 
     for key, value in data.items():
         if key == "cli_num":
