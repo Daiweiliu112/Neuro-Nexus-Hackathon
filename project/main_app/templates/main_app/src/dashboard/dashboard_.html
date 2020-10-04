@@ -223,17 +223,18 @@
   });
 
   function get_clients(){
-    let client_id_url = "{% url 'main_app:client_id' %}";
+    let client_id_url = "{% url 'main_app:client_num' %}";
     $.ajax({
       type: "GET",
-      dataType:'json',
+      //dataType:'json',
       url: client_id_url,
       success: function(data){
         let dropdown_selection = $("#client_list");
         let client_ids = data["clients"];
+        dropdown_selection.empty();
         //console.log(client_ids);
         for(let i = 0; i < client_ids.length;i++) {
-          //console.log("Data:" + client_ids[i]);
+          console.log("Data:" + client_ids[i]);
           dropdown_selection.append(new Option(client_ids[i],client_ids[i]) );
         }
       },
@@ -260,6 +261,7 @@
        data: {"cli_num": cli_id},
        success: function (response) {
          console.log(response);
+         get_clients()
        },
        error: function (response) {
          console.log(response);
