@@ -27,4 +27,5 @@ urlpatterns = [
     path('client_num/',views.get_client_data,name='client_num'),
     path('check_cli_num/', views.check_cli_num, name='check_cli_num'),
     path('save_cli_data/',views.save_cli_data, name='save_cli_data')
+    path('get_csv/',views.get_csv, name='get_csv')
 ]
