@@ -253,25 +253,6 @@
     };
     data = JSON.stringify(data);
    // console.log(data);
-<<<<<<< HEAD
-    if (cli_id.length === 6) {
-      $.ajax({
-        type: 'GET',
-        dataType: 'json',
-        url: check_cli_num_url,
-        data: {"cli_num": cli_id},
-        success: function (response) {
-          console.log(response);
-        },
-        error: function (response) {
-          console.log(response);
-        },
-      });
-    } else {
-      alert("Client ID must be 6 digits long.");
-    }
-  }
-=======
    if (cli_id.length === 6) {
      $.ajax({
        type: 'GET',
@@ -290,7 +271,6 @@
      alert("Client ID must be 6 digits long.");
    }
  }
->>>>>>> 01faade2e0f3559c22fa176f654fdc89ad613006
 
   $("#cli_id_form").submit(function(e) {
     console.log('here');
