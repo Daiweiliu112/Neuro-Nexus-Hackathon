@@ -23,7 +23,7 @@ admin.site.register(GameTrain, GameTrainAdmin)
 
 
 class ClientAdmin(admin.ModelAdmin):
-    list_display = ('is_active',)
+    list_display = ('is_active','clinician','email','id_num')
     search_fields = (['is_active'])
 
 admin.site.register(Client, ClientAdmin)

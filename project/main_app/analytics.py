@@ -15,15 +15,19 @@ logger = logging.getLogger(__name__)
 
 def check_cli_num(user,data):
     cli_num = data
-    print(data)
     if Client.objects.filter(id_num=cli_num).exists():
-        print("exists")
-        return JsonResponse({"valid":False}, status = 200)
+        print(cli_num)
+        is_valid = {
+            "valid":False
+        }
     else:
         client = Client(clinician=user,id_num=cli_num)
         print(client)
         client.save()
-    return JsonResponse({"valid":True}, status = 200)
+        is_valid = {
+            "valid":True
+        }
+    return is_valid
 
 def save_cli_data(user,data):
     # print(type(data))

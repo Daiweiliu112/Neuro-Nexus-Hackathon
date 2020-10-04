@@ -244,6 +244,7 @@
   }
 
   function send_data() {
+    let check_cli_num_url = "{% url 'main_app:check_cli_num' %}";
    console.log('Sending data to server...');
    var cli_id = document.forms["cli_id_form"]["cli_id"].value;
    var data = {
@@ -255,11 +256,10 @@
      $.ajax({
        type: 'GET',
        dataType: 'json',
-       url: '/check_cli_num/',
-       data: data,
+       url: check_cli_num_url,
+       data: {"cli_num": cli_id},
        success: function (response) {
          console.log(response);
-         
        },
        error: function (response) {
          console.log(response);
