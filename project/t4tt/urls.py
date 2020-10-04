@@ -30,7 +30,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('main_app/', include(main_app_urls)),
     path('',account_views.signin),
-    path('save_cli_data/',main_app_views.save_cli_data, name='save_cli_data'),
 
     #path('main_app/dashboard',main_app_views.dashboard)
 ]

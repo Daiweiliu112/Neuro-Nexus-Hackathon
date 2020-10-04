@@ -17,6 +17,38 @@ logger = logging.getLogger(__name__)
 
 # Create your views here.
 
+def get_csv(request):
+	# response content type
+    if request.method == 'POST':
+        cli_id = json.loads(request.body)
+        logger.error(cli_id)
+        user = request.user
+
+        # if the client is associated with the requested clinician then 
+        # we we concatenate all the scores for that client and prompt a csv download
+
+        # if
+            # name = 
+
+        response = HttpResponse(content_type='text/csv')
+        #decide the file name
+        response['Content-Disposition'] = 'attachment; filename={}.csv'.format(name)
+
+        writer = csv.writer(response, csv.excel)
+        response.write(u'\ufeff'.encode('utf8'))
+
+        #write the headers
+        writer.writerow([
+            smart_str(u"User"),
+        ])
+        #get data from database or from text file....
+        events = event_services.get_events_by_year(year) #dummy function to fetch data
+        for score in scores:
+            writer.writerow([
+                smart_str(event.name)
+            ])
+        return response
+
 def check_cli_num(request):
     if request.is_ajax and request.method == "GET":
         # get the nick name from the client side.
@@ -25,7 +57,6 @@ def check_cli_num(request):
         user = request.user
         response = analytics.check_cli_num(user,cli_num)
         return JsonResponse(response)
-        # return HttpResponse("Success")
 
 def save_cli_data(request):
     if request.method == 'POST':
@@ -33,6 +64,8 @@ def save_cli_data(request):
         logger.error(cli_data)
         user = request.user
         analytics.save_cli_data(user,cli_data)
+        return HttpResponse("Success")
+
 
 def get_client_data(request):
     if request.method == "GET":

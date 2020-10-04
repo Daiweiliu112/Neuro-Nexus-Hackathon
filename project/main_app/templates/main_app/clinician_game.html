@@ -108,13 +108,17 @@
       document.querySelector('.footer .center-horizontal').appendChild(notification)
     }
 
+
     /* If the game is over, send the game data via ajax request */
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    let save_cli_data_url = "{% url 'main_app:save_cli_data' %}";
     if (index >= boxes.length) {
       $.ajax({
-        type: 'GET',
+        type: 'POST',
         dataType: 'json',
-        url: 'save_cli_data/',
-        data: JSON.stringify({cli_num: 123456, trial_data: game.getData}),
+        url: save_cli_data_url,
+        headers: {'X-CSRFToken': csrftoken},
+        data: JSON.stringify({cli_num: 123123, trial_data: game.getData}),
         success: function (response) {
           console.log(response);
         },
@@ -157,6 +161,11 @@
   });
   
 </script>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+{% csrf_token %}
+
 {% endblock %}
 
 </html>

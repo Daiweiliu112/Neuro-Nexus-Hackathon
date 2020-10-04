@@ -32,14 +32,16 @@ def check_cli_num(user,data):
 def save_cli_data(user,data):
     # print(type(data))
     for key in data:
-        print(key)
-        print('*************************')
+        logger.error(key)
+        logger.error('*************************')
 
     for key, value in data.items():
         if key == "cli_num":
+            print("DEBUG 1")
             cli_num = value
             client = Client.objects.get(id_num=cli_num)
         if key == "trial_data":
+            print("DEBUG 2")
             print(key)
             
 
