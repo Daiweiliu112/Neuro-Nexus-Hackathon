@@ -169,8 +169,11 @@ def make_meeting(request):
     room_name = utils.get_room_name()
     print(request.POST.get("pk"))
     pk = request.POST.get("pk")
-    client_room_name = "/main_app/client/" + room_name + "/" + pk
-    clinician_room_name = "/main_app/cli/" + room_name + '/' + pk
+    client_num = request.POST.get("client_num")
+    client_id = Client.objects.get(id_num=client_num).pk
+    print("Client_num: ",client_id)
+    client_room_name = "/main_app/client/" + room_name + "/" + pk 
+    clinician_room_name = "/main_app/cli/" + room_name + '/' + pk + "/" + str(client_id)
     #return render(request,'main_app/room_name.html',{'room_name':room_name})
     data = {'clinician':clinician_room_name,
             'client':client_room_name
@@ -183,7 +186,7 @@ def client_game(request):
 def clinician_game(request):
     return render(request,'main_app/clinician_game.html')
 
-def clinician_test(request,room_name,pk):
+def clinician_test(request,room_name,pk,client_id):
     print("clinician:" + room_name)
     print("pk:",pk)
     collection = ImageSet.objects.get(pk=pk)

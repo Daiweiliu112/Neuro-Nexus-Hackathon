@@ -156,6 +156,8 @@
     let selected_collection = $(".selected-image-set").map(function () {
       return $(this).attr("id");
     }).get();
+    let selected_client_num = $("#client_list").find(":selected").text();
+    console.log(selected_client_num);
     if(selected_collection.length == 1){
       let url = '../ajax/create_meeting/';
       $.ajax({
@@ -164,7 +166,8 @@
         mode: 'same-origin',
         method:"POST",
         data:{
-          "pk":JSON.stringify(parseInt(selected_collection[0]))
+          "pk":JSON.stringify(parseInt(selected_collection[0])),
+          "client_num":JSON.stringify(parseInt(selected_client_num))
         },
         success: function (data) {
           console.log("Recieved");
