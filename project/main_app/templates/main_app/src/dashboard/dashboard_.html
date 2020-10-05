@@ -55,7 +55,7 @@
     </div>
 
     <form id="cli_id_form" name="cli_id_form" action="#" onsubmit="return send_data()" style="padding: 10px;">
-        <input type="text" placeholder="Client ID" name="cli_id"  class="form-control" id="client-id">
+        <input type="text" placeholder="Client ID(6-digit only)" name="cli_id"  class="form-control" id="client-id">
         <input type="submit" value="Create Client" class="btn btn-primary my-2">
     </form>
     <select name="client_list" id="client_list">
@@ -266,9 +266,13 @@
        success: function (response) {
          console.log(response);
          get_clients()
+
+         if(response["valid"] == false){
+         alert("Client ID already exists");
+         }
        },
        error: function (response) {
-         console.log(response);
+         console.log(response[valid]);
        },
      });
    } else {
@@ -325,5 +329,13 @@
       width: 10%;
       margin: 0 auto;
     }
+    
+    #client-id {
+      width: 15%;
+      height: 50px;
+      text-align: center;
+      font-size: large;
+    }
+
   </style>
 {% endblock %}
