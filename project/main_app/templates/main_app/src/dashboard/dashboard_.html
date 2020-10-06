@@ -266,7 +266,6 @@
        success: function (response) {
          console.log(response);
          get_clients()
-
          if(response["valid"] == false){
          alert("Client ID already exists");
          }
@@ -286,26 +285,21 @@
   });
   
   $("#download-csv").click(function(){
+    let cli_id = $("#client_list").find(":selected").text();
     let download_CSV_url = "{% url 'main_app:get_csv' %}";
     console.log('Sending client id to server...');
-    // place holder till I know how to reference the active element in the dropdown list
-    var cli_id = document.forms["cli_id_form"]["cli_id"].value; 
-    var data = {
-     cli_id: cli_id,
-    };
-    data = JSON.stringify(data);
-    console.log(data);
+    console.log(cli_id);
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     $.ajax({
-      type:"POST",
+      type:"GET",
       dataType: 'json',
       headers: {'X-CSRFToken': csrftoken},
       mode: 'same-origin',
       url: download_CSV_url,
-      data: data,
+      data: {"cli_id":cli_id},
+      // data: data,
       success: function (response) {
          console.log(response);
-         get_clients()
        },
        error: function (response) {
          console.log(response);

@@ -17,23 +17,69 @@ logger = logging.getLogger(__name__)
 
 # Create your views here.
 
+# def get_csv(request):
+# 	# response content type
+#     if request.method == 'POST':
+#         cli_id = json.loads(request.body)
+#         logger.error(cli_id)
+#         user = request.user
+#         try:
+#             client = Client.objects.get(clinician=request.user,id_num=cli_id)
+#             utils.export_as_csv(client)
+#             is_valid = {
+#                 "valid":True
+#             }
+#         except:
+#             is_valid = {
+#                 "valid":False
+#             }
+#         return JsonResponse(is_valid)
+
+# def get_csv(request):
 def get_csv(request):
 	# response content type
-    if request.method == 'POST':
-        cli_id = json.loads(request.body)
+    if request.is_ajax and request.method == "GET":
+        cli_id = request.GET.get("cli_id")
+        # cli_id = json.loads(request.body)
         logger.error(cli_id)
         user = request.user
         try:
+            # does this client have a link to a given clinician
             client = Client.objects.get(clinician=request.user,id_num=cli_id)
-            utils.export_as_csv(client)
+            # queryset is an array of score objects for a given client 
+            queryset = Score.objects.filter(user=client)
+            if queryset.exists():
+
+                meta = self.client._meta
+                field_names = [field.name for field in meta.fields]
+                name = "Client_Data_Model_Instance " + meta + "_" + str(timezone.localtime(timezone.now()))
+
+                response = HttpResponse(content_type='text/csv')
+                response['Content-Disposition'] = 'attachment; filename={}.csv'.format(name)
+                writer = csv.writer(response)
+
+                writer.writerow(field_names)
+                for obj in queryset:
+                    row = writer.writerow([getattr(obj, field) for field in field_names])
+
+                return response
+            # Error - there is a client with that id that is connected to the active clinician BUT NO data exists
+            else: 
+                is_valid = {
+                    "valid":False
+                }
+                return JsonResponse(is_valid, status=202)
+            # Success - Here there is a client that is connected to the active clinician AND data exists
             is_valid = {
                 "valid":True
             }
+            return JsonResponse(is_valid, status=200)
+        # Error - there is NO client that is connected to the active clinician, whether data exists is inconsequential
         except:
             is_valid = {
                 "valid":False
             }
-        return JsonResponse(is_valid)
+            return JsonResponse(is_valid, status=201)
 
 def check_cli_num(request):
     if request.is_ajax and request.method == "GET":
@@ -51,7 +97,6 @@ def save_cli_data(request):
         user = request.user
         analytics.save_cli_data(user,cli_data)
         return HttpResponse("Success")
-
 
 def get_client_data(request):
     if request.method == "GET":
