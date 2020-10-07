@@ -118,7 +118,7 @@
         dataType: 'json',
         url: save_cli_data_url,
         headers: {'X-CSRFToken': csrftoken},
-        data: JSON.stringify({object: {cli_num: 123123, trial_data: game.getData}}),
+        data: JSON.stringify({cli_num: 123123, trial_data: game.getData()}),
         success: function (response) {
           console.log(response);
         },
