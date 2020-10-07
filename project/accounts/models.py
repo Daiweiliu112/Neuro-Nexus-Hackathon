@@ -13,16 +13,6 @@ class Game(models.Model):
     updated = models.DateTimeField(auto_now=True)
     thumb = models.ImageField(upload_to='main_nav/%Y/%m/%d' ,max_length=IMAGE_MAX_LENGTH,  default="default.png") #
 
-########## GameTrain
-class GameTrain(models.Model):
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
-    game = models.ForeignKey(Game,on_delete=models.CASCADE)
-    index = models.IntegerField(null=True,blank=True) # this should default to 1
-    started = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-    is_active = models.BooleanField(default=True)
-
-
 ########## Client (NOT an extended user model!)
 class Client(models.Model):
     clinician = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -31,12 +21,42 @@ class Client(models.Model):
     id_num = models.IntegerField(null=True,blank=True)
     is_active = models.BooleanField(default=True)
 
+########## GameTrain
+class GameTrain(models.Model):
+    user = models.ForeignKey(Client, on_delete=models.PROTECT)
+    game = models.ForeignKey(Game,on_delete=models.CASCADE)
+    index = models.IntegerField(null=True,blank=True) # this should default to 1
+    started = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
+
 ######### Score 
 class Score(models.Model):
     user = models.ForeignKey(Client,on_delete=models.PROTECT)
-    main_data = ArrayField(
+    total_cli = ArrayField(
+                        models.IntegerField(null=True,blank=True), 
+                        default=[0,0,0,0,0,0,0,0,0,0],
+                        size=10,
+                    )
+    time_t = ArrayField(
                         models.DecimalField(max_digits=12,decimal_places=6,blank=True,null=True), 
+                        default=[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
                         size=10, # binary correct or incorrect
+                    )
+    incor_cli = ArrayField(
+                        models.IntegerField(null=True,blank=True), 
+                        default=[0,0,0,0,0,0,0,0,0,0],
+                        size=10,
+                    )
+    cor_cli = ArrayField(
+                        models.IntegerField(null=True,blank=True), 
+                        default=[0,0,0,0,0,0,0,0,0,0],
+                        size=10,
+                    )
+    cor = ArrayField(
+                        models.IntegerField(null=True,blank=True),
+                        default=[0,0,0,0,0,0,0,0,0,0],
+                        size=10,
                     )
     computed_nums = ArrayField(
                         models.DecimalField(max_digits=12,decimal_places=6,blank=True,null=True), 
