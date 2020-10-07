@@ -218,7 +218,7 @@ def make_meeting(request):
     client_id = Client.objects.get(id_num=client_num).pk
     print("Client_num: ",client_id)
     client_room_name = "/main_app/client/" + room_name + "/" + pk 
-    clinician_room_name = "/main_app/cli/" + room_name + '/' + pk + "/" + str(client_id)
+    clinician_room_name = "/main_app/cli/" + room_name + '/' + pk + "/" + str(client_num)
     #return render(request,'main_app/room_name.html',{'room_name':room_name})
     data = {'clinician':clinician_room_name,
             'client':client_room_name
