@@ -113,12 +113,15 @@
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     let save_cli_data_url = "{% url 'main_app:save_cli_data' %}";
     if (index >= boxes.length) {
+      let splits = document.URL.split("/")
+      let len = splits.length;
+      let cli_num = Number(splits[len - 2])
       $.ajax({
         type: 'POST',
         dataType: 'json',
         url: save_cli_data_url,
         headers: {'X-CSRFToken': csrftoken},
-        data: JSON.stringify({cli_num: 123123, trial_data: game.getData()}),
+        data: JSON.stringify({cli_num: cli_num, trial_data: game.getData()}),
         success: function (response) {
           console.log(response);
         },
