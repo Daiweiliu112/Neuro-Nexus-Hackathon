@@ -55,7 +55,7 @@
     </div>
 
     <form id="cli_id_form" name="cli_id_form" action="#" onsubmit="return send_data()" style="padding: 10px;">
-        <input type="text" placeholder="Client ID" name="cli_id"  class="form-control" id="client-id">
+        <input type="text" placeholder="Client ID(6-digit only)" name="cli_id"  class="form-control" id="client-id">
         <input type="submit" value="Create Client" class="btn btn-primary my-2">
     </form>
     <select name="client_list" id="client_list">
@@ -252,28 +252,29 @@
     let check_cli_num_url = "{% url 'main_app:check_cli_num' %}";
     console.log('Sending prospective client id to server in order to confirm there are no clients with that given id...');
     var cli_id = document.forms["cli_id_form"]["cli_id"].value;
-    var data = {
-     cli_id: cli_id
-    };
-    data = JSON.stringify(data);
-   // console.log(data);
-   if (cli_id.length === 6) {
-     $.ajax({
-       type: 'GET',
-       dataType: 'json',
-       url: check_cli_num_url,
-       data: {"cli_num": cli_id},
-       success: function (response) {
-         console.log(response);
-         get_clients()
-       },
-       error: function (response) {
-         console.log(response);
-       },
-     });
-   } else {
-     alert("Client ID must be 6 digits long.");
-   }
+
+    if (cli_id.length === 6) {
+      $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: check_cli_num_url,
+        data: {"cli_num": cli_id},
+        success: function (response) {
+          document.forms["cli_id_form"]["cli_id"].value = "";
+          console.log(response);
+          get_clients()
+          if(response["valid"] == false){
+          alert("Client ID already exists");
+          }
+        },
+        error: function (response) {
+          console.log(response[valid]);
+        },
+      });
+    } else {
+      alert("Client ID must be 6 digits long.");
+    }
+
  }
 
   $("#cli_id_form").submit(function(e) {
@@ -282,30 +283,34 @@
   });
   
   $("#download-csv").click(function(){
+    let cli_id = $("#client_list").find(":selected").text();
     let download_CSV_url = "{% url 'main_app:get_csv' %}";
     console.log('Sending client id to server...');
-    // place holder till I know how to reference the active element in the dropdown list
-    var cli_id = document.forms["cli_id_form"]["cli_id"].value; 
-    var data = {
-     cli_id: cli_id,
-    };
-    data = JSON.stringify(data);
-    console.log(data);
+    console.log(cli_id);
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     $.ajax({
-      type:"POST",
+      type:"GET",
       dataType: 'json',
       headers: {'X-CSRFToken': csrftoken},
       mode: 'same-origin',
       url: download_CSV_url,
-      data: data,
+      data: {"cli_id":cli_id},
+      // data: data,
       success: function (response) {
          console.log(response);
-         get_clients()
        },
        error: function (response) {
          console.log(response);
        },
+       statusCode:{
+        201:function(response){
+           alert('There is NO client with this number connected to active clinician');
+         },
+         202: function(response){
+           alert('The Client exists, but there is NO data to recall');
+         },
+         
+       }
     })
   })
 
@@ -325,5 +330,13 @@
       width: 10%;
       margin: 0 auto;
     }
+    
+    #client-id {
+      width: 15%;
+      height: 50px;
+      text-align: center;
+      font-size: large;
+    }
+
   </style>
 {% endblock %}
