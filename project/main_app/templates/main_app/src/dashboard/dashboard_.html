@@ -175,10 +175,10 @@
           let client_room_name = data['client']
           let clinician_room_name = data['clinician']
           //$('#room_name').text(client_room_name);
-          $('#client_link').attr('href', "../.." + client_room_name);
-          $('#client_link').text("localhost" + client_room_name);
-          $('#clinician_link').attr('href', "../.." + clinician_room_name);
-          $('#clinician_link').text("localhost" + clinician_room_name);
+          $('#client_link').attr('href',  client_room_name);
+          $('#client_link').text( client_room_name);
+          $('#clinician_link').attr('href',  clinician_room_name);
+          $('#clinician_link').text( clinician_room_name);
         },
       });
     }else if (selected_collection.length == 0){
