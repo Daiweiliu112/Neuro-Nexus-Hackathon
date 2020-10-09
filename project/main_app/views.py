@@ -5,12 +5,15 @@ from django.http import HttpResponse,JsonResponse
 from accounts.models import (
     Client,
     ImageSet,
-    Image
+    Image,
+    Score
     )
 from django.contrib.auth.models import User
 import json
 import logging
 from . import analytics
+from django.utils import timezone
+import csv
 
 # DEBUGGING
 logger = logging.getLogger(__name__)
@@ -43,43 +46,57 @@ def get_csv(request):
         # cli_id = json.loads(request.body)
         logger.error(cli_id)
         user = request.user
-        try:
+        # try:
             # does this client have a link to a given clinician
-            client = Client.objects.get(clinician=request.user,id_num=cli_id)
-            # queryset is an array of score objects for a given client 
-            queryset = Score.objects.filter(user=client)
-            if queryset.exists():
+            # client = Client.objects.get(clinician=request.user,id_num=cli_id)
 
-                meta = self.client._meta
-                field_names = [field.name for field in meta.fields]
-                name = "Client_Data_Model_Instance " + meta + "_" + str(timezone.localtime(timezone.now()))
-
-                response = HttpResponse(content_type='text/csv')
-                response['Content-Disposition'] = 'attachment; filename={}.csv'.format(name)
-                writer = csv.writer(response)
-
-                writer.writerow(field_names)
-                for obj in queryset:
-                    row = writer.writerow([getattr(obj, field) for field in field_names])
-
-                return response
-            # Error - there is a client with that id that is connected to the active clinician BUT NO data exists
-            else: 
-                is_valid = {
-                    "valid":False
-                }
-                return JsonResponse(is_valid, status=202)
-            # Success - Here there is a client that is connected to the active clinician AND data exists
-            is_valid = {
-                "valid":True
-            }
-            return JsonResponse(is_valid, status=200)
         # Error - there is NO client that is connected to the active clinician, whether data exists is inconsequential
+        try:
+            client = Client.objects.get(id_num=cli_id)
         except:
             is_valid = {
                 "valid":False
             }
             return JsonResponse(is_valid, status=201)
+        print(client)
+        # queryset is an array of score objects for a given client 
+        queryset = Score.objects.filter(user=client)
+        print(queryset)
+        if queryset.exists():
+
+            meta = queryset[0]._meta
+            field_names = [field.name for field in meta.fields]
+            name = "Client_Data_Model_Instance_" + str(client.id) + str(timezone.now())
+
+            print(name)
+
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename={}.csv'.format(name)
+
+            print("DEBUG_1")
+
+            writer = csv.writer(response)
+            writer.writerow(field_names)
+            for obj in queryset:
+                row = writer.writerow([getattr(obj, field) for field in field_names])
+
+            print("DEBUG_2")
+
+
+            return response
+
+        # Error - there is a client with that id that is connected to the active clinician BUT NO data exists
+        else: 
+            is_valid = {
+                "valid":False
+            }
+            return JsonResponse(is_valid, status=202)
+        # Success - Here there is a client that is connected to the active clinician AND data exists
+        is_valid = {
+            "valid":True
+        }
+        return JsonResponse(is_valid, status=200)
+
 
 def check_cli_num(request):
     if request.is_ajax and request.method == "GET":

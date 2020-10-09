@@ -113,13 +113,15 @@ def save_cli_data(user,data):
 
             # check if this game's game model instance has been created if not, make one
             try:
-                game = Game.models.get(title="Find the Thing")
+                game = Game.objects.get(title="Find the Thing")
             except:
                 game = Game(
                     title = "Find the Thing",
                     body = "You find the thing"
                 )
                 game.save()
+
+
 
             # check if an existing game train exists for this game, otherwise make one
             try: 
