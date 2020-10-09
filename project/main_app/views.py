@@ -233,9 +233,10 @@ def make_meeting(request):
     pk = request.POST.get("pk")
     client_num = request.POST.get("client_num")
     client_id = Client.objects.get(id_num=client_num).pk
-    print("Client_num: ",client_id)
-    client_room_name = "/main_app/client/" + room_name + "/" + pk 
-    clinician_room_name = "/main_app/cli/" + room_name + '/' + pk + "/" + str(client_num)
+    print(request.META['HTTP_HOST'])
+    domain_name = request.META['HTTP_HOST']
+    client_room_name = domain_name + "/main_app/client/" + room_name + "/" + pk 
+    clinician_room_name = domain_name + "/main_app/cli/" + room_name + '/' + pk + "/" + str(client_num)
     #return render(request,'main_app/room_name.html',{'room_name':room_name})
     data = {'clinician':clinician_room_name,
             'client':client_room_name
