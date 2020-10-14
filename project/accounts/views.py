@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .forms import RegisterForm
+from .forms import RegisterForm, UserAuthForm
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
@@ -10,7 +10,7 @@ def home(request):
 
 def signin(request):
     if request.method == "POST":
-        form = AuthenticationForm(request.POST)
+        form = UserAuthForm(request.POST)
         print(request.POST)
         user = request.POST['username']
         password = request.POST['password']
@@ -22,10 +22,8 @@ def signin(request):
             return redirect('/main_app/dashboard/')
         else:
             print("login failed")
-
-
     else:
-        form = AuthenticationForm()
+        form = UserAuthForm()
     return render(request, 'accounts/sign-in/sign_in.html',{'form':form})
 
 def signup(request):
