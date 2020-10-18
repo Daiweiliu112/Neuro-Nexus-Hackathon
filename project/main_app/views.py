@@ -1,36 +1,132 @@
 from django.shortcuts import render, redirect
 from .forms import UploadImageForm, UploadFileForm
 from . import utils
-from django.http import JsonResponse
+from django.http import HttpResponse,JsonResponse
 from accounts.models import (
     Client,
     ImageSet,
-    Image
+    Image,
+    Score
     )
 from django.contrib.auth.models import User
 import json
+import logging
+from . import analytics
+from django.utils import timezone
+import csv
+
+# DEBUGGING
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 
-def check_cli_num(request):
-    # request should be ajax and method should be GET.
-    if request.is_ajax and request.method == "GET":
-        # get the client number from the client side.
-        cli_id = request.GET.get("cli_id", None)
-        # check for the existing client number in the database.
-        user = request.user
-        if Client.objects.filter(id_num = cli_id).exists():
-            # if cli_num found return not valid .
-            return JsonResponse({"valid":False}, status = 200)
-        else:
-            user = request.user
-            # if cli_num not found, then clinician can create a new client.
-            client = Client(clinician=user,id_num=cli_id)
-            client.save()
-            return JsonResponse({"valid":True}, status = 200)
+# def get_csv(request):
+# 	# response content type
+#     if request.method == 'POST':
+#         cli_id = json.loads(request.body)
+#         logger.error(cli_id)
+#         user = request.user
+#         try:
+#             client = Client.objects.get(clinician=request.user,id_num=cli_id)
+#             utils.export_as_csv(client)
+#             is_valid = {
+#                 "valid":True
+#             }
+#         except:
+#             is_valid = {
+#                 "valid":False
+#             }
+#         return JsonResponse(is_valid)
 
-    return JsonResponse({}, status = 400)
-    
+# def get_csv(request):
+def get_csv(request):
+	# response content type
+    if request.is_ajax and request.method == "GET":
+        cli_id = request.GET.get("cli_id")
+        # cli_id = json.loads(request.body)
+        logger.error(cli_id)
+        user = request.user
+        # try:
+            # does this client have a link to a given clinician
+            # client = Client.objects.get(clinician=request.user,id_num=cli_id)
+
+        # Error - there is NO client that is connected to the active clinician, whether data exists is inconsequential
+        try:
+            client = Client.objects.get(id_num=cli_id)
+        except:
+            is_valid = {
+                "valid":False
+            }
+            return JsonResponse(is_valid, status=201)
+        print(client)
+        # queryset is an array of score objects for a given client 
+        queryset = Score.objects.filter(user=client)
+        print(queryset)
+        if queryset.exists():
+
+            meta = queryset[0]._meta
+            field_names = [field.name for field in meta.fields]
+            name = "Client_Data_Model_Instance_" + str(client.id) + str(timezone.now())
+
+            print(name)
+
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename={}.csv'.format(name)
+
+            print("DEBUG_1")
+
+            writer = csv.writer(response)
+            writer.writerow(field_names)
+            for obj in queryset:
+                row = writer.writerow([getattr(obj, field) for field in field_names])
+
+            print("DEBUG_2")
+
+
+            return response
+
+        # Error - there is a client with that id that is connected to the active clinician BUT NO data exists
+        else: 
+            is_valid = {
+                "valid":False
+            }
+            return JsonResponse(is_valid, status=202)
+        # Success - Here there is a client that is connected to the active clinician AND data exists
+        is_valid = {
+            "valid":True
+        }
+        return JsonResponse(is_valid, status=200)
+
+
+def check_cli_num(request):
+    if request.is_ajax and request.method == "GET":
+        # get the nick name from the client side.
+        cli_num = request.GET.get("cli_num")
+        logger.error(cli_num)
+        user = request.user
+        response = analytics.check_cli_num(user,cli_num)
+        return JsonResponse(response)
+
+def save_cli_data(request):
+    if request.method == 'POST':
+        cli_data = json.loads(request.body)
+        logger.error(cli_data)
+        user = request.user
+        analytics.save_cli_data(user,cli_data)
+        return HttpResponse("Success")
+
+def get_client_data(request):
+    if request.method == "GET":
+        clients = Client.objects.filter(clinician = request.user)
+        clients_id = []
+        for client in clients:
+            clients_id.append(client.id_num)
+        print(clients_id)
+        clients_json = {
+            "clients":clients_id
+        }
+        return JsonResponse(clients_json)
+
 def index(request):
     return render(request,'main_app/index copy.html')
 
@@ -135,8 +231,12 @@ def make_meeting(request):
     room_name = utils.get_room_name()
     print(request.POST.get("pk"))
     pk = request.POST.get("pk")
-    client_room_name = "/main_app/client/" + room_name + "/" + pk
-    clinician_room_name = "/main_app/cli/" + room_name + '/' + pk
+    client_num = request.POST.get("client_num")
+    client_id = Client.objects.get(id_num=client_num).pk
+    print(request.META['HTTP_HOST'])
+    domain_name = request.META['HTTP_HOST']
+    client_room_name = domain_name + "/main_app/client/" + room_name + "/" + pk 
+    clinician_room_name = domain_name + "/main_app/cli/" + room_name + '/' + pk + "/" + str(client_num)
     #return render(request,'main_app/room_name.html',{'room_name':room_name})
     data = {'clinician':clinician_room_name,
             'client':client_room_name
@@ -149,7 +249,7 @@ def client_game(request):
 def clinician_game(request):
     return render(request,'main_app/clinician_game.html')
 
-def clinician_test(request,room_name,pk):
+def clinician_test(request,room_name,pk,client_id):
     print("clinician:" + room_name)
     print("pk:",pk)
     collection = ImageSet.objects.get(pk=pk)

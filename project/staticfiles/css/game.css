@@ -18,6 +18,7 @@ img {
   font-weight: 400;
   color: #FFCB9A;
 }
+
 .rectangle {
   color: inherit;
   border: 5px solid #2C3531;
@@ -59,7 +60,7 @@ input[type="text"] {
 
 button {
   display: inline-block;
-  width: 60px;
+  width: 101px;
   height: 60px;
 }
 

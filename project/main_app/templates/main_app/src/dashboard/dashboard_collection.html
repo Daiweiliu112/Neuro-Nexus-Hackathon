@@ -22,7 +22,7 @@
 
 
 <!-- Custom styles for this template -->
-<link href="dashboard.css" rel="stylesheet">
+<link href="{% static 'css/dashboard.css' %}" type="text/css" rel="stylesheet">
 
 
 
@@ -225,7 +225,9 @@ $('#title').val("{{ collection_title }}")
 </script>
 
 <style>
-
+.card-selected {
+  background-color: aqua;
+}
 </style>
 
 

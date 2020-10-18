@@ -5,9 +5,26 @@
 <html>
 {% block content %}
 
+<style>
+  .bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  @media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+      font-size: 3.5rem;
+    }
+  }
+</style>
+
 
 <div id="canvas">
-  <img class="image-fluid" id= "image-shown" src="{% static 'I_Spy 1.png' %}" />
+  <img class="image-fluid" id= "image-shown" src="" />
 </div>
 
 <div class="footer">
@@ -21,8 +38,11 @@
     <button id="delete-button">
       Delete all
     </button>
-    <button id="next-button">
-      Next
+    <button id="next-button-success">
+      Success
+    </button>
+    <button id="next-button-failure">
+      Failure
     </button>
   </div>
 </div>
@@ -35,7 +55,7 @@
 <script>
   const roomName = JSON.parse(document.getElementById('room-name').textContent);
   const chatSocket = get_socket(window.location.host, roomName);
-  initDraw(document.getElementById('canvas'), chatSocket);
+  var game = new ClinicianGame(document.getElementById('canvas'), chatSocket, 11); // number of games is currently hard-coded to 11
   let images = []
   let coord_array = []
 </script>
@@ -49,20 +69,6 @@
 </script>
 {% endfor %}
 <script>;
-  let index = 0;
-  let boxes = [];
-  for(let i = 0; i < coord_array.length;i++){
-    let width = coord_array[i][2] - coord_array[i][0];
-    let height = coord_array[i][3] - coord_array[i][1];
-    let temp = {
-      "top":coord_array[i][1],
-      "left":coord_array[i][0],
-      "width":width,
-      "height":height
-    }
-    boxes.push(temp);
-  }
-
   function makeRects(data) {
     var element = null;
     element = document.createElement('div');
@@ -77,22 +83,92 @@
     
     document.getElementById('canvas').appendChild(element)
   };
+
+  /* Logic that runs every time that the clinician wishes 
+   * to go to the next image */
+  function goToNextImage(clientSuccess) {
+
+    /* Remove rectangles and click circles */
+    document.querySelectorAll('.rectangle').forEach(rect => {
+      rect.remove()
+    });
+    document.querySelectorAll('.client-click-pos').forEach(dot_pos =>{
+      dot_pos.remove()
+    });
+
+    /* Increment index of image */
+    index++;
+    game.nextImage(clientSuccess)
+
+    /* Let clinician know if they are on the last image */
+    if (index == boxes.length - 1) {
+      let notification = document.createElement('span');
+      notification.style.color = "#fff";
+      notification.innerHTML = "\t(This is the Last trial)";
+      document.querySelector('.footer .center-horizontal').appendChild(notification)
+    }
+
+
+    /* If the game is over, send the game data via ajax request */
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    let save_cli_data_url = "{% url 'main_app:save_cli_data' %}";
+    if (index >= boxes.length) {
+      let splits = document.URL.split("/")
+      let len = splits.length;
+      let cli_num = Number(splits[len - 2])
+      $.ajax({
+        type: 'POST',
+        dataType: 'json',
+        url: save_cli_data_url,
+        headers: {'X-CSRFToken': csrftoken},
+        data: JSON.stringify({cli_num: cli_num, trial_data: game.getData()}),
+        success: function (response) {
+          console.log(response);
+        },
+        error: function (response) {
+          console.log(response);
+        },
+      });
+      alert("Session now complete. Closing tab.");
+      window.close();
+    }
+
+    /* Make new rects if available */
+    makeRects(boxes[index]);
+    $('#image-shown').attr('src',images[index]);
+  }
+
+  let index = 0;
+  let boxes = [];
+  for (let i = 0; i < coord_array.length;i++){
+    let width = coord_array[i][2] - coord_array[i][0];
+    let height = coord_array[i][3] - coord_array[i][1];
+    let temp = {
+      top: coord_array[i][1],
+      left: coord_array[i][0],
+      width: width,
+      height: height
+    }
+    boxes.push(temp);
+  } 
+
+
   $('#image-shown').attr('src',images[index]);
   makeRects(boxes[index]);
   //$('#image-shown').attr("src", images[0])
-  $('#next-button').click(function(){
-    document.querySelectorAll('.rectangle').forEach(rect => {
-            rect.remove()
-    });
-    index++;
-    makeRects(boxes[index]);
-    $('#image-shown').attr('src',images[index]);
-
-    console.log(images[index]);
-    console.log(coord_array[index]);
+  $('#next-button-success').click(function(){
+    goToNextImage(true);
+  });
+  $('#next-button-failure').click(function(){
+    goToNextImage(false);
   });
   
 </script>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+{% csrf_token %}
+
 {% endblock %}
 
 </html>

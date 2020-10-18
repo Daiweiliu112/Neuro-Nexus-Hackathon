@@ -6,9 +6,26 @@
 <html>
 {% block content %}
 
+<style>
+  .bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  @media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+      font-size: 3.5rem;
+    }
+  }
+</style>
+
 
 <div id="canvas">
-  <img class="image-fluid" id="image-shown" src="{% static 'I_Spy 1.png' %}" />
+  <img class="image-fluid" id="image-shown" src="" />
 </div>
 
 <div class="footer">
@@ -23,20 +40,61 @@
 <script>
     const roomName = JSON.parse(document.getElementById('room-name').textContent);
     const chatSocket = get_socket(window.location.host, roomName)
-    initDraw(document.getElementById('canvas'), chatSocket);
+    var game = new ClientGame(document.getElementById('canvas'), chatSocket);
     let images = [];
+    let coord_array = [];
 </script>
 {% for ind_image in set_images %}
 <script>
   image_url = '{{ ind_image.image.url }}'
+  coord = {{ ind_image.coords }}
   console.log(image_url);
   images.push(image_url);
+  coord_array.push(coord);
 </script>
 {% endfor %}
 <script>
-    console.log(images);
-    let index = 0;
-    $('#image-shown').attr('src', images[index]);
+  
+  console.log(coord_array);
+
+  function makeRects(data) {
+    var element = null;
+    element = document.createElement('div');
+    element.className = 'target'
+    element.id = "test"
+    element.style.position = 'absolute'
+    
+    element.style.top = data['top'] + 'px'
+    element.style.left = data['left'] + 'px'
+    element.style.width = data['width'] + 'px'
+    element.style.height = data['height'] + 'px'
+    
+    document.getElementById('canvas').appendChild(element)
+  };
+
+  function calc_data(coord_data){
+    console.log(coord_data);
+    let width = coord_data[2]- coord_data[0];
+    let height = coord_data[3] - coord_data[1];
+    let temp = {
+    "top":coord_data[1],
+    "left":coord_data[0],
+    "width":width,
+    "height":height
+    };
+    return temp;
+  }
+  console.log(images);
+  let index = 0;
+  $('#image-shown').attr('src', images[index]);
+  let rect_data = calc_data(coord_array[index]);
+  makeRects(rect_data);
+
+  function next_image(){
+    index++;
+    $("#image-shown").attr('src',images[index]);
+    let rect_data = calc_data(coord_array[index]);
+  }
     
 </script>
 <style>

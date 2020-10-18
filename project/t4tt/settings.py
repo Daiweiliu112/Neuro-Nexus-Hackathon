@@ -28,7 +28,7 @@ DEBUG = True
 
 CURRENT_SITE = '0.0.0.0'
 
-ALLOWED_HOSTS = ['localhost','0.0.0.0']
+ALLOWED_HOSTS = ['localhost','0.0.0.0','ec2-18-188-81-190.us-east-2.compute.amazonaws.com']
 
 
 # Application definition
