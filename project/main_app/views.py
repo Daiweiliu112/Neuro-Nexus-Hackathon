@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect 
 from .forms import UploadImageForm, UploadFileForm
 from . import utils
 from django.http import HttpResponse,JsonResponse
@@ -141,12 +141,17 @@ def dashboard(request):
     context = {"testing": '''<image class="image-fluid" height="255" width= "100%" src="/static/I_Spy 1.png" />'''}
     return render(request,'main_app/src/dashboard/dashboard_collection.html',context)
 
+# This function loads the dashboard
 def dashboard_test(request):
-    if request.user.is_authenticated:
+
+    if request.user.is_authenticated:                               # Checking if the user that is requesting is authenticated
         current_user = request.user
         print("current user: ", current_user)
         #clinician = account_models.Clinician.objects.get(user=request.user)
-        collections = ImageSet.objects.filter(clinician=request.user)
+
+        # Filtering collection for requested user
+        collections = ImageSet.objects.filter(clinician=request.user)       # Filter out the collections for the requested user
+        # This part is for showing 3 collections per row
         collections_row = len(collections) // 3
         collections_remainder = len(collections) % 3
         collections_array = []
@@ -159,6 +164,8 @@ def dashboard_test(request):
             for i in range(collections_remainder):
                 temp.append(collections[last_index+i])
             collections_array.append(temp)
+        
+        # This part is for showing 3 images per row
         images = Image.objects.filter(clinician=request.user)
         print("Image: ", images)
         print(len(images))
@@ -176,6 +183,7 @@ def dashboard_test(request):
                 temp.append(images[last_index + i])
             image_array.append(temp)
         print(image_array)
+        # Put the images and collections as JSON object
         context = {
             "images":image_array,
             "collections":collections_array,
@@ -199,16 +207,18 @@ def download_csv(request):
     return render(request,'main_app/src/download_data/download_data.html')
 
 def upload_file(request):
-    if request.user.is_authenticated:
-        if request.method == "POST":
-            form = UploadFileForm(request.POST,request.FILES)
+    if request.user.is_authenticated:               # Check if the user requesting access is authenticated user
+        if request.method == "POST":                
+            form = UploadFileForm(request.POST,request.FILES)   # Get the file from the POST request
             print(request.POST['title'])
-            if form.is_valid():
+            if form.is_valid():                     # Check if the form was valid
                 print("valid form")
                 #image_form = form.save(commit=False)
                 #clinician = account_models.Clinician.objects.get(user=request.user)
                 #print("clincian:",clincian.user.email)
-                default_coord = [0,0,0,0]
+                default_coord = [0,0,0,0]           # Set default coordinates of point 1 and 2 to be 0,0
+
+                # Make an Image Object for database and save the image
                 image_model = Image(image=request.FILES['file'],title=request.POST['title'],clinician=request.user,coords=default_coord)
                 image_model.save()
                 #form.coords = [0,0,0,0]
@@ -219,7 +229,7 @@ def upload_file(request):
                 print("Image time:",image_model.created)
                 print("Image detail:",image_model.pk)
                 print("Image id:",image_model.id)
-                return redirect('main_app:editview',pk=image_model.pk)
+                return redirect('main_app:editview',pk=image_model.pk)      # Redirect the user to editing page
         else:
             form = UploadFileForm()
             #form = UploadImageForm()
@@ -227,17 +237,22 @@ def upload_file(request):
     else:
         return redirect('accounts:signin')
 
+# Generates the URL for session
 def make_meeting(request):
-    room_name = utils.get_room_name()
+    room_name = utils.get_room_name()                       # Generates random string
     print(request.POST.get("pk"))
-    pk = request.POST.get("pk")
-    client_num = request.POST.get("client_num")
-    client_id = Client.objects.get(id_num=client_num).pk
+    pk = request.POST.get("pk")                             # Gets the public key of collection which clinician chose
+    client_num = request.POST.get("client_num") 
+    client_id = Client.objects.get(id_num=client_num).pk    # Gets the ClientID from the Client Number which clinician chose
     print(request.META['HTTP_HOST'])
-    domain_name = request.META['HTTP_HOST']
+    domain_name = request.META['HTTP_HOST']                 # Returns the domain name
+
+    # Generates the url for client and clinician
     client_room_name = domain_name + "/main_app/client/" + room_name + "/" + pk 
     clinician_room_name = domain_name + "/main_app/cli/" + room_name + '/' + pk + "/" + str(client_num)
     #return render(request,'main_app/room_name.html',{'room_name':room_name})
+    
+    # Put the URL as JSON Object to send it to user
     data = {'clinician':clinician_room_name,
             'client':client_room_name
             }
@@ -249,10 +264,12 @@ def client_game(request):
 def clinician_game(request):
     return render(request,'main_app/clinician_game.html')
 
+# Loads the clinician page of the session
 def clinician_test(request,room_name,pk,client_id):
     print("clinician:" + room_name)
     print("pk:",pk)
-    collection = ImageSet.objects.get(pk=pk)
+    collection = ImageSet.objects.get(pk=pk)        # Gets collection with the public key that clinician chose
+    # Gets the images in the collection
     images = [
         collection.pic1,
         collection.pic2,
@@ -272,9 +289,11 @@ def clinician_test(request,room_name,pk,client_id):
         "set_images":images
     })
 
+# Loads the client page of the session
 def client_test(request,room_name,pk):
     print("client" + room_name)
-    collection = ImageSet.objects.get(pk=pk)
+    collection = ImageSet.objects.get(pk=pk)        # Gets collection with the public key that clinician chose 
+    # Gets the image in the collection
     images = [
         collection.pic1,
         collection.pic2,
@@ -294,15 +313,17 @@ def client_test(request,room_name,pk):
         "set_images":images
     })
             
+# Editing image's area of interest and title
 def edit_view(request,pk):
     print(pk)
     if request.user.is_authenticated:
-        image_model = Image.objects.get(pk=pk)
+        image_model = Image.objects.get(pk=pk)                  # Load the image model from database
         print("image url:",image_model.image.url)
         print("image title:", image_model.title)
-        image_points = image_model.coords
-        if(image_points == [0,0,0,0]):
-            image_points = None
+        image_points = image_model.coords                       # Gets the area of the interest coordinates of the image
+                                                                # The structre is save [x1,y1,x2,y2] where x1 and y1 is top left of the rectangle and x2,y2 is bottom right of the rectangle
+        if(image_points == [0,0,0,0]):                          # Default is 0,0 and 0,0
+            image_points = None                                 
         print(image_points)
         context ={
             "image":image_model,
@@ -315,29 +336,31 @@ def edit_view(request,pk):
 def save_image_edit(request):
     print(request.POST.get("points"))
     print(request.POST)
-    image_pk = request.POST.get("image_pk")
-    image_model = Image.objects.get(pk=image_pk)
+    image_pk = request.POST.get("image_pk")                     # Gets the public key of the image
+    image_model = Image.objects.get(pk=image_pk)                # Gets the Image model corresponding to public key
     print(image_model.coords)
-    points = json.loads(request.POST.get("points"))
+    points = json.loads(request.POST.get("points"))             # Gets the points of the area of interest
     print(points["top_left"])
-    points_arr = [points["top_left"][0],points["top_left"][1],points["bottom_right"][0],points["bottom_right"][1]]
+    points_arr = [points["top_left"][0],points["top_left"][1],points["bottom_right"][0],points["bottom_right"][1]]      # Parse the data so we have only two points (Top Left and Bottom Right)
     print(points_arr)
     image_model.coords = points_arr 
     image_model.title = json.loads(request.POST.get("title"))
     #image_model.coords = points_arr
-    image_model.save()
+    image_model.save()                                          # Save the Image model to database
     print("coord check:",image_model.coords)
     return JsonResponse({"worked":True})
 
+# Loads the creation of collection view/page
 def create_collection_view(request):
     if request.user.is_authenticated:
         current_user = request.user
         #clinician = account_models.Clinician.objects.get(user=current_user)
-        collections = ImageSet.objects.filter(clinician=request.user)
+        collections = ImageSet.objects.filter(clinician=request.user)           # Loads the ImageSet for the clinician
         #collections_pk = collections.pk
-        images = Image.objects.filter(clinician=request.user)
+        images = Image.objects.filter(clinician=request.user)                   # Loads the images that is uploaded by the clinician
         print("Image: ", images)
         print(len(images))
+        # These are for showing 3 enteries per row
         image_row = len(images) // 3
         remain = len(images) % 3
         image_array = []
@@ -359,13 +382,15 @@ def create_collection_view(request):
         return render(request,'main_app/src/dashboard/dashboard_collection.html',context)
     return render(request,'main_app/src/dashboard/dashboard_collection.html')
 
+# Handles the request when clinician creates collection
 def create_collection(request):
-    images_id = json.loads(request.POST.get("selected_image"))
+    images_id = json.loads(request.POST.get("selected_image"))          # Gets the public keys of the selected Image Model
     print(images_id)
     current_user = request.user
     #clinician = account_models.Clinician.objects.get(user=current_user)
     #print(clinician)
-    collection_pk = json.loads(request.POST.get("collection_pk"))
+    collection_pk = json.loads(request.POST.get("collection_pk"))       # Gets the public key of the ImageSet Model
+    # If the public key is below 0, create new ImageSet Model. 
     if(collection_pk < 0):
         image_set = ImageSet()
     else:
@@ -381,6 +406,8 @@ def create_collection(request):
     #    temp_model = account_models.Image.objects.get(pk=image_id)
         
     #    i+=1
+
+    # Save the selected Image Models to the ImageSet Model 
     image_set.pic1 = Image.objects.get(pk=images_id[0])
     image_set.pic2 = Image.objects.get(pk=images_id[1])
     image_set.pic3 = Image.objects.get(pk=images_id[2])
@@ -394,14 +421,15 @@ def create_collection(request):
     image_set.pic11 = Image.objects.get(pk=images_id[10])
     for i in range(3,14):
         print(fields[i])
-    image_set.save()
+    image_set.save()                                            # Save the ImageSet Model to database
     print(image_set.pic1.pk)
     return JsonResponse({"sucess":True})
 
+# Handles request of editing the entry of Images in existing ImageSet
 def edit_collection_view(request,pk):
     if request.user.is_authenticated:
         print(pk)
-        collection_model = ImageSet.objects.get(pk=pk)
+        collection_model = ImageSet.objects.get(pk=pk)          # Loads the ImageSet Model with given public key
         collection_image = [[collection_model.pic1,collection_model.pic2,collection_model.pic3],
                             [collection_model.pic4,collection_model.pic5,collection_model.pic6],
                             [collection_model.pic7,collection_model.pic8,collection_model.pic9],
@@ -422,13 +450,17 @@ def edit_collection_view(request,pk):
 
     return render(request,'main_app/src/dashboard/dashboard_collection.html')
 
+
+# Helper function for getting Image models uploaded by the clinician
 def get_images(clinician):
     #clinician = account_models.Clinician.objects.get(user=current_user)
     #collections = account_models.ImageSet.objects.filter(clinician=clinician)
     #collections_pk = collections.pk
-    images = Image.objects.filter(clinician=clinician)
+    images = Image.objects.filter(clinician=clinician)          # Loads all the Image models uploaded by clinician
     #print("Image: ", images)
     #print(len(images))
+
+    # Show only 3 enteries per row
     image_row = len(images) // 3
     remain = len(images) % 3
     image_array = []
