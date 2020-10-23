@@ -1,6 +1,5 @@
 # Tech for Teletherapy
 
-##### EDEN’s
 
 Tested in 18.04 Ubuntu OS & MacOS Catalina 10.15
 
