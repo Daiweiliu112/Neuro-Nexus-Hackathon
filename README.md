@@ -1,11 +1,8 @@
 # Tech for Teletherapy
 
-
-Sudo docker system prune --volumes --force
-
 ##### EDEN’s
 
-Tested in 18.04 Ubuntu OS
+Tested in 18.04 Ubuntu OS & MacOS Catalina 10.15
 
 Install Docker
 https://docs.docker.com/engine/install/ubuntu/  

@@ -49,7 +49,7 @@
         <p>Link for Client: <a id='client_link' href="" target="_blank"></a></p>
         <p>Link for Clincian: <a id='clinician_link' href="" target="_blank"></a></p>
       </div>
-      <a href="../upload/" class="btn btn-primary my-2">Upload Images</a>
+      <a href="../upload/" class="btn btn-primary my-2">Upload Image</a>
       <!--a href="{% url 'main_app:create_collection' %}" class="btn btn-primary">Make collection</a-->
       <a href="{% url 'main_app:create_collection' %}" class="btn btn-primary" id="create_collection">Create Collection</a>
     </div>
@@ -99,7 +99,7 @@
       </div>
       {% endfor %}
 
-
+      <br>
       <span>Uploaded Images</span>
       {% for image_row in images %}
       <div class="row">
@@ -175,10 +175,10 @@
           let client_room_name = data['client']
           let clinician_room_name = data['clinician']
           //$('#room_name').text(client_room_name);
-          $('#client_link').attr('href', "../.." + client_room_name);
-          $('#client_link').text("localhost" + client_room_name);
-          $('#clinician_link').attr('href', "../.." + clinician_room_name);
-          $('#clinician_link').text("localhost" + clinician_room_name);
+          $('#client_link').attr('href',  "http://" + client_room_name);
+          $('#client_link').text( client_room_name);
+          $('#clinician_link').attr('href',  "http://" + clinician_room_name);
+          $('#clinician_link').text( clinician_room_name);
         },
       });
     }else if (selected_collection.length == 0){
@@ -252,31 +252,29 @@
     let check_cli_num_url = "{% url 'main_app:check_cli_num' %}";
     console.log('Sending prospective client id to server in order to confirm there are no clients with that given id...');
     var cli_id = document.forms["cli_id_form"]["cli_id"].value;
-    var data = {
-     cli_id: cli_id
-    };
-    data = JSON.stringify(data);
-   // console.log(data);
-   if (cli_id.length === 6) {
-     $.ajax({
-       type: 'GET',
-       dataType: 'json',
-       url: check_cli_num_url,
-       data: {"cli_num": cli_id},
-       success: function (response) {
-         console.log(response);
-         get_clients()
-         if(response["valid"] == false){
-         alert("Client ID already exists");
-         }
-       },
-       error: function (response) {
-         console.log(response[valid]);
-       },
-     });
-   } else {
-     alert("Client ID must be 6 digits long.");
-   }
+
+    if (cli_id.length === 6) {
+      $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: check_cli_num_url,
+        data: {"cli_num": cli_id},
+        success: function (response) {
+          document.forms["cli_id_form"]["cli_id"].value = "";
+          console.log(response);
+          get_clients()
+          if(response["valid"] == false){
+          alert("Client ID already exists");
+          }
+        },
+        error: function (response) {
+          console.log(response[valid]);
+        },
+      });
+    } else {
+      alert("Client ID must be 6 digits long.");
+    }
+
  }
 
   $("#cli_id_form").submit(function(e) {
@@ -306,7 +304,7 @@
        },
        statusCode:{
         201:function(response){
-           alert('There is NO client with this number connected to active clinician');
+           alert('There is NO client with this number connected to the ACTIVE clinician');
          },
          202: function(response){
            alert('The Client exists, but there is NO data to recall');

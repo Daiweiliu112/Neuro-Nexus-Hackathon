@@ -165,7 +165,6 @@ class ClinicianGame {
                     if (this.element !== null) {
                         console.log('Please construct the rectangles such that they do not intersect')
                     }
-                    console.log(this.element);
                     this.element.remove()
                 }
                 this.element = null
