@@ -154,7 +154,9 @@
   $('#create_meeting').click(function () {
     console.log("clicked");
     let selected_collection = $(".selected-image-set").map(function () {
-      return $(this).attr("id");
+      if($(this).hasClass("collection-images")){
+        return $(this).attr("id");
+      }
     }).get();
     let selected_client_num = $("#client_list").find(":selected").text();
     console.log(selected_client_num);
