@@ -78,9 +78,11 @@ def get_csv(request):
             writer = csv.writer(response)
             writer.writerow(field_names)
             for obj in queryset:
-                row = writer.writerow([getattr(obj, field) for field in field_names])
+                #row = writer.writerow([getattr(obj, field) for field in field_names])
+                writer.writerow([getattr(obj, field) for field in field_names])
+                print([getattr(obj, field) for field in field_names])
 
-            print("DEBUG_2")
+            print(response)
 
 
             return response
