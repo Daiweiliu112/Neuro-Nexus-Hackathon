@@ -1,0 +1,102 @@
+{% extends "base_layout2.html" %}
+{% load static %}
+{% block content %}
+<section id="banner" class="style6">
+  <div class="inner">
+    <span class="image">
+      <img src="images/pic07.jpg" alt="" />
+    </span>
+    <header class="major">
+      <h1>Game</h1>
+    </header>
+    <div class="content">
+      <p>Light Switch!</p>
+    </div>
+  </div>
+</section>
+
+<main>
+  <div class="image_center"
+    style="display: flex; justify-content: center; padding-top: 10rem; padding-bottom: 3rem; align-items: center;">
+    <button onclick="location.href='/home/pancake'" id='next' class="next" ;
+      style="-webkit-transform: scaleX(-1); transform: scaleX(-1); padding-left: 0.75rem;"></button>
+    <img id='lights' src="{% static 'voice_games_img/off.jpg'%}" alt="lights"
+      style="padding-left: 5rem; padding-right: 5rem;">
+    <button onclick="location.href='/home/pop'" id='next' class="next" style="padding-left: 0.75rem;"></button>
+  </div>
+  <div class="container" style='display: flex; justify-content: center;'>
+    <button id='btnGiveCommand'>Say On!</button>
+  </div>
+  <p class="hints"></p>
+  <div style="display: flex; justify-content: center;">
+    <p class="output"><em>...diagnostic messages</em></p>
+  </div>
+</main>
+
+
+<script>
+  var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
+  var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList
+  var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent
+
+  // define grammar we want to recognize
+  var grammar = '#JSGF V1.0;'
+  var message = document.querySelector('#message');
+  var diagnostic = document.querySelector('.output');
+  var lights = false;
+
+  // create a speech recognition instance
+  var recognition = new SpeechRecognition();
+
+  // create a new speech grammar list
+  var speechRecognitionList = new SpeechGrammarList();
+
+  // add grammar to list 
+  speechRecognitionList.addFromString(grammar, 1);
+
+  recognition.grammars = speechRecognitionList;
+  recognition.continuous = false;
+  recognition.lang = 'en-US';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  recognition.onresult = function (event) {
+    //ar last = event.results.length - 1;
+    //var command = event.results[last][0].transcript;
+    var last = event.results.length - 1;
+    var input = event.results[last][0].transcript;
+    diagnostic.textContent = 'Result received: ' + input + '.';
+
+    if (input.toLowerCase() == 'turn on' || input.toLowerCase() == 'on') {
+      document.querySelector('#title').innerHTML = "Turn Off the Lights!";
+      document.querySelector('#btnGiveCommand').innerHTML = "Say Turn Off!";
+      document.getElementById("lights").src = "{% static 'voice_games_img/on.jpg'%}";
+    }
+    if (input.toLowerCase() == 'turn off' || input.toLowerCase() == 'off') {
+      document.querySelector('#title').innerHTML = "Turn On the Lights!";
+      document.querySelector('#btnGiveCommand').innerHTML = "Say Turn On!";
+      document.getElementById("lights").src = "{% static 'voice_games_img/off.jpg'%}";
+    }
+  }
+
+  recognition.onspeechend = function () {
+    recognition.stop();
+  }
+
+  recognition.onnomatch = function (event) {
+    diagnostic.textContent = 'I didnt recognise that word.';
+  }
+
+  recognition.onerror = function (event) {
+    diagnostic.textContent = 'Error occurred in recognition: ' + event.error;
+  }
+
+  document.querySelector('#btnGiveCommand').addEventListener('click', function () {
+    recognition.start();
+  });
+
+</script>
+</body>
+
+</html>
+{% endblock content %}

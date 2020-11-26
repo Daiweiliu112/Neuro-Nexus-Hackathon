@@ -1,0 +1,212 @@
+<!--Imgae did not work due to javascript link was not written correctly-->
+<!--note: w/out js, there is only card/tiles template with words. it Will miss logo, banner title, button. menu and images-->
+{% load static %}
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>Tech for Teletherapy</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{% static 'css/homepage/main.css' %}" />
+		<noscript><link rel="stylesheet" href="{% static 'css/homepage/noscript.css' %}" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header" class="alt">
+						<a href="{% url 'accounts:home' %}" class="logo"><strong>Tech for </strong> <span>Teletherapy</span></a>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<ul class="links">
+							<li><a href="{% url 'accounts:home' %}">Home</a></li>
+							<li><a href="MyAccount.html">My Account</a></li> 
+							<li><a href="{% url 'main_app:main2' %}">My Activities</a></li>
+							<li><a href="AboutUs.html">About Us</a></li>
+						</ul>
+						<ul class="actions stacked">
+							<li><a href="#" class="button primary fit">Get Started</a></li>
+							<li><a href="{% url 'accounts:signin2' %}" class="button fit">Log In</a></li>
+						</ul>
+					</nav>
+
+				<!-- Banner -->
+					<section id="banner" class="major">
+						<div class="inner">
+							<header class="major">
+								<h1>Welcome to Tech for Teletherapy</h1>
+							</header>
+							<div class="content">
+								<p>Transforming in-person therapy to a seamless interactive virtual experience</p>
+								<ul class="actions">
+									<li><a href="{% url 'accounts:signin2' %}" class="button next scrolly">Click to Connect</a></li>
+								</ul>
+							</div>
+						</div>
+					</section>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- One -->
+							<section id="one" class="tiles">
+								<article>
+									<span class="image">
+										<img src="{% static 'home_img/MainPicture.jpg' %}"alt="" />
+									</span>
+									<header class="major">
+										<h3><a href="landing.html" class="link">Free</a></h3>
+										<p>No paywall restrictions to access our activities</p>
+									</header>
+								</article>
+								<article>
+									<span class="image">
+										<img src="{% static 'home_img/image2.jpg'%}" alt="" />
+									</span>
+									<header class="major">
+										<h3><a href="#" class="link">Interactive and Accessible</a></h3>
+										<p>share a link and share the experience</p>
+									</header>
+								</article>
+								<article>
+									<span class="image">
+										<img src="{% static 'home_img/image3.jpg'%}" alt="" />
+									</span>
+									<header class="major">
+										<h3><a href="landing.html" class="link">Unique and Customizable</a></h3>
+										<p>create your own age-appropriate activities with your own images</p>
+									</header>
+								</article>
+								<article>
+									<span class="image">
+										<img src="{% static 'home_img/image4.jpg'%}" alt="" />
+									</span>
+									<header class="major">
+										<h3><a href="landing.html" class="link">Try it out now!</a></h3>
+										<p>Cause-and-effect games, expressive and receptive language games and more!
+										</p>
+									</header>
+								</article>
+								<article>
+									<span class="image">
+										<img src="{% static 'home_img/image5.jpg'%}" alt="" />
+									</span>
+									<header class="major">
+										<h3><a href="landing.html" class="link">Our Session Activities</a></h3>
+										<p>Explore what we have to offer!</p>
+									</header>
+								</article>
+								<article>
+									<span class="image">
+										<img src="{% static 'home_img/image6.jpg' %}" alt="" />
+									</span>
+									<header class="major">
+										<h3><a href="landing.html" class="link">Testimonials</a></h3>
+										<p>Read what our users have to say!</p>
+									</header>
+								</article>
+							</section>
+
+						<!-- Two -->
+							<section id="two">
+								<div class="inner">
+									<header class="major">
+										<h2>Our Project</h2>
+									</header>
+									<p>We strive to create an interactive virtual experience for families transitioning to online therapy prompted by the pandemic. Our one-stop platform connects clinicians to children with developmental disabilities and their caregivers, with a variety of customizable and evidence-based therapeutic activities. Regardless of location, clinicians and caregivers can support children in meeting language and motor development goals in a fun, accessible, and efficient manner.</p>
+								</div>
+							</section>
+
+					</div>
+
+				<!-- Contact -->
+					<section id="contact">
+						<div class="inner">
+							<section class="bottomimage">
+								<img src="{% static 'home_img/ActualLogo.png'%}" alt="" />
+
+
+
+								<!--- <form method="post" action="#">
+									<div class="fields">
+										<div class="field half">
+											<label for="name">Name</label>
+											<input type="text" name="name" id="name" />
+										</div>
+										<div class="field half">
+											<label for="email">Email</label>
+											<input type="text" name="email" id="email" />
+										</div>
+										<div class="field">
+											<label for="message">Message</label>
+											<textarea name="message" id="message" rows="6"></textarea>
+										</div>
+									</div>
+									<ul class="actions">
+										<li><input type="submit" value="Send Message" class="primary" /></li>
+										<li><input type="reset" value="Clear" /></li>
+									</ul>
+								</form> -->
+							</section>
+							<section class="split">
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-envelope"></span>
+										<h3>Email</h3>
+										<a href="https://mail.google.com/mail/u/0/" target="_blank">techforteletherapy@gmail.com</a>
+									</div>
+								</section>
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-phone"></span>
+										<h3>Phone</h3>
+										<span>(000) 000-0000</span>
+									</div>
+								</section>
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-home"></span>
+										<h3>Donate</h3>
+									</div>
+								</section>
+							</section>
+						</div>
+					</section>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<div class="inner">
+							<ul class="icons">
+								<li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
+								<li><a href="#" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
+								<li><a href="https://www.instagram.com/14_tech_4_teletherapy" target="_blank" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>
+								<li><a href="#" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+								<li><a href="#" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+							</ul>
+							<ul class="copyright">
+								<li>&copy; 2020 Tech for Teletherapy</li>
+							</ul>
+						</div>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="{% static 'js/homepage_js/jquery.min.js' %}"></script>
+			<script src="{% static 'js/homepage_js/jquery.scrolly.min.js' %}"></script>
+			<script src="{% static 'js/homepage_js/jquery.scrollex.min.js' %}"></script>
+			<script src="{% static 'js/homepage_js/browser.min.js' %}"></script>
+			<script src="{% static 'js/homepage_js/breakpoints.min.js' %}"></script>
+			<script src="{% static 'js/homepage_js/util.js' %}"></script>
+			<script src="{% static 'js/homepage_js/main.js' %}"></script>
+
+	</body>
+</html>

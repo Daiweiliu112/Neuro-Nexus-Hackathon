@@ -27,5 +27,18 @@ urlpatterns = [
     path('client_num/',views.get_client_data,name='client_num'),
     path('check_cli_num/', views.check_cli_num, name='check_cli_num'),
     path('save_cli_data/',views.save_cli_data, name='save_cli_data'),
-    path('get_csv/',views.get_csv, name='get_csv')
+    path('get_csv/',views.get_csv, name='get_csv'),
+
+    path('spinner/', views.spinner, name ='spinner'),
+    path('spinner_update', views.spinner_update, name = 'spinner_update'),
+
+    path('main/', views.main, name ='main'),
+    path('main2/', views.main2, name ='main2'),
+    path('pop/', views.pop, name ='pop'),
+    path('light/', views.light, name ='light'),
+    path('pancake/', views.pancake, name ='pancake'),
+
+    path('custom_setup/', views.custom_setup, name = 'custom_setup'),
+    path('custom_game', views.custom_game, name = 'custom_game')
+    
 ]

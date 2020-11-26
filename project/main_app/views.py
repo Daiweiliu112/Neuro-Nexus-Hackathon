@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect 
-from .forms import UploadImageForm, UploadFileForm
+from .forms import UploadImageForm, UploadFileForm, SpinnerUpdateForm, VoicePicForm, VoiceWordsForm, RecordForm
 from . import utils
 from django.http import HttpResponse,JsonResponse
 from accounts.models import (
@@ -14,6 +14,8 @@ import logging
 from . import analytics
 from django.utils import timezone
 import csv
+from django.contrib import messages
+from django.core import serializers
 
 # DEBUGGING
 logger = logging.getLogger(__name__)
@@ -78,11 +80,9 @@ def get_csv(request):
             writer = csv.writer(response)
             writer.writerow(field_names)
             for obj in queryset:
-                #row = writer.writerow([getattr(obj, field) for field in field_names])
-                writer.writerow([getattr(obj, field) for field in field_names])
-                print([getattr(obj, field) for field in field_names])
+                row = writer.writerow([getattr(obj, field) for field in field_names])
 
-            print(response)
+            print("DEBUG_2")
 
 
             return response
@@ -476,4 +476,80 @@ def get_images(clinician):
         for i in range(remain):
             temp.append(images[last_index + i])
         image_array.append(temp)
-    return image_array    
+    return image_array  
+
+#################################################################
+#Spinner Stuff
+
+def spinner(request):
+    return render(request, 'main_app/src/spinner/spinner.html' )
+
+def spinner_update(request):
+    if request.method == 'POST':
+        s_form = SpinnerUpdateForm(request.POST, request.FILES, instance=request.user.spinner)
+        if s_form.is_valid():
+            s_form.save()
+            messages.success(request, f"Your spinner has been updated.")
+            #cant just be spinner_update, must have main_app
+            return redirect('main_app:spinner_update') 
+    else:
+        s_form = SpinnerUpdateForm(instance=request.user.spinner)
+        
+
+    context = {
+        's_form':s_form
+    }
+
+    return render(request, 'main_app/src/spinner/spinner_update.html', context)  
+
+def main(request):
+    return render(request, 'main_app/src/voice_games/main.html')
+
+def main2(request):
+    return render(request, 'main_app/src/voice_games/main2.html')
+
+def pop(request):
+    return render(request, 'main_app/src/voice_games/pop.html')
+
+def pancake(request):
+    return render(request, 'main_app/src/voice_games/pancake.html')
+
+def light(request):
+    return render(request, 'main_app/src/voice_games/lights.html')
+
+def custom_setup(request):
+    if request.method == 'POST':
+        v_form = VoicePicForm(request.POST, request.FILES, instance=request.user.voice_game2)
+        w_form = VoiceWordsForm(request.POST, request.FILES, instance=request.user.voice_words2)
+        if v_form.is_valid() and w_form.is_valid():
+            v_form.save()
+            w_form.save()
+            messages.success(request, f"Your game has been updated.")
+            #cant just be spinner_update, must have main_app
+            return redirect('main_app:custom_setup') 
+    else:
+        v_form = VoicePicForm(instance=request.user.voice_game2)
+        w_form = VoiceWordsForm(instance=request.user.voice_words2)
+        
+
+    context = {
+        'v_form':v_form,
+        'w_form':w_form
+    }
+  
+    return render(request, 'main_app/src/voice_games/custom_setup.html', context)
+
+def custom_game(request):
+    return render (request, 'main_app/src/voice_games/custom_game.html')
+
+def post_voice(request):
+    if request.is_ajax and request.method == "POST":
+        form = RecordForm(request.POST)
+
+        if form.is_valid():
+            instance = form.save()
+            ser_instance = serializers.serialize('json', [instance,])
+            return JsonResponse({"instance":ser_instance}, status = 200)
+        else:
+            return JsonResponse({"error": form.errors}, status = 400)
+    return JsonResponse({"error":""}, status = 400)

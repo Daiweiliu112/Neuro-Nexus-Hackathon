@@ -5,7 +5,13 @@ from .models import (
     Client,
     Score,
     Image,
-    ImageSet
+    ImageSet,
+    Spinner,
+    voice_game2,
+    voice_game3,
+    voice_game4,
+    voice_words2,
+    voice_record
     )
 import csv
 from django.http import HttpResponse
@@ -83,3 +89,12 @@ class ImageSetAdmin(admin.ModelAdmin):
     actions = ["export_user_csv"]
 
 admin.site.register(ImageSet, ImageSetAdmin)
+
+admin.site.register(Spinner)
+
+admin.site.register(voice_game2)
+admin.site.register(voice_game3)
+admin.site.register(voice_game4)
+admin.site.register(voice_words2)
+admin.site.register(voice_record)
+
