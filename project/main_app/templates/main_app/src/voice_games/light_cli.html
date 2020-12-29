@@ -1,0 +1,156 @@
+{% extends "base_layout2.html" %}
+{% load static %}
+{% block content %}
+<section id="banner" class="style6">
+    <div class="inner">
+        <span class="image">
+            <img src="images/pic07.jpg" alt="" />
+        </span>
+        <header class="major">
+            <h1 id='pop'>Bubblegum</h1>
+        </header>
+        <div class="content">
+            <p>Say pop to pop the bubble!</p>
+        </div>
+    </div>
+</section>
+
+<main>
+    <span id='message'></span>
+    <div class="switchmode" id="game">
+        <button class="switch_mode" onclick="location.href='nonverbalbubblegum.html #game'">Switch to Nonverbal</button>
+    </div>
+    <div class="image_center"
+        style="display: flex; justify-content: center; padding-top: 0.75rem; padding-bottom: 3rem; align-items: center;">
+        <button onclick="location.href='cookies.html #game'" id='next' class="next" ;
+            style="-webkit-transform: scaleX(-1); transform: scaleX(-1); padding-left: 0.75rem;"></button>
+        <img id='bubble' src="{% static 'voice_games_img/off.jpg'%}" alt="bubble"
+            style="padding-right: 5rem; padding-left: 5rem;">
+        <button onclick="location.href='pancake_game.html #game'" id='next' class="next"
+            style="padding-left: 0.75rem;"></button>
+    </div>
+    <div class="container" style='display: flex; justify-content: center;'>
+        <button id='btnGiveCommand'>Say Pop!</button>
+    </div>
+    <p class="hints"></p>
+    <div style="display: flex; justify-content: center;">
+        <p><button class="output" style="color: #FFF; background-color: #53e3fb;">Answer: </button></p>
+    </div>
+    <div class="clinician_box">
+        <div class="clinician_buttons">
+            <div class="checkbox mb-3">
+                <input type="checkbox" id="Remember Me" name="Remember Me" value="hi">
+                <label for="Remember Me" style="color: #242943;">Correct</label>
+            </div>
+            <div class="checkbox mb-3">
+                <input type="checkbox" id="RememberMe" name="RememberMe" value="hi">
+                <label for="RememberMe" style="color: #242943;">Incorrect</label>
+            </div>
+        </div>
+        <div class="prompts">
+            <div class="dropdown_2">
+                <button onclick="myFunction()" class="pp" id="pp">PP
+                    <div id="clinician_dropdown" class="full_partial">
+                        <a id='ppFull'>Full</a>
+                        <a id='ppPartial'>Partial</a>
+                    </div>
+                </button>
+            </div>
+            <button class="mp" id="mp">MP</button>
+            <button class="gp" id="gp">GP</button>
+            <div class="dropdown_2">
+                <button onclick="myFunction2()" class="pp">VeP
+                    <div id="clinician_dropdown2" class="full_partial">
+                        <a id='vepFull'>Full</a>
+                        <a id='vepPartial'>Partial</a>
+                    </div>
+                </button>
+            </div>
+            <button class="vip" id="vip">ViP</button>
+            <button class="i" id="i">I</button>
+        </div>
+    </div>
+    <div class="prompt_explanation">
+        <span>*PP = Physical Prompt</span>
+        <span>MP = Model Prompt</span>
+        <span>GP = Gestural Prompt</span>
+        <span>VEP = Verbal Prompt</span>
+        <span>VIP = Visual Prompt</span>
+        <span>I = Independent
+    </div>
+    <div class="session_notes">
+        Session Notes
+        <textarea rows="4" cols="50" name="comment" form="usrform" placeholder="Enter the notes here..."
+            id="notes"></textarea>
+        <p>Record special notes for the session activites, for future reference!</p>
+        <button class="save" id='save'>Save</button>
+        <button class="trial" id='reset' onclick=resetImage()>Next Trial</button>
+        <button class="export" onclick="exportCsv()">Export</button>
+    </div>
+</main>
+
+
+<script>
+    var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
+    var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList
+    var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent
+
+    // define grammar we want to recognize
+    var grammar = '#JSGF V1.0;'
+    var message = document.querySelector('#message');
+    var diagnostic = document.querySelector('.output');
+    var lights = false;
+
+    // create a speech recognition instance
+    var recognition = new SpeechRecognition();
+
+    // create a new speech grammar list
+    var speechRecognitionList = new SpeechGrammarList();
+
+    // add grammar to list 
+    speechRecognitionList.addFromString(grammar, 1);
+
+    recognition.grammars = speechRecognitionList;
+    recognition.continuous = false;
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onresult = function (event) {
+        //ar last = event.results.length - 1;
+        //var command = event.results[last][0].transcript;
+        var last = event.results.length - 1;
+        var input = event.results[last][0].transcript;
+        diagnostic.textContent = 'Result received: ' + input + '.';
+
+        if (input.toLowerCase() == 'turn on' || input.toLowerCase() == 'on') {
+            document.querySelector('#title').innerHTML = "Turn Off the Lights!";
+            document.querySelector('#btnGiveCommand').innerHTML = "Say Turn Off!";
+            document.getElementById("lights").src = "{% static 'voice_games_img/on.jpg'%}";
+        }
+        if (input.toLowerCase() == 'turn off' || input.toLowerCase() == 'off') {
+            document.querySelector('#title').innerHTML = "Turn On the Lights!";
+            document.querySelector('#btnGiveCommand').innerHTML = "Say Turn On!";
+            document.getElementById("lights").src = "{% static 'voice_games_img/off.jpg'%}";
+        }
+    }
+
+    recognition.onspeechend = function () {
+        recognition.stop();
+    }
+
+    recognition.onnomatch = function (event) {
+        diagnostic.textContent = 'I didnt recognise that word.';
+    }
+
+    recognition.onerror = function (event) {
+        diagnostic.textContent = 'Error occurred in recognition: ' + event.error;
+    }
+
+    document.querySelector('#btnGiveCommand').addEventListener('click', function () {
+        recognition.start();
+    });
+
+</script>
+</body>
+{% endblock content %}

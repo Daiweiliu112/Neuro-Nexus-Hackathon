@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+    <title>My Activities</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <!--CSS stylesheets-->
+    <link rel="stylesheet" href="{% static 'css/homepage/main.css' %}" />
+    <noscript>
+        <link rel="stylesheet" href="{% static 'css/homepage/noscript.css' %}" /></noscript>
+</head>
+
+<body class="is-preload">
+
+    <!-- Wrapper -->
+    <div id="wrapper">
+
+        <!-- Header -->
+        <!-- Note: The "styleN" class below should match that of the banner element. -->
+        <header id="header" class="alt style2">
+            <a href="{% url 'accounts:home' %}" class="logo"><strong>Tech for</strong> <span>Teletherapy</span></a>
+            <nav>
+                <a href="#menu">Menu</a>
+            </nav>
+        </header>
+
+        <!-- Menu -->
+        <nav id="menu">
+            <ul class="links">
+                <li><a href="{% url 'accounts:home' %}">Home</a></li>
+                <li><a href="MyAccount.html">My Account</a></li>
+                <li><a href="{% url 'main_app:main2' %}">My Activities</a></li>
+                <li><a href="AboutUs.html">About Us</a></li>
+            </ul>
+            <ul class="actions stacked">
+                <li><a href="#" class="button primary fit">Get Started</a></li>
+                <li><a href="#" class="button fit">Log In</a></li>
+            </ul>
+        </nav>
+
+        <!-- New Content here -->
+        <!--Must have this to specify where your content is for this template-->
+        {% block content %}{% endblock %}
+        {% include "cli_input.html" %}
+
+
+        <!-- Footer -->
+        <footer id="footer">
+            <div class="inner">
+                <ul class="icons">
+                    <li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
+                    <li><a href="#" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
+                    <li><a href="https://www.instagram.com/14_tech_4_teletherapy" target="_blank"
+                            class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>
+                    <li><a href="#" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+                    <li><a href="#" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+                </ul>
+                <ul class="copyright">
+                    <li>&copy; 2020 Tech for Teletherapy</li>
+                </ul>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="{% static 'js/voice_games_js/main.js' %}"></script>
+    <script src="{% static 'js/homepage_js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/homepage_js/jquery.scrolly.min.js' %}"></script>
+    <script src="{% static 'js/homepage_js/jquery.scrollex.min.js' %}"></script>
+    <script src="{% static 'js/homepage_js/browser.min.js' %}"></script>
+    <script src="{% static 'js/homepage_js/breakpoints.min.js' %}"></script>
+    <script src="{% static 'js/homepage_js/util.js' %}"></script>
+    <script src="{% static 'js/homepage_js/main.js' %}"></script>
+    <script src="{% static 'js/homepage_js/dropdown.js' %}"></script>
+    <script src="{% static 'js/homepage_js/export.js' %}"></script>
+
+
+</body>
+
+</html>

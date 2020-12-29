@@ -1,0 +1,109 @@
+html, body {
+  height: 100%;
+}
+
+* {
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+#canvas {
+  font-family: 'Quicksand';
+  margin: 0 auto;
+  width: 70%;
+  font-weight: 400;
+  color: #FFCB9A;
+}
+
+.rectangle {
+  color: inherit;
+  border: 5px solid #2C3531;
+  position: absolute;
+}
+
+.rectangle-header {
+  background: #2C3531;
+  border-radius: 5px 5px 0 0;
+  height: 30px;
+  line-height: 30px;
+  width: 25%;
+  min-width: 100px;
+  position: relative;
+  top: -30px;
+  left: -5px;
+}
+
+input[type="text"] {
+  width: 95%;
+  height: inherit;
+}
+
+.rectangle-title {
+  background: #2C3531;
+  font-weight: 700;
+  font-size: 1.2em;
+  border: none;
+  width: 90%;
+}
+
+.center-horizontal {
+  text-align: center;
+}
+
+.center-vertical *{
+  margin: auto;
+}
+
+button {
+  display: inline-block;
+  width: 101px;
+  height: 60px;
+}
+
+/* Header styles */
+.jumbotron {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  margin-bottom: 0;
+  background-color: #fff;
+}
+@media (min-width: 768px) {
+  .jumbotron {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+}
+
+.jumbotron p:last-child {
+  margin-bottom: 0;
+}
+
+.jumbotron h1 {
+  font-weight: 300;
+}
+
+.jumbotron .container {
+  max-width: 40rem;
+}
+
+footer {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+footer p {
+  margin-bottom: .25rem;
+}
+
+
+.footer {
+  position:absolute;
+  bottom:0;
+  width:100%;
+  height:60px;   /* Height of the footer */
+  background:#2C3531;
+}

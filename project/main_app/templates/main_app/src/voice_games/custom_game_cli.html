@@ -1,0 +1,109 @@
+{% extends "clinician_layout.html" %}
+{% load static %}
+{% block content %}
+
+<section id="banner" class="style6">
+  <div class="inner">
+    <span class="image">
+      <img src="images/pic07.jpg" alt="" />
+    </span>
+    <header class="major">
+      <h1>Custom Game</h1>
+    </header>
+    <div class="content">
+      <p>{{user.voice_words2.title}}</p>
+    </div>
+  </div>
+</section>
+
+
+<main>
+  <title>Flip</title>
+  <div class="image_center"
+    style="display: flex; justify-content: center; padding-top: 10rem; padding-bottom: 3rem; align-items: center;">
+    <img id='lights' src="{{user.voice_game2.pic1.url}}" style="padding-left: 5rem; padding-right: 5rem;">
+  </div>
+  <div class="container" style='display: flex; justify-content: center;'>
+    <button id='btnGiveCommand'>{{user.voice_words2.word1}}</button>
+  </div>
+  <p class="hints"></p>
+  <div style="display: flex; justify-content: center;">
+    <p class="output"><em>...diagnostic messages</em></p>
+  </div>
+</main>
+
+</form>
+
+<script>
+  var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
+  var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList
+  var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent
+
+  // define grammar we want to recognize
+  var grammar = '#JSGF V1.0;'
+  var message = document.querySelector('#message');
+  var diagnostic = document.querySelector('.output');
+  var lights = false;
+
+  // create a speech recognition instance
+  var recognition = new SpeechRecognition();
+
+  // create a new speech grammar list
+  var speechRecognitionList = new SpeechGrammarList();
+
+  // add grammar to list 
+  speechRecognitionList.addFromString(grammar, 1);
+
+  recognition.grammars = speechRecognitionList;
+  recognition.continuous = false;
+  recognition.lang = 'en-US';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  recognition.onresult = function (event) {
+    //ar last = event.results.length - 1;
+    //var command = event.results[last][0].transcript;
+    var records = [];
+    var last = event.results.length - 1;
+    var input = event.results[last][0].transcript;
+    diagnostic.textContent = 'Result received: ' + input + '.';
+    if (input.toLowerCase() == "{{user.voice_words2.word2}}") {
+      document.querySelector('#btnGiveCommand').innerHTML = "{{user.voice_words2.word1}}";
+      document.getElementById("lights").src = "{{ user.voice_game2.pic1.url }}";
+      records.push(input);
+      console.log(records.length)
+
+    }
+    if (input.toLowerCase() == "{{user.voice_words2.word1}}") {
+      document.querySelector('#btnGiveCommand').innerHTML =  "{{user.voice_words2.word2}}";
+      document.getElementById("lights").src = "{{ user.voice_game2.pic2.url }}";
+      records.push(input);
+      console.log(records.length)
+  
+    }
+  }
+
+  recognition.onspeechend = function () {
+    recognition.stop();
+  }
+
+  recognition.onnomatch = function (event) {
+    diagnostic.textContent = 'I didn\'t recognise that word.';
+  }
+
+  recognition.onerror = function (event) {
+    diagnostic.textContent = 'Error occurred in recognition: ' + event.error;
+  }
+
+  document.querySelector('#btnGiveCommand').addEventListener('click', function () {
+    recognition.start();
+  });
+
+</script>
+
+<script src="{% static 'js/jquery.js' %}"></script>
+</body>
+
+</html>
+
+{% endblock content %}

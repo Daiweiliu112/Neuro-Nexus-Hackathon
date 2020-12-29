@@ -1,0 +1,47 @@
+{% extends "base_layout2.html" %}
+{% block content %}
+<!-- Banner -->
+<!-- Note: The "styleN" class below should match that of the header element. -->
+<section id="banner" class="style6">
+    <div class="inner">
+        <span class="image">
+            <img src="images/pic07.jpg" alt="" />
+        </span>
+        <header class="major">
+            <h1>My Activities</h1>
+        </header>
+        <div class="content">
+            <p>Game Sessions</p>
+        </div>
+    </div>
+</section>
+        
+
+<div class="container" style="padding-top: 10rem; display: flex; justify-content: center; padding-bottom: 10rem;">
+    <div class="dropdown">
+        <button onclick="myFunction()" class="dropbtn"style='margin-left: 3rem; margin-right: 3rem; width: 257px; justify-content: center; display: flex;'>Verbal Games</button>
+        <div id="myDropdown" class="dropdown-content">
+            <a href="{% url 'main_app:spinner' %}">Random Game</a>
+            <a href="{% url 'main_app:custom_setup' %}">Create Game</a>
+            <a href="{% url 'main_app:custom_game' %}">Custom Game</a>
+            <a href="{% url 'main_app:pop' %}">Bubble</a>
+            <a href="{% url 'main_app:pancake' %}">Pancake</a>
+            <a href="{% url 'main_app:light' %}">Turn on the Lights</a>
+
+
+        </div>
+    </div>
+
+    <div class="dropdown">
+        <button onclick="myFunction2()" class="dropbtn">Nonverbal Games</button>
+        <div id="myDropdown2" class="dropdown-content">
+            <a href="{% url 'main_app:custom_setup' %}">Create Game</a>
+            <a href="{% url 'main_app:custom_game' %}">Custom Game</a>
+            <a href="{% url 'main_app:pop_nvb' %}">Bubble</a>
+            <a href="{% url 'main_app:pancake' %}">Pancake</a>
+            <a href="{% url 'main_app:light_nvb' %}">Turn on the Lights</a>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

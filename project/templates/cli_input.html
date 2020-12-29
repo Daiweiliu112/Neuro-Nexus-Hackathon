@@ -1,0 +1,57 @@
+
+{% load static %}
+<p class="hints"></p>
+<div style="display: flex; justify-content: center;">
+    <p><button class="output" style="color: #FFF; background-color: #53e3fb;">Answer: </button></p>
+</div>
+<div class="clinician_box">
+    <div class="clinician_buttons">
+        <div class="checkbox mb-3">
+            <input type="checkbox" id="Remember Me" name="Remember Me" value="hi">
+            <label for="Remember Me" style="color: #242943;">Correct</label>
+        </div>
+        <div class="checkbox mb-3">
+            <input type="checkbox" id="RememberMe" name="RememberMe" value="hi">
+            <label for="RememberMe" style="color: #242943;">Incorrect</label>
+        </div>
+    </div>
+    <div class="prompts">
+        <div class="dropdown_2">
+            <button onclick="myFunction()" class="pp" id="pp">PP
+                <div id="clinician_dropdown" class="full_partial">
+                    <a id='ppFull'>Full</a>
+                    <a id='ppPartial'>Partial</a>
+                </div>
+            </button>
+        </div>
+        <button class="mp" id="mp">MP</button>
+        <button class="gp" id="gp">GP</button>
+        <div class="dropdown_2">
+            <button onclick="myFunction2()" class="pp">VeP
+                <div id="clinician_dropdown2" class="full_partial">
+                    <a id='vepFull'>Full</a>
+                    <a id='vepPartial'>Partial</a>
+                </div>
+            </button>
+        </div>
+        <button class="vip" id="vip">ViP</button>
+        <button class="i" id="i">I</button>
+    </div>
+</div>
+<div class="prompt_explanation">
+    <span>*PP = Physical Prompt</span>
+    <span>MP = Model Prompt</span>
+    <span>GP = Gestural Prompt</span>
+    <span>VEP = Verbal Prompt</span>
+    <span>VIP = Visual Prompt</span>
+    <span>I = Independent
+</div>
+<div class="session_notes">
+    Session Notes
+    <textarea rows="4" cols="50" name="comment" form="usrform" placeholder="Enter the notes here..."
+        id="notes"></textarea>
+    <p>Record special notes for the session activites, for future reference!</p>
+    <button class="save" id='save'>Save</button>
+    <button class="trial" id='reset' onclick=resetImage()>Next Trial</button>
+    <button class="export" onclick="exportCsv()">Export</button>
+</div>

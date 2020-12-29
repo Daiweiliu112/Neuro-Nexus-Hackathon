@@ -1,0 +1,27 @@
+{% extends "base_layout2.html" %}
+{% load static %}
+{% block content %}
+<main role="main" class="container">
+    <div class="row">
+        <div class="col-md-8">
+            {% for record in records %}
+
+            <article class="media content-section">
+                <div class="media-body">
+                    <div class="article-metadata">
+                        <a class="mr-2" href="#">Session {{ record.user_id }}</a>
+                        <small class="text-muted">{{record.date|date:"F d, Y" }}</small>
+                    </div>
+                    <!--url post-detail is the route on the url page, post_detail is the html page-->
+                    <!--the post id is passed on int:pk-->
+                    <!--no quotation mark around post.id-->
+                    <p class="article-content">Correct: {{ record.correct }}</p >
+                    <p class="article-content">Incorrect: {{ record.incorrect }}</p>
+                    <p class="article-content">Session Notes: {{ record.notes }}</p>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</main>
+{% endblock content %}

@@ -1,0 +1,116 @@
+{% extends "clinician_layout.html" %}
+{% load static %}]
+{% block content %}
+
+<!-- Banner -->
+<!-- Note: The "styleN" class below should match that of the header element. -->
+<section id="banner" class="style6">
+    <div class="inner">
+        <span class="image">
+            <img src="images/pic07.jpg" alt="" />
+        </span>
+        <header class="major">
+            <h1 id='cookies'>Cookies</h1>
+        </header>
+        <div class="content">
+            <p>Say more to fill the cookie jar!</p>
+        </div>
+    </div>
+</section>
+
+<main>
+    <span id='message'></span>
+    <div class="switchmode" id="game">
+        <button class="switch_mode" onclick="location.href='nonverbal_cookies.html #game'">Switch Modes</button>
+    </div>
+    <div class="image_center"
+        style="display: flex; justify-content: center; padding-top: 0.75rem; padding-bottom: 3rem; align-items: center;">
+        <button onclick="location.href='turnlights.html #game'" id='next' class="next" ;
+            style="-webkit-transform: scaleX(-1); transform: scaleX(-1); padding-left: 0.75rem;"></button>
+        <img id='cookies_yes' src="{% static 'voice_games_img/cookies1.png'%}" alt="cookies_yes"
+            style="padding-right: 5rem; padding-left: 5rem;">
+        <button onclick="location.href='bubblegum.html #game'" id='next' class="next"
+            style="padding-left: 0.75rem;"></button>
+    </div>
+    <div class="container" style='display: flex; justify-content: center;'>
+        <button id='btnGiveCommand' onclick="changeState()">More!</button>
+    </div>
+    <p class="hints"></p>
+    <div style="display: flex; justify-content: center;">
+        <p class="output"><em>...diagnostic messages</em></p>
+    </div>
+</main>
+
+<script>
+    var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
+    var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList
+    var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent
+
+    // define grammar we want to recognize
+    var grammar = '#JSGF V1.0;'
+    var message = document.querySelector('#message');
+    var diagnostic = document.querySelector('.output');
+    var cookies = 1;
+
+    // create a speech recognition instance
+    var recognition = new SpeechRecognition();
+
+    // create a new speech grammar list
+    var speechRecognitionList = new SpeechGrammarList();
+
+    // add grammar to list 
+    speechRecognitionList.addFromString(grammar, 1);
+
+    recognition.grammars = speechRecognitionList;
+    recognition.continuous = false;
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onresult = function (event) {
+        var last = event.results.length - 1;
+        var input = event.results[last][0].transcript;
+        diagnostic.textContent = 'Result received: ' + input + '.';
+
+        if (input.toLowerCase() == 'more') {
+            cookies++;
+            document.getElementById("cookies_yes").src = "{% static 'voice_games_img/cookies'|add:cookies|add:'jpg' %}" ;
+
+            // if last image
+            if (cookies == 6) {
+                document.querySelector('#btnGiveCommand').innerHTML = "Reset";
+                document.querySelector('#title').innerHTML = "It's Full!";
+            }
+        }
+    }
+
+    recognition.onspeechend = function () {
+        recognition.stop();
+    }
+
+    recognition.onnomatch = function (event) {
+        diagnostic.textContent = 'I didnt recognise that word.';
+    }
+
+    recognition.onerror = function (event) {
+        diagnostic.textContent = 'Error occurred in recognition: ' + event.error;
+    }
+
+    function changeState() {
+        switch (cookies) {
+            // if cookie jar is not full
+            case 1: case 2: case 3: case 4: case 5:
+                // start voice recognition
+                recognition.start();
+                break;
+            // if cookie jar is full, reset
+            case 6:
+                cookies = 1;
+                document.getElementById("cookies_yes").src = "{% static 'voice_games_img/cookies'|add:cookies|add:'jpg' %}";
+                document.querySelector('#btnGiveCommand').innerHTML = "More";
+                document.querySelector('#title').innerHTML = "Fill the Cookie Jar!";
+                break;
+        }
+    }
+</script>
+{% endblock content %}

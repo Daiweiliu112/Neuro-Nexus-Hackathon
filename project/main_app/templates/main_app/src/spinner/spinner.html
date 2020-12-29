@@ -1,0 +1,48 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset = "UTF-8">
+    <title> Spinning Wheel</title>
+    <link rel = "stylesheet" href = "{% static 'css/spinner_style.css' %}">
+
+
+    
+</head>
+
+<body>
+    <div id = "mainbox" class = "mainbox">
+        <!--Javascript reference HTML by id, CSS does not need to. Need to add ID-->
+        <div id = "box" class = "box"> 
+            <!--These are the slices of the spinners-->
+            <div  class = "box1">
+                <span class = "span1"><b><img class = "box_img" src = "{{user.spinner.image1.url}}"></b></span>
+                <span class = "span2"><b><img class = "box_img" src = "{{user.spinner.image2.url}}"></b></span>
+                <span class = "span3"><b><img class = "box_img" src = "{{user.spinner.image3.url}}"></b></span>
+                <span class = "span4"><b><img class = "box_img" src = "{{user.spinner.image4.url}}"></b></span>
+
+            </div>
+            <div class = "box2">
+                <span class = "span1"><b><img class = "box_img" src = "{{user.spinner.image5.url}}"></b></span>
+                <span class = "span2"><b><img class = "box_img" src = "{{user.spinner.image6.url}}"></b></span>
+                <span class = "span3"><b><img class = "box_img" src = "{{user.spinner.image7.url}}"></b></span>
+                <span class = "span4"><b><img class = "box_img" src = "{{user.spinner.image8.url}}"></b></span>
+            </div>
+
+            
+        </div>
+        <!--Spin button, calls javascript function-->
+        <button class ="spin" onclick= "anim()" >SPIN</button>
+        <button id = "go" class ="go" onclick= "go()">GO</button>
+
+
+    </div>
+
+    <script type="text/javascript" src="{% static 'js/spin_animation.js' %}"></script>
+
+
+
+</body>
+
+</html>

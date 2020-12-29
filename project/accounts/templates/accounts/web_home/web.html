@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type ="text/css" href="{% static 'css/web_style2.css' %}">
+    <style>.Slideshow {
+        display: none
+    }
+    </style>
+    <title>Tech For Teletherapy</title>
+</head>
+<body>
+    <header>
+        <div class="header">
+            <div class="inner header_inner">
+                <div class="logo">
+                    <img src="{% static 'home_pics/Logo.png' %}" alt="Logo">
+                </div>
+                <nav class="page_menu">
+                    <a href="#" class="active">Home</a>
+                    <a href="#">My Account</a>
+                    <a href="#">Session Activities</a>
+                    <a href="#">About Us</a>
+                </nav>
+            </div>
+        </div>
+        <div class="hero_header">
+            <div class="slideshow_pictures">
+                <img src="{% static 'home_img/MainPicture.jpg' %}" alt="Picture1" class="slideshow" style="width:100%">
+                <img src="{% static 'home_img/MainPicture2.jpg' %}" alt="Picture2" class="slideshow" style="width:100%">
+                <img src="{% static 'home_img/MainPicture3.jpg' %}" alt="Picture2" class="slideshow" style="width:100%">
+            </div>
+            <script>
+                var myIndex = 0;
+                carousel();
+                
+                function carousel() {
+                  var i;
+                  var x = document.getElementsByClassName("slideshow");
+                  for (i = 0; i < x.length; i++) {
+                    x[i].style.display = "none";  
+                  }
+                  myIndex++;
+                  if (myIndex > x.length) {myIndex = 1}    
+                  x[myIndex-1].style.display = "block";  
+                  setTimeout(carousel, 2000); // Change image every 2 seconds
+                }
+            </script>
+            <div class="inner hero_header_inner">
+                <div class="hero_content">
+                    <div class="subheadline">
+                        <strong>Tech For Teletherapy</strong>
+                        <br>
+                        <br>
+                        Transforming in-person therapy to a seamless interactive virtual experience.
+                    </div>
+                    <a href="#" class="button">Click to Connect</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="main_info">
+            <div class="inner inner_padding">
+                <h1>
+                    What Is
+                    <br>
+                    <strong>
+                        Tech For Teletherapy?
+                    </strong>
+                </h1>
+                <div class="information">
+                    <p class="mission_statement">
+                        We strive to create an interactive virtual experience for families transitioning to online therapy prompted by the pandemic. Our one-stop platform connects clinicians to children with developmental disabilities and their caregivers, with a variety of customizable and evidence-based therapeutic activities. Regardless of location, clinicians and caregivers can support children in meeting language and motor development goals in a fun, accessible, and efficient manner.
+                    </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <nav class="footer_menu">
+                <a href="#" class="active">Donate</a>
+                <a href="#">Contact Us</a>
+            </nav>
+        </div>
+    </main>
+</body>
+</html>

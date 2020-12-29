@@ -1,0 +1,234 @@
+{% extends "base_layout.html" %}
+
+{% load static %}
+{% block content %}
+<style>
+  .bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  @media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+      font-size: 3.5rem;
+    }
+  }
+</style>
+
+
+
+<!-- Custom styles for this template -->
+<link href="{% static 'css/dashboard.css' %}" type="text/css" rel="stylesheet">
+
+
+
+<main role="main">
+
+  <section class="jumbotron text-center">
+    <div class="container">
+      <h1>Clinician dashboard</h1>
+      <!-- <p class="lead text-muted">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p> -->
+      <p>
+        <!--a href="#" class="btn btn-primary my-2" id='create_meeting'>Create Meeting</a-->
+        <!--a href="#" class="btn btn-secondary my-2">View Overall Statistics</a-->
+      </p>
+      <!--div id='room_name'>
+        <p>Link for Client: <a id='client_link' href=""></a></p>
+        <p>Link for Clincian: <a id='clinician_link' href=""></a></p>
+      </div-->
+      <a href="../upload/" class="btn btn-primary my-2">Upload Images</a>
+      <button type="button" class="btn btn-primary" id="save">Finish and Save</button><br>
+      <span>Title of the Image set: </span><input type="text" id="title">
+      <div id="tooltip" style="display: none;">Invalid number of image selected. Choose only 11 images</div>
+    </div>
+  </section>
+
+  <div class="album py-5 bg-light">
+    <div class="container">
+      <span>Current Images</span>
+      {% for collection_image_row in collection %}
+      <div class="row">
+        {% for collection_image in collection_image_row %}
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm up-image card-selected selected-image-set" id='{{ collection_image.pk }}'>
+            <!--svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg"
+              preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail">
+              <title>Placeholder</title>
+
+              <rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%" fill="#eceeef"
+                dy=".3em">Thumbnail</text>
+            </svg-->
+
+            <image class="image-fluid" height="255" width="100%" src='{{ collection_image.image.url }}' />
+            <div class="card-body">
+              <p class="card-text">{{ collection_image.title }} </p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <!--button type="button" class="btn btn-sm btn-outline-secondary">View</button-->
+                  <a class="edit btn btn-sm btn-outline-secondary"
+                    href='{% url 'main_app:editview' collection_image.pk %}'>Edit</a>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+      <br>
+      <span>Uploaded Images</span>
+      {% for image_row in images %}
+      <div class="row">
+        {% for asset_image in image_row %}
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm up-image" id='{{ asset_image.pk }}'>
+            <!--svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg"
+              preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail">
+              <title>Placeholder</title>
+
+              <rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%" fill="#eceeef"
+                dy=".3em">Thumbnail</text>
+            </svg-->
+
+            <image class="image-fluid" height="255" width="100%" src='{{ asset_image.image.url }}' />
+            <div class="card-body">
+              <p class="card-text">{{ asset_image.title }} </p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <!--button type="button" class="btn btn-sm btn-outline-secondary">View</button-->
+                  <a class="edit btn btn-sm btn-outline-secondary"
+                    href='{% url 'main_app:editview' asset_image.pk %}'>Edit</a>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+
+
+    </div>
+  </div>
+
+</main>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script>
+  $('#create_meeting').click(function () {
+    console.log("clicked");
+    let url = '../ajax/create_meeting/';
+    $.ajax({
+      url: url,
+      success: function (data) {
+        console.log("Recieved");
+        console.log(data);
+        let client_room_name = data['client']
+        let clinician_room_name = data['clinician']
+        //$('#room_name').text(client_room_name);
+        $('#client_link').attr('href', "../.." + client_room_name);
+        $('#client_link').text("localhost" + client_room_name);
+        $('#clinician_link').attr('href', "../.." + clinician_room_name);
+        $('#clinician_link').text("localhost" + clinician_room_name)
+      },
+    });
+  });
+</script>
+{% csrf_token %}
+{% if collection_pk %}
+<script>
+  let collection_pk_ = {{ collection_pk }}
+</script>
+{% else %}
+<script>
+  let collection_pk_ = -1
+</script>
+{% endif %}
+
+{% if collection_title %}
+<script>
+$('#title').val("{{ collection_title }}")
+</script>
+{% else %}
+<script>
+</script>
+{% endif %}
+<script>
+  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+  let url = '{% url 'main_app:ajax_create_collection' %}';
+  $('.card').click(function () {
+    if ($(this).hasClass('card-selected')) {
+      $(this).removeClass('card-selected');
+    } else {
+      //let classes = $(this).attr('class');
+      //console.log(classes);
+      $(this).addClass('card-selected');
+      classes = $(this).attr('class');
+      console.log(classes);
+      console.log(url)
+      console.log(collection_pk_)
+    }
+    if ($(this).hasClass('up-image')) {
+      if ($(this).hasClass('selected-image-set')) {
+        $(this).removeClass('selected-image-set')
+      } else {
+
+        $(this).addClass('selected-image-set');
+      }
+    }
+
+
+    //console.log('card clicked');
+    //$(this).attr('style','background-color:blue');
+  });
+  $('#save').click(function () {
+    let selected_image = $(".selected-image-set").map(function () {
+      return $(this).attr("id");
+    }).get();
+    console.log("Title:" + $("#title").val())
+    let title = $("#title").val()
+    console.log(selected_image);
+    console.log(selected_image.length);
+    if (selected_image.length === 11) {
+      console.log("Valid number of images");
+      $('#tooltip').hide();
+
+      $.post({
+        headers: {
+          'X-CSRFToken': csrftoken
+        },
+        mode: 'same-origin',
+        type: "POST",
+        url: url,
+        data: {
+          "selected_image": JSON.stringify(selected_image),
+          "title": JSON.stringify(title),
+          "collection_pk": JSON.stringify(collection_pk_)
+        },
+        success: function(){
+          window.location.replace('{% url 'main_app:dashboard' %}' );
+        }
+      });
+    } else {
+      console.log("Not enough or too many images");
+      $("#tooltip").show();
+    }
+
+  });
+</script>
+
+<style>
+.card-selected {
+  background-color: aqua;
+}
+</style>
+
+
+{% endblock %}
