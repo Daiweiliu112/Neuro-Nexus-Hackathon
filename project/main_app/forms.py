@@ -28,6 +28,7 @@ class VoiceWordsForm(forms.ModelForm):
 
 class RecordForm(forms.ModelForm):
     class Meta:
+<<<<<<< HEAD
         model = models.VoiceRecordPop
         fields = ['date', 'correct', 'incorrect','notes']
 
@@ -45,3 +46,14 @@ class RecordFormCookies(forms.ModelForm):
     class Meta:
         model = models.voice_record_cookies
         fields = ['date','correct', 'incorrect','notes']
+=======
+        model = models.voice_record
+        fields = ['record1','record2','record3','record4','record5']
+        widgets = {
+            'text':forms.TextInput(attrs = {
+                'id':'post-text',
+                'required':True,
+                'placeholder':'Something...'
+            }),
+        }
+>>>>>>> 2a904ff631a5a2a3d51ea4ffa064617fec668b15

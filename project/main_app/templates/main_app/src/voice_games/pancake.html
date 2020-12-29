@@ -4,6 +4,7 @@
 
 <section id="banner" class="style6">
   <div class="inner">
+<<<<<<< HEAD
     <span class="image">
       <img src="images/pic07.jpg" alt="" />
     </span>
@@ -13,10 +14,22 @@
     <div class="content">
       <p>Pancake Flip</p>
     </div>
+=======
+      <span class="image">
+          <img src="images/pic07.jpg" alt="" />
+      </span>
+      <header class="major">
+          <h1>Games</h1>
+      </header>
+      <div class="content">
+          <p>Pancake Flip</p>
+      </div>
+>>>>>>> 2a904ff631a5a2a3d51ea4ffa064617fec668b15
   </div>
 </section>
 
 
+<<<<<<< HEAD
 <main>
   <title>Flip</title>
   <div class="switchmode" id="game">
@@ -96,6 +109,82 @@
   });
 
 </script>
+=======
+  <main>
+    <title>Flip</title>
+    <div class="image_center"
+      style="display: flex; justify-content: center; padding-top: 10rem; padding-bottom: 3rem; align-items: center;">
+      <button onclick="location.href='/home/pop'" id='next' class="next" ;
+        style="-webkit-transform: scaleX(-1); transform: scaleX(-1); padding-left: 0.75rem;"></button>
+      <img id='pancake' src="{% static 'voice_games_img/pancake.gif'%}" alt="pancake"
+        style="padding-left: 5rem; padding-right: 5rem;">
+      <button onclick="location.href='/home/light'" id='next' class="next" style="padding-left: 0.75rem;"></button>
+    </div>
+    <div class="container" style='display: flex; justify-content: center;'>
+      <button id='btnGiveCommand'>Say Flip!</button>
+    </div>
+    <p class="hints"></p>
+    <div style="display: flex; justify-content: center;">
+      <p class="output"><em>...diagnostic messages</em></p>
+    </div>
+  </main>
+
+  <script>
+    var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
+    var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList
+    var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent
+
+    // define grammar we want to recognize
+    var grammar = '#JSGF V1.0;'
+    var message = document.querySelector('#message');
+    var diagnostic = document.querySelector('.output');
+
+    // create a speech recognition instance
+    var recognition = new SpeechRecognition();
+
+    // create a new speech grammar list
+    var speechRecognitionList = new SpeechGrammarList();
+
+    // add grammar to list 
+    speechRecognitionList.addFromString(grammar, 1);
+
+    recognition.grammars = speechRecognitionList;
+    recognition.continuous = false;
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onresult = function (event) {
+      //ar last = event.results.length - 1;
+      //var command = event.results[last][0].transcript;
+      var input = event.results[0][0].transcript;
+      diagnostic.textContent = 'Result received: ' + input + '.';
+
+      if (input.toLowerCase() == 'flip' || input.toLowerCase() == 'flipped') {
+        //document.querySelector('#flip').remove();
+        document.querySelector('#btnGiveCommand').remove();
+        document.getElementById("pancake").src = "{% static 'voice_games_img/pancake-flip.gif'%}";
+      }
+    }
+
+    recognition.onspeechend = function () {
+      recognition.stop();
+    }
+
+    recognition.onnomatch = function (event) {
+      diagnostic.textContent = 'I didnt recognise that word.';
+    }
+
+    recognition.onerror = function (event) {
+      diagnostic.textContent = 'Error occurred in recognition: ' + event.error;
+    }
+
+    document.querySelector('#btnGiveCommand').addEventListener('click', function () {
+      recognition.start();
+    });
+
+  </script>
+>>>>>>> 2a904ff631a5a2a3d51ea4ffa064617fec668b15
 </body>
 
 </html>

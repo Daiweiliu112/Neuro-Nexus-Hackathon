@@ -11,10 +11,14 @@ from .models import (
     voice_game3,
     voice_game4,
     voice_words2,
+<<<<<<< HEAD
     VoiceRecordPop,
     Record,
     voice_record_pancake,
     voice_record_cookies
+=======
+    voice_record
+>>>>>>> 2a904ff631a5a2a3d51ea4ffa064617fec668b15
     )
 import csv
 from django.http import HttpResponse
@@ -99,8 +103,12 @@ admin.site.register(voice_game2)
 admin.site.register(voice_game3)
 admin.site.register(voice_game4)
 admin.site.register(voice_words2)
+<<<<<<< HEAD
 admin.site.register(Record)
 admin.site.register(VoiceRecordPop)
 admin.site.register(voice_record_pancake)
 admin.site.register(voice_record_cookies)
+=======
+admin.site.register(voice_record)
+>>>>>>> 2a904ff631a5a2a3d51ea4ffa064617fec668b15
 

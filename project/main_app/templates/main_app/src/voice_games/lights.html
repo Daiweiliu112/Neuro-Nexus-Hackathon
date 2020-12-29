@@ -1,9 +1,5 @@
 {% extends "base_layout2.html" %}
 {% load static %}
-<<<<<<< HEAD
-{% load crispy_forms_tags %}
-=======
->>>>>>> 2a904ff631a5a2a3d51ea4ffa064617fec668b15
 {% block content %}
 <section id="banner" class="style6">
   <div class="inner">
@@ -14,52 +10,29 @@
       <h1>Game</h1>
     </header>
     <div class="content">
-      <p>Pop the Bubblegum!</p>
+      <p>Light Switch!</p>
     </div>
   </div>
 </section>
 
 <main>
-  <span id='message'></span>
-<<<<<<< HEAD
-  <div class="switchmode" id="game">
-    <button class="switch_mode" onclick=>
-      <a href = "{% url 'main_app:pop_nvb' %}">Switch to Non-Verbal</a>
-    </button>
-  </div>
-=======
->>>>>>> 2a904ff631a5a2a3d51ea4ffa064617fec668b15
   <div class="image_center"
     style="display: flex; justify-content: center; padding-top: 10rem; padding-bottom: 3rem; align-items: center;">
-    <button onclick="location.href='/home/light'" id='next' class="next" ;
+    <button onclick="location.href='/home/pancake'" id='next' class="next" ;
       style="-webkit-transform: scaleX(-1); transform: scaleX(-1); padding-left: 0.75rem;"></button>
-    <img id='bubble' src="{% static 'voice_games_img/bubble.png'%}" alt="bubble"
-      style="padding-right: 5rem; padding-left: 5rem;">
-    <button onclick="location.href='/home/pancake'" id='next' class="next" style="padding-left: 0.75rem;"></button>
+    <img id='lights' src="{% static 'voice_games_img/off.jpg'%}" alt="lights"
+      style="padding-left: 5rem; padding-right: 5rem;">
+    <button onclick="location.href='/home/pop'" id='next' class="next" style="padding-left: 0.75rem;"></button>
   </div>
   <div class="container" style='display: flex; justify-content: center;'>
-    <button id='btnGiveCommand'>Say Pop!</button>
+    <button id='btnGiveCommand'>Say On!</button>
   </div>
   <p class="hints"></p>
   <div style="display: flex; justify-content: center;">
     <p class="output"><em>...diagnostic messages</em></p>
   </div>
 </main>
-<<<<<<< HEAD
-<!--
-<form method="POST" enctype="multipart/form-data">
-  {% csrf_token %}
-  <fieldset class="form-group">
-      <legend class="border-bottom mb-4">Record your game</legend>
-      {{ p_form|crispy }}
-  </fieldset>
-  <div class="form-group">
-      <button class="btn btn-outline-info" type="submit">Submit</button>
-  </div>
-</form>
--->
-=======
->>>>>>> 2a904ff631a5a2a3d51ea4ffa064617fec668b15
+
 
 <script>
   var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
@@ -70,6 +43,7 @@
   var grammar = '#JSGF V1.0;'
   var message = document.querySelector('#message');
   var diagnostic = document.querySelector('.output');
+  var lights = false;
 
   // create a speech recognition instance
   var recognition = new SpeechRecognition();
@@ -89,13 +63,19 @@
   recognition.onresult = function (event) {
     //ar last = event.results.length - 1;
     //var command = event.results[last][0].transcript;
-    var input = event.results[0][0].transcript;
+    var last = event.results.length - 1;
+    var input = event.results[last][0].transcript;
     diagnostic.textContent = 'Result received: ' + input + '.';
 
-    if (input.toLowerCase() == 'pop') {
-      document.querySelector('#pop').remove();
-      document.querySelector('#btnGiveCommand').remove();
-      document.getElementById("bubble").src = "{% static 'voice_games_img/pop.png'%}";
+    if (input.toLowerCase() == 'turn on' || input.toLowerCase() == 'on') {
+      document.querySelector('#title').innerHTML = "Turn Off the Lights!";
+      document.querySelector('#btnGiveCommand').innerHTML = "Say Turn Off!";
+      document.getElementById("lights").src = "{% static 'voice_games_img/on.jpg'%}";
+    }
+    if (input.toLowerCase() == 'turn off' || input.toLowerCase() == 'off') {
+      document.querySelector('#title').innerHTML = "Turn On the Lights!";
+      document.querySelector('#btnGiveCommand').innerHTML = "Say Turn On!";
+      document.getElementById("lights").src = "{% static 'voice_games_img/off.jpg'%}";
     }
   }
 

@@ -3,7 +3,10 @@ from django import forms
 from django.contrib.postgres.fields import ArrayField
 from django.contrib.auth.models import User
 from PIL import Image as Img
+<<<<<<< HEAD
 from django.utils import timezone
+=======
+>>>>>>> 2a904ff631a5a2a3d51ea4ffa064617fec668b15
 
 
 IMAGE_MAX_LENGTH=300
@@ -125,6 +128,12 @@ class Spinner(models.Model):
 
         img_list = [img1, img2, img3, img4, img5, img6, img7, img8]
 
+<<<<<<< HEAD
+=======
+        # tried using parallel iteration with zip, but apparently image field does not have attribute path now cause an error
+        # but it does not seem to causing error outside of iteration.
+
+>>>>>>> 2a904ff631a5a2a3d51ea4ffa064617fec668b15
 
         for i in img_list:
             if i.height > 200 or i.width > 200 or i.height < 200 or i.width < 200:
@@ -152,14 +161,20 @@ class voice_game2(models.Model):
     pic1 = models.ImageField(default = 'pikachu.jpg', upload_to = 'media/main_nav/custom_game')
     pic2 = models.ImageField(default = 'pikachu.jpg', upload_to = 'media/main_nav/custom_game')
 
+<<<<<<< HEAD
 ## not used
+=======
+>>>>>>> 2a904ff631a5a2a3d51ea4ffa064617fec668b15
 class voice_game3(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE)
     pic1 = models.ImageField(default = 'pikachu.jpg', upload_to = 'media/main_nav/custom_game')
     pic2 = models.ImageField(default = 'pikachu.jpg', upload_to = 'media/main_nav/custom_game')
     pic3 = models.ImageField(default = 'pikachu.jpg', upload_to = 'media/main_nav/custom_game')
 
+<<<<<<< HEAD
 ## not used
+=======
+>>>>>>> 2a904ff631a5a2a3d51ea4ffa064617fec668b15
 class voice_game4(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE)
     pic1 = models.ImageField(default = 'pikachu.jpg', upload_to = 'media/main_nav/custom_game')
@@ -173,6 +188,7 @@ class voice_words2(models.Model):
     word1 = models.CharField(max_length=30)
     word2 = models.CharField(max_length=30)
 
+<<<<<<< HEAD
 ## not being used
 class VoiceRecordPop(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -205,6 +221,15 @@ class voice_record_cookies(models.Model):
     incorrect = models.IntegerField(null=True,blank=True)
     notes = models.TextField(default = 'This is the session notes for the cookies game')
 
+=======
+class voice_record(models.Model):
+    user = models.OneToOneField(User, on_delete = models.CASCADE)
+    record1 = models.CharField(max_length=30)
+    record2 = models.CharField(max_length=30)
+    record3 = models.CharField(max_length=30)
+    record4 = models.CharField(max_length=30)
+    record5 = models.CharField(max_length=30)
+>>>>>>> 2a904ff631a5a2a3d51ea4ffa064617fec668b15
 
     
 

@@ -24,7 +24,11 @@
     <img id='lights' src="{{user.voice_game2.pic1.url}}" style="padding-left: 5rem; padding-right: 5rem;">
   </div>
   <div class="container" style='display: flex; justify-content: center;'>
+<<<<<<< HEAD
     <button id='btnGiveCommand'>{{user.voice_words2.word1}}</button>
+=======
+    <button id='btnGiveCommand'>Say {{user.voice_words2.word1}}</button>
+>>>>>>> 2a904ff631a5a2a3d51ea4ffa064617fec668b15
   </div>
   <p class="hints"></p>
   <div style="display: flex; justify-content: center;">
@@ -68,14 +72,22 @@
     var input = event.results[last][0].transcript;
     diagnostic.textContent = 'Result received: ' + input + '.';
     if (input.toLowerCase() == "{{user.voice_words2.word2}}") {
+<<<<<<< HEAD
       document.querySelector('#btnGiveCommand').innerHTML = "{{user.voice_words2.word1}}";
+=======
+      document.querySelector('#btnGiveCommand').innerHTML = "Say " + "{{user.voice_words2.word1}}";
+>>>>>>> 2a904ff631a5a2a3d51ea4ffa064617fec668b15
       document.getElementById("lights").src = "{{ user.voice_game2.pic1.url }}";
       records.push(input);
       console.log(records.length)
 
     }
     if (input.toLowerCase() == "{{user.voice_words2.word1}}") {
+<<<<<<< HEAD
       document.querySelector('#btnGiveCommand').innerHTML =  "{{user.voice_words2.word2}}";
+=======
+      document.querySelector('#btnGiveCommand').innerHTML = "Say " + "{{user.voice_words2.word2}}";
+>>>>>>> 2a904ff631a5a2a3d51ea4ffa064617fec668b15
       document.getElementById("lights").src = "{{ user.voice_game2.pic2.url }}";
       records.push(input);
       console.log(records.length)

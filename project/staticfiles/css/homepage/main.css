@@ -1,9 +1,12 @@
 @import url(fontawesome-all.min.css);
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300italic,600,600italic");
 
+<<<<<<< HEAD
 html {
 	scroll-behavior: smooth;
 }
+=======
+>>>>>>> 2a904ff631a5a2a3d51ea4ffa064617fec668b15
 
 html, body, div, span, applet, object,
 iframe, h1, h2, h3, h4, h5, h6, h7, p, blockquote,
@@ -1994,7 +1997,10 @@ input, select, textarea {
 	}
 
 	input[type="checkbox"],
+<<<<<<< HEAD
 	input[type="checkbox2"],
+=======
+>>>>>>> 2a904ff631a5a2a3d51ea4ffa064617fec668b15
 	input[type="radio"] {
 		-moz-appearance: none;
 		-webkit-appearance: none;
@@ -2008,7 +2014,10 @@ input, select, textarea {
 	}
 
 		input[type="checkbox"] + label,
+<<<<<<< HEAD
 		input[type="checkbox2"] + label,
+=======
+>>>>>>> 2a904ff631a5a2a3d51ea4ffa064617fec668b15
 		input[type="radio"] + label {
 			text-decoration: none;
 			color: #ffffff;
@@ -2021,7 +2030,10 @@ input, select, textarea {
 		}
 
 			input[type="checkbox"] + label:before,
+<<<<<<< HEAD
 			input[type="checkbox2"] + label:before,
+=======
+>>>>>>> 2a904ff631a5a2a3d51ea4ffa064617fec668b15
 			input[type="radio"] + label:before {
 				-moz-osx-font-smoothing: grayscale;
 				-webkit-font-smoothing: antialiased;
@@ -2036,7 +2048,10 @@ input, select, textarea {
 			}
 
 			input[type="checkbox"] + label:before,
+<<<<<<< HEAD
 			input[type="checkbox2"] + label:before,
+=======
+>>>>>>> 2a904ff631a5a2a3d51ea4ffa064617fec668b15
 			input[type="radio"] + label:before {
 				background: rgba(212, 212, 255, 0.035);
 				border: solid 1px rgba(24, 24, 211, 0.1);
@@ -2055,6 +2070,7 @@ input, select, textarea {
 			}
 
 		input[type="checkbox"]:checked + label:before,
+<<<<<<< HEAD
 		input[type="checkbox2"]:checked + label:before, 
 		input[type="radio"]:checked + label:before {
 			background: #8ea9e8; 							/*checkbox for remember me on sign in page*/
@@ -2070,6 +2086,16 @@ input, select, textarea {
 
 		input[type="checkbox"]:focus + label:before,
 		input[type="checkbox2"]:focus + label:before,
+=======
+		input[type="radio"]:checked + label:before {
+			background: #8ea9e8; 							/*checkbox for remember me on sign in page*/
+			border-color: #9bf1ff;
+			content: '\f00c';
+			color: #242943;
+		}
+
+		input[type="checkbox"]:focus + label:before,
+>>>>>>> 2a904ff631a5a2a3d51ea4ffa064617fec668b15
 		input[type="radio"]:focus + label:before {
 			box-shadow: 0 0 0 2px #9bf1ff;
 		}
@@ -3982,6 +4008,7 @@ input, select, textarea {
 			visibility: visible;
 		}
 
+<<<<<<< HEAD
 		.dropbtn {
 			display: flex;
 			color: #242943;
@@ -4126,3 +4153,5 @@ input, select, textarea {
 .prompt_explanation span + span {
 	margin-left: 25px;
 }
+=======
+>>>>>>> 2a904ff631a5a2a3d51ea4ffa064617fec668b15
